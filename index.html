@@ -1,653 +1,964 @@
 <!DOCTYPE html>
 <html xml:lang="en" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>
+      B&#226;gu Alexandru Bogdan - Elixir Developer, Ia&#x0219;i, Romania
+    </title>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
-<head>
-  <meta charset="utf-8">
-  <title>B&#226;gu Alexandru Bogdan - Elixir Developer, Ia&#x0219;i, Romania</title>
-  <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <!-- meta headers -->
+    <meta name="author" content="B&#226;gu Alexandru Bogdan" />
+    <meta
+      name="description"
+      content="I'm a Elixir Developer living in Iasi, Romania. I'm in love with scripting languages like Elixir, Perl and PHP. Programming is not just a job for me, it's a passion."
+    />
+    <meta
+      name="keywords"
+      content="alexandrubagu, bagu alexandru bogdan, elixir romania, elixir developer romania, elixir programmer romania, elixir enthusiast romania"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- meta headers -->
-  <meta name="author" content="B&#226;gu Alexandru Bogdan">
-  <meta name="description"
-    content="I'm a Elixir Developer living in Iasi, Romania. I'm in love with scripting languages like Elixir, Perl and PHP. Programming is not just a job for me, it's a passion.">
-  <meta name="keywords"
-    content="alexandrubagu, bagu alexandru bogdan, elixir romania, elixir developer romania, elixir programmer romania, elixir enthusiast romania">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- google web developer tools -->
+    <meta
+      name="google-site-verification"
+      content="CUhRi_ohyKkM9999FzPiJiyScaNejWiwVqLWd27kuwI"
+    />
 
-  <!-- google web developer tools -->
-  <meta name="google-site-verification" content="CUhRi_ohyKkM9999FzPiJiyScaNejWiwVqLWd27kuwI" />
+    <!-- bootstrap and animate -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="css/animate.min.css" />
 
-  <!-- bootstrap and animate -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-  <link rel="stylesheet" href="css/animate.min.css">
+    <!-- font icon -->
+    <link rel="stylesheet" href="css/flaticon.css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
 
-  <!-- font icon -->
-  <link rel="stylesheet" href="css/flaticon.css">
-  <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- my style -->
+    <link rel="stylesheet" href="css/style.min.css" />
 
-  <!-- my style -->
-  <link rel="stylesheet" href="css/style.min.css">
+    <!-- google cards -->
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org/",
+        "@type": "Person",
+        "name": "Bâgu Alexandru Bogdan",
+        "url": "http://alexandrubagu.info",
+        "jobTitle": "Web Developer",
+        "description": "I'm in love with scripting languages like Elixir, Perl and PHP. Programming is not just a job for me, it's a passion",
+        "image": "http://alexandrubagu.info/images/alexandrubagu.jpg",
+        "sameAs": [
+          "https://www.facebook.com/alexandrubagu",
+          "https://www.linkedin.com/in/alexandrubagu",
+          "https://twitter.com/alexandrubagu",
+          "https://github.com/alexandrubagu",
+          "https://www.xing.com/profile/Bagu_Alexandru"
+        ],
+        "homeLocation": {
+          "@type": "Place",
+          "name": "Iasi",
+          "address": "Str. Palat nr.3C, United Business Center, Iasi"
+        }
+      }
+    </script>
+  </head>
 
-  <!-- google cards -->
-  <script type="application/ld+json">
-    {"@context":"http://schema.org/","@type":"Person","name":"Bâgu Alexandru Bogdan","url":"http://alexandrubagu.info","jobTitle":"Web Developer","description":"I'm in love with scripting languages like Elixir, Perl and PHP. Programming is not just a job for me, it's a passion","image":"http://alexandrubagu.info/images/alexandrubagu.jpg","sameAs":["https://www.facebook.com/alexandrubagu","https://www.linkedin.com/in/alexandrubagu","https://twitter.com/alexandrubagu","https://github.com/alexandrubagu","https://www.xing.com/profile/Bagu_Alexandru"],"homeLocation":{"@type":"Place","name":"Iasi","address":"Str. Palat nr.3C, United Business Center, Iasi"}}
-  </script>
-</head>
-
-<body>
-  <!-- navigation -->
-  <nav id="top" class="navbar navbar-custom navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#intro">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#professional-timeline">Professional Timeline</a></li>
-          <li><a href="#education">Education</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <section id="intro" class="section hidden-xs">
-    <div class="text-center">
-      <div class="max-width-absolute-container">
-        <div class="table-container">
-          <div class="browser-container">
-            <h5 class="font-dosis-bold uppercase hovercolor">Hello, I am <span>B&#226;gu Alexandru Bogdan</span></h5>
-          </div>
+  <body>
+    <!-- navigation -->
+    <nav id="top" class="navbar navbar-custom navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target="#nav-collapse"
+          >
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" id="nav-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#intro">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#professional-timeline">Professional Timeline</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
         </div>
       </div>
-    </div>
-  </section>
+    </nav>
 
-  <!-- about me -->
-  <section id="about" class="section">
-    <div class="container">
-      <div class="row alexandrubagu">
-        <div class="col-sm-12">
-          <div class="im-centered">
-            <div class="hexagon">
-              <div class="hexTop"></div>
-              <div class="hexBottom"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="description row text-center">
-        <h3 class="font-dosis-bold uppercase">who am i</h3>
-        <h1 class="font-accident-one-bold uppercase hovercolor">B&#226;gu Alexandru Bogdan</h1>
-        <div class="dividewhite1"></div>
-        <h2 class="small">
-          a web developer living in Iasi, Romania. I have worked with companies like <span class="hovercolor">Host
-            Europe
-            Grup</span> and <span class="hovercolor">eMAG</span>.<br />
-          <span>I'm in love with scripting languages like <span class="hovercolor">Elixir</span>, <span
-              class="hovercolor">Perl</span>
-            and <span class="hovercolor">PHP</span>. Programming is not just a job for me, it's a passion.</span>
-        </h2>
-      </div>
-      <div class="services row text-center">
-        <div class="col-sm-4">
-          <span class="generic-icon flaticon-light-bulb"></span>
-          <h6 class="font-accident-one-bold uppercase hovercolor">Creative</h6>
-          <p class="small">Programming can be fun and is ultimately a creative art. I like creating applications out of
-            nothing using rapid development
-            tools like Elixir and Ecto.</p>
-        </div>
-        <div class="col-sm-4">
-          <span class="generic-icon flaticon-cup"></span>
-          <h6 class="font-accident-one-bold uppercase hovercolor">Self-motivated</h6>
-          <p class="small">Even if programming is more about fixing than it is creating, I always feel a burning desire
-            to
-            improve, rewrite and
-            do things better.</p>
-        </div>
-        <div class="col-sm-4">
-          <span class="generic-icon flaticon-multiply"></span>
-          <h6 class="font-accident-one-bold uppercase hovercolor">Solutions</h6>
-          <p class="small">Approach each task knowing there is more than one solution this will help you develop skills
-            used
-            to solve problems,
-            improve or rewrite code.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- professional timeline -->
-  <section id="professional-timeline" class="professional-timeline section" style="overflow: hidden;">
-    <div class="container light">
+    <section id="intro" class="section hidden-xs">
       <div class="text-center">
-        <h3 class="font-dosis-bold uppercase">My Professional Timeline</h3>
-        <h5 class="font-dosis-bold uppercase hovercolor">Work hard in silence, let success be your noise</h5>
-        <div class="spacer1"></div>
-        <p class="small" hidden>
-          Here is my professional timeline
-        </p>
-      </div>
-      <div class="spacer4"></div>
-
-      <ul class="timeline-vert">
-        <li class="timeline-inverted">
-          <div class="timeline-badge success"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> October 2018 - Present
-            </p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">Intersoft Solutions</h4>
-              <h6 class="uppercase">[Remote] Elixir Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Elixir / OTP </p>
-              <p class="small"><i class="fa fa-angle-right"></i> Plug / Phoenix</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Ecto / Ecto SQL</p>
-              <p class="small"><i class="fa fa-angle-right"></i> GraphQL using Absinthe</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Docker / Bitbucket CI</p>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="timeline-badge primary"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> January 2015 - Present
-            </p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">AlexandruBagu.info</h4>
-              <h6 class="uppercase">Elixir / Phoenix Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Elixir /</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Plug / Phoenix</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Ecto / Ecto SQL</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Nginx</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Docker / Gitlab CI</p>
-            </div>
-          </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge success"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> April 2015 - September
-              2018</p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">eMAG</h4>
-              <h6 class="uppercase">PHP Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> PHP / Mysql</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Symfony2</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Memcache</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Gearman / RabbitMQ</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Varnish</p>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="timeline-badge primary"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> October 2014 - March
-              2015</p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">Softvision</h4>
-              <h6 class="uppercase">JavaScript Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> AngularJS</p>
-              <p class="small"><i class="fa fa-angle-right"></i> jQuery + jQuery UI</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Underscore.js as templating engine</p>
-              <p class="small"><i class="fa fa-angle-right"></i> RequireJS</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Promise API</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Bower / Yeoman</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Bootstrap 3</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Ajax</p>
-            </div>
-          </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge success"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> September 2012 -
-              September
-              2014</p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">Host Europe Group</h4>
-              <h6 class="uppercase">Perl Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Responsibilities:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Added release and transfer of domains and refactored
-                the entire domain api client from <a href="http://donhost.co.uk" rel="nofollow">Donhost.co.uk</a></p>
-              <p class="small"><i class="fa fa-angle-right"></i> Build from scrath the integration of gTLD portal with
-                Webfusion UK website (integrated OAuth to existing authentication system, added new features to APIs to
-                handle the gTLD portal requests)</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Resolve some of customer tickets</p>
-
-              <div class="spacer1"></div>
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Perl / Mysql</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Catalyst Framework</p>
-              <p class="small"><i class="fa fa-angle-right"></i> OAuth2 Protocol</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Apache2 - CGI / mod_perl</p>
-              <p class="small"><i class="fa fa-angle-right"></i> DBIx::Class & Rose::DB</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Web Services exposed with REST</p>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="timeline-badge primary"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> May 2012 - September
-              2012</p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">UrbanStudioNYC.com</h4>
-              <h6 class="uppercase">Remote - Ruby / Ruby on Rails Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Ruby / Ruby On Rails</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Single sign on ( OAuth2 )</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Image Processing</p>
-            </div>
-          </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge success"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> June 2012 - August 2012
-            </p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">StreamWIDE</h4>
-              <h6 class="uppercase">PHP Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Responsibilities:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Added more features on sms gateway (Kannel) using Zend
-                Framework</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Improved XMLRPC Server/Client library to support
-                multipart messages</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Created unit tests for sms gateway</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Wrote documentation</p>
-
-              <div class="spacer1"></div>
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> PHP / Mysql</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Zend 1.6</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Doctrine</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Kannel</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Redis / Memcache</p>
-              <p class="small"><i class="fa fa-angle-right"></i> SMPP Protocol</p>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="timeline-badge primary"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> May 2011 - April 2012</p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">Webfusion</h4>
-              <h6 class="uppercase">Perl Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Responsibilities:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Added two payment methods: Invoices and PayNow ( method
-                which allows customer support to generate orders and send back to client to pay )</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Implemented the voucher system for all brands:
-                Webfusion UK, Webfusion ES</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Improved website loading time by adding memcache</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Modified the provisioning system tool to pick up failed
-                baskets automatically</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Refactored and fixed the bundle promotions and admin
-                order interface</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Modified the firewall web interface</p>
-
-              <div class="spacer1"></div>
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Perl / Mysql</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Catalyst Framework</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Apache2 - CGI / mod_perl</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Supervise monitoring</p>
-              <p class="small"><i class="fa fa-angle-right"></i> DBIx::Class</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Gearman</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Memcache</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Web Services exposed with SOAP and JSON-RPC</p>
-            </div>
-          </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge success"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> September 2009 - June
-              2011</p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">Freelancer</h4>
-              <h6 class="uppercase">Remote - PHP Developer</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Libraries / technologies used:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> PHP</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Mysql</p>
-              <p class="small"><i class="fa fa-angle-right"></i> jQuery</p>
-              <p class="small"><i class="fa fa-angle-right"></i> CSS</p>
-              <p class="small"><i class="fa fa-angle-right"></i> HTML</p>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- education timeline -->
-  <section id="education" class="professional-timeline section" style="overflow: hidden;">
-    <div class="container light">
-      <div class="text-center">
-        <h3 class="font-dosis-bold uppercase">My Education Timeline</h3>
-      </div>
-      <div class="spacer4"></div>
-
-      <ul class="timeline-vert">
-        <li>
-          <div class="timeline-badge primary"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> September 2008 - June
-              2011</p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">Alexandru Ioan Cuza University</h4>
-              <h6 class="uppercase">Computer Science - (BSc)</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Description:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Algorithms and Programming</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Computer Architecture and Operating Systems</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Object Oriented Programming</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Formal Languages, Automata and Compilers</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Design and Analysis of Algorithms</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Information Security</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Artificial Intelligence</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Bioinformatics</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Computer Networks</p>
-              <p class="small"><i class="fa fa-angle-right"></i> C/C++</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Java</p>
-              <p class="small"><i class="fa fa-angle-right"></i> .NET</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Web Programming</p>
-            </div>
-          </div>
-        </li>
-        <li class="timeline-inverted">
-          <div class="timeline-badge success"><i class="fa fa-dot-circle-o"></i></div>
-          <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-            <p class="timeline-time fontcolor-invert"><i class="glyphicon glyphicon-time"></i> September 2009 - June
-              2011</p>
-            <div class="spacer4"></div>
-            <div class="timeline-heading">
-              <h4 class="font-dosis-bold uppercase">Calistrat Hogas High-School</h4>
-              <h6 class="uppercase">Licentiate degree</h6>
-            </div>
-            <div class="spacer1"></div>
-            <div class="timeline-body">
-              <p class="font-dosis-bold">Field of Study:</p>
-              <p class="small"><i class="fa fa-angle-right"></i> Information Technology</p>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- main skills -->
-  <section id="skills" class="section">
-    <div class="container">
-      <div class="row text-center">
-        <h3 class="font-dosis-bold uppercase">My Main Skills</h3>
-        <h5 class="font-dosis-bold uppercase hovercolor">Working hard and making the success</h5>
-      </div>
-      <div class="row text-center">
-        <span class="chart" data-percent="85">
-          <span class="percent"></span>
-          <span class="center-block font-dosis-bold">Perl</span>
-        </span>
-        <span class="chart" data-percent="85">
-          <span class="percent"></span>
-          <span class="center-block font-dosis-bold">Elixir</span>
-        </span>
-        <span class="chart" data-percent="80">
-          <span class="percent"></span>
-          <span class="center-block font-dosis-bold">PHP</span>
-        </span>
-        <span class="chart" data-percent="60">
-          <span class="percent"></span>
-          <span class="center-block font-dosis-bold">jQuery</span>
-        </span>
-        <span class="chart" data-percent="65">
-          <span class="percent"></span>
-          <span class="center-block font-dosis-bold">Linux</span>
-        </span>
-      </div>
-    </div>
-  </section>
-
-  <!-- projects -->
-  <section id="projects" class="section">
-    <div class="container">
-      <div class="col-md-12">
-        <div class="row text-center">
-          <h3 class="font-dosis-bold uppercase">Projects</h3>
-          <div class="card hovercard">
-            <img src="images/cart.png" alt="Request Mock" />
-            <div class="avatar">
-              <img src="images/requestmock.png" alt="written in Elixir" />
-            </div>
-            <div class="info">
-              <div class="title">
-                <h5 class="font-dosis-bold uppercase hovercolor">Request Mock</h5>
-              </div>
-              <div class="description">
-                <div class="small">allows you to set up custom endpoints to test and inspect HTTP requests &amp;
-                  responses</div>
-              </div>
-              <div class="spacer2"></div>
-              <a class="font-dosis-bold uppercase hovercolor small" href="https://www.requestmock.com"
-                target="_blank">View</a>
-            </div>
-          </div>
-          <div class="card hovercard">
-            <img src="images/classifield.png" alt="Donate Things" />
-            <div class="avatar">
-              <img src="images/elixir.png" alt="written in Elixir" />
-            </div>
-            <div class="info">
-              <div class="title">
-                <h5 class="font-dosis-bold uppercase hovercolor">Donez Lucruri</h5>
-              </div>
-              <div class="description">
-                <div class="small">Classified application for donating things that you don't need any more</div>
-              </div>
-              <div class="spacer2"></div>
-              <a class="font-dosis-bold uppercase hovercolor small" href="https://www.donezlucruri.ro"
-                target="_blank">View</a>
-            </div>
-          </div>
-        </div>
-        <div class="spacer1"></div>
-        <div class="row text-center">
-          <h5 class="font-dosis-bold uppercase hovercolor">Open-Source Libraries</h5>
-          <div class="card hovercard">
-            <img src="images/cart.png" alt="Cart Manager" />
-            <div class="avatar">
-              <img src="images/elixir.png" alt="written in Elixir" />
-            </div>
-            <div class="info">
-              <div class="title">
-                <h5 class="font-dosis-bold uppercase hovercolor">cacheable</h5>
-              </div>
-              <div class="description">
-                <div class="small">Decorate your functions with customizable cache</div>
-              </div>
-              <div class="spacer2"></div>
-              <a class="font-dosis-bold uppercase hovercolor small" href="https://github.com/alexandrubagu/cacheable" target="_blank">View</a>
-            </div>
-          </div>
-          <div class="card hovercard">
-            <img src="images/ecto_generator.png" alt="Ecto Generator" />
-            <div class="avatar">
-              <img src="images/elixir.png" alt="written in Elixir" />
-            </div>
-            <div class="info">
-              <div class="title">
-                <h5 class="font-dosis-bold uppercase hovercolor">gcs_signed_url</h5>
-              </div>
-              <div class="description">
-                <div class="small">Create Signed URLs for Google Cloud Storage</div>
-                <div class="small">&nbsp;</div>
-              </div>
-              <div class="spacer2"></div>
-              <a class="font-dosis-bold uppercase hovercolor small" href="https://github.com/alexandrubagu/gcs_signed_url" target="_blank">View</a>
-            </div>
-          </div>
-          <div class="card hovercard">
-            <img src="images/simplehttp.png" alt="Simplehttp" />
-            <div class="avatar">
-              <img src="images/elixir.png" alt="written in Elixir" />
-            </div>
-            <div class="info">
-              <div class="title">
-                <h5 class="font-dosis-bold uppercase hovercolor">simplehttp</h5>
-              </div>
-              <div class="description">
-                <div class="small">HTTP client without dependencies</div>
-                <div class="small">written in Elixir</div>
-              </div>
-              <div class="spacer2"></div>
-              <a class="font-dosis-bold uppercase hovercolor small" href="https://github.com/alexandrubagu/simplehttp"
-                target="_blank">View</a>
+        <div class="max-width-absolute-container">
+          <div class="table-container">
+            <div class="browser-container">
+              <h5 class="font-dosis-bold uppercase hovercolor">
+                Hello, I am <span>B&#226;gu Alexandru Bogdan</span>
+              </h5>
             </div>
           </div>
         </div>
       </div>
-      <div class="spacer4"></div>
-      <div class="col-md-8 col-md-offset-2">
-        <div class="row text-center">
-          <h5 class="font-dosis-bold uppercase hovercolor">GitHub Contributions</h5>
+    </section>
+
+    <!-- about me -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="row alexandrubagu">
+          <div class="col-sm-12">
+            <div class="im-centered">
+              <div class="hexagon">
+                <div class="hexTop"></div>
+                <div class="hexBottom"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="description row text-center">
+          <h3 class="font-dosis-bold uppercase">who am i</h3>
+          <h1 class="font-accident-one-bold uppercase hovercolor">
+            B&#226;gu Alexandru Bogdan
+          </h1>
+          <div class="dividewhite1"></div>
+          <h2 class="small">
+            a web developer living in Iasi, Romania. I have worked with
+            companies like <span class="hovercolor">Host Europe Groupe</span> and
+            <span class="hovercolor">eMAG</span>.<br />
+            <span
+              >I'm in love with scripting languages like
+              <span class="hovercolor">Elixir</span>,
+              <span class="hovercolor">Perl</span> and
+              <span class="hovercolor">PHP</span>. Programming is not just a job
+              for me, it's a passion.</span
+            >
+          </h2>
+        </div>
+        <div class="services row text-center">
+          <div class="col-sm-4">
+            <span class="generic-icon flaticon-light-bulb"></span>
+            <h6 class="font-accident-one-bold uppercase hovercolor">
+              Creative
+            </h6>
+            <p class="small">
+              Programming can be fun and is ultimately a creative art. I like
+              creating applications out of nothing using rapid development tools
+              like Elixir and Ecto.
+            </p>
+          </div>
+          <div class="col-sm-4">
+            <span class="generic-icon flaticon-cup"></span>
+            <h6 class="font-accident-one-bold uppercase hovercolor">
+              Self-motivated
+            </h6>
+            <p class="small">
+              Even if programming is more about fixing than it is creating, I
+              always feel a burning desire to improve, rewrite and do things
+              better.
+            </p>
+          </div>
+          <div class="col-sm-4">
+            <span class="generic-icon flaticon-multiply"></span>
+            <h6 class="font-accident-one-bold uppercase hovercolor">
+              Solutions
+            </h6>
+            <p class="small">
+              Approach each task knowing there is more than one solution this
+              will help you develop skills used to solve problems, improve or
+              rewrite code.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- professional timeline -->
+    <section
+      id="professional-timeline"
+      class="professional-timeline section"
+      style="overflow: hidden"
+    >
+      <div class="container light">
+        <div class="text-center">
+          <h3 class="font-dosis-bold uppercase">My Professional Timeline</h3>
+          <h5 class="font-dosis-bold uppercase hovercolor">
+            Work hard in silence, let success be your noise
+          </h5>
           <div class="spacer1"></div>
-          <a class="notice notice-success" href="https://github.com/msaraiva/surface/pull/79">
-            <span class="hovercolor">msaraiva/surface</span> - implements input form elements
-          </a>
-          <a class="notice notice-success" href="https://github.com/ueberauth/guardian/pull/264">
-            <span class="hovercolor">ueberauth/guardian</span> - update mix deps & small refactor
-          </a>
-          <a class="notice notice-success" href="https://github.com/rubencaro/sshex/pull/14">
-            <span class="hovercolor">rubencaro/sshex</span> - update documentation: show how to use password
-          </a>
-          <a class="notice notice-success" href="https://github.com/ueberauth/guardian/pull/231">
-            <span class="hovercolor">ueberauth/guardian</span> - update behaviours to reflect changes made in elixir
-            1.4
-          </a>
-          <a class="notice notice-success" href="https://github.com/potatosalad/erlang-jose/pull/26">
-            <span class="hovercolor">potatosalad/erlang-jose</span> - add parentheses to remove the ambiguity on Elixir
-            1.4
-          </a>
-          <a class="notice notice-danger" href="https://github.com/elixir-ecto/ecto/pull/1722">
-            <span class="hovercolor">elixir-ecto/ecto</span> - Ecto dump models
-          </a>
-          <a class="notice notice-success" href="https://github.com/slimphp/Slim/pull/851">
-            <span class="hovercolor">slimphp/Slim</span> - fix function log from Slim/Log.php
-          </a>
+          <p class="small" hidden>Here is my professional timeline</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- contact -->
-  <section id="contact" class="section section-contact">
-    <div class="container">
-      <div class="row text-center">
-        <h3 class="font-dosis-bold uppercase">Contact</h3>
         <div class="spacer4"></div>
 
-        <div class="col-sm-3 col-xs-6">
-          <a href="https://www.linkedin.com/in/alexandrubagu" target="_blank">
-            <span class="fa fa-linkedin"></span>
-            <p class="small">Linkedin</p>
-          </a>
+        <ul class="timeline-vert">
+          <li>
+            <div class="timeline-badge success">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> May 2021 - Present
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">zenloop GmbH</h4>
+                <h6 class="uppercase">[Remote] Elixir / Phoenix Developer</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Elixir / Plug / Phoenix
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Ecto / EctoSQL
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Elasticsearch
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> RabbitMQ
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Redis
+                </p>
+              </div>
+            </div>
+          </li>
+          <li class="timeline-inverted">
+            <div class="timeline-badge success">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> October 2018 - April 2021
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">Intersoft Solutions</h4>
+                <h6 class="uppercase">[Remote] Elixir / Phoenix Developer</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Elixir / Plug / Phoenix
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Ecto / EctoSQL
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> GraphQL using Absinthe
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Docker / Bitbucket CI
+                </p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="timeline-badge success">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> April 2015 - September
+                2018
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">eMAG</h4>
+                <h6 class="uppercase">PHP Developer</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> PHP / Mysql
+                </p>
+                <p class="small"><i class="fa fa-angle-right"></i> Symfony2</p>
+                <p class="small"><i class="fa fa-angle-right"></i> Memcache</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Gearman / RabbitMQ
+                </p>
+                <p class="small"><i class="fa fa-angle-right"></i> Varnish</p>
+              </div>
+            </div>
+          </li>
+          <li class="timeline-inverted">
+            <div class="timeline-badge primary">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> October 2014 - March
+                2015
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">Softvision</h4>
+                <h6 class="uppercase">JavaScript Developer</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small"><i class="fa fa-angle-right"></i> AngularJS</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> jQuery + jQuery UI
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Underscore.js as templating
+                  engine
+                </p>
+                <p class="small"><i class="fa fa-angle-right"></i> RequireJS</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Promise API
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Bower / Yeoman
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Bootstrap 3
+                </p>
+                <p class="small"><i class="fa fa-angle-right"></i> Ajax</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="timeline-badge success">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> September 2012 -
+                September 2014
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">Host Europe Group</h4>
+                <h6 class="uppercase">Perl Developer</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Responsibilities:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Added release and transfer
+                  of domains and refactored the entire domain api client from
+                  <a href="http://donhost.co.uk" rel="nofollow"
+                    >Donhost.co.uk</a
+                  >
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Build from scrath the
+                  integration of gTLD portal with Webfusion UK website
+                  (integrated OAuth to existing authentication system, added new
+                  features to APIs to handle the gTLD portal requests)
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Resolve some of customer
+                  tickets
+                </p>
+
+                <div class="spacer1"></div>
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Perl / Mysql
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Catalyst Framework
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> OAuth2 Protocol
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Apache2 - CGI / mod_perl
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> DBIx::Class & Rose::DB
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Web Services exposed with
+                  REST
+                </p>
+              </div>
+            </div>
+          </li>
+          <li class="timeline-inverted">
+            <div class="timeline-badge primary">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> May 2012 - September
+                2012
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">UrbanStudioNYC.com</h4>
+                <h6 class="uppercase">
+                  Remote - Ruby / Ruby on Rails Developer
+                </h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Ruby / Ruby On Rails
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Single sign on ( OAuth2 )
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Image Processing
+                </p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="timeline-badge success">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> June 2012 - August 2012
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">StreamWIDE</h4>
+                <h6 class="uppercase">PHP Developer</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Responsibilities:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Added more features on sms
+                  gateway (Kannel) using Zend Framework
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Improved XMLRPC
+                  Server/Client library to support multipart messages
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Created unit tests for sms
+                  gateway
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Wrote documentation
+                </p>
+
+                <div class="spacer1"></div>
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> PHP / Mysql
+                </p>
+                <p class="small"><i class="fa fa-angle-right"></i> Zend 1.6</p>
+                <p class="small"><i class="fa fa-angle-right"></i> Doctrine</p>
+                <p class="small"><i class="fa fa-angle-right"></i> Kannel</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Redis / Memcache
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> SMPP Protocol
+                </p>
+              </div>
+            </div>
+          </li>
+          <li class="timeline-inverted">
+            <div class="timeline-badge primary">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> May 2011 - April 2012
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">Webfusion</h4>
+                <h6 class="uppercase">Perl Developer</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Responsibilities:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Added two payment methods:
+                  Invoices and PayNow ( method which allows customer support to
+                  generate orders and send back to client to pay )
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Implemented the voucher
+                  system for all brands: Webfusion UK, Webfusion ES
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Improved website loading
+                  time by adding memcache
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Modified the provisioning
+                  system tool to pick up failed baskets automatically
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Refactored and fixed the
+                  bundle promotions and admin order interface
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Modified the firewall web
+                  interface
+                </p>
+
+                <div class="spacer1"></div>
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Perl / Mysql
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Catalyst Framework
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Apache2 - CGI / mod_perl
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Supervise monitoring
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> DBIx::Class
+                </p>
+                <p class="small"><i class="fa fa-angle-right"></i> Gearman</p>
+                <p class="small"><i class="fa fa-angle-right"></i> Memcache</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Web Services exposed with
+                  SOAP and JSON-RPC
+                </p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="timeline-badge success">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> September 2009 - June
+                2011
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">Freelancer</h4>
+                <h6 class="uppercase">Remote - PHP Developer</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Libraries / technologies used:</p>
+                <p class="small"><i class="fa fa-angle-right"></i> PHP</p>
+                <p class="small"><i class="fa fa-angle-right"></i> Mysql</p>
+                <p class="small"><i class="fa fa-angle-right"></i> jQuery</p>
+                <p class="small"><i class="fa fa-angle-right"></i> CSS</p>
+                <p class="small"><i class="fa fa-angle-right"></i> HTML</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- education timeline -->
+    <section
+      id="education"
+      class="professional-timeline section"
+      style="overflow: hidden"
+    >
+      <div class="container light">
+        <div class="text-center">
+          <h3 class="font-dosis-bold uppercase">My Education Timeline</h3>
         </div>
-        <div class="col-sm-3 col-xs-6">
-          <a href="https://github.com/alexandrubagu" target="_blank">
-            <span class="fa fa-github"></span>
-            <p class="small">Github</p>
-          </a>
+        <div class="spacer4"></div>
+
+        <ul class="timeline-vert">
+          <li>
+            <div class="timeline-badge primary">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> September 2008 - June
+                2011
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">
+                  Alexandru Ioan Cuza University
+                </h4>
+                <h6 class="uppercase">Computer Science - (BSc)</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Description:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Algorithms and Programming
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Computer Architecture and
+                  Operating Systems
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Object Oriented Programming
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Formal Languages, Automata
+                  and Compilers
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Design and Analysis of
+                  Algorithms
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Information Security
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Artificial Intelligence
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Bioinformatics
+                </p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Computer Networks
+                </p>
+                <p class="small"><i class="fa fa-angle-right"></i> C/C++</p>
+                <p class="small"><i class="fa fa-angle-right"></i> Java</p>
+                <p class="small"><i class="fa fa-angle-right"></i> .NET</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Web Programming
+                </p>
+              </div>
+            </div>
+          </li>
+          <li class="timeline-inverted">
+            <div class="timeline-badge success">
+              <i class="fa fa-dot-circle-o"></i>
+            </div>
+            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
+              <p class="timeline-time fontcolor-invert">
+                <i class="glyphicon glyphicon-time"></i> September 2009 - June
+                2011
+              </p>
+              <div class="spacer4"></div>
+              <div class="timeline-heading">
+                <h4 class="font-dosis-bold uppercase">
+                  Calistrat Hogas High-School
+                </h4>
+                <h6 class="uppercase">Licentiate degree</h6>
+              </div>
+              <div class="spacer1"></div>
+              <div class="timeline-body">
+                <p class="font-dosis-bold">Field of Study:</p>
+                <p class="small">
+                  <i class="fa fa-angle-right"></i> Information Technology
+                </p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- main skills -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="row text-center">
+          <h3 class="font-dosis-bold uppercase">My Main Skills</h3>
+          <h5 class="font-dosis-bold uppercase hovercolor">
+            Working hard and making the success
+          </h5>
         </div>
-        <div class="col-sm-3 col-xs-6">
-          <a href="https://www.facebook.com/alexandrubagu" target="_blank">
-            <span class="fa fa-facebook"></span>
-            <p class="small">Facebook</p>
-          </a>
-        </div>
-        <div class="col-sm-3 col-xs-6">
-          <a href="https://twitter.com/alexandrubagu" target="_blank">
-            <span class="fa fa-twitter"></span>
-            <p class="small">Twitter</p>
-          </a>
+        <div class="row text-center">
+          <span class="chart" data-percent="85">
+            <span class="percent"></span>
+            <span class="center-block font-dosis-bold">Perl</span>
+          </span>
+          <span class="chart" data-percent="85">
+            <span class="percent"></span>
+            <span class="center-block font-dosis-bold">Elixir</span>
+          </span>
+          <span class="chart" data-percent="80">
+            <span class="percent"></span>
+            <span class="center-block font-dosis-bold">PHP</span>
+          </span>
+          <span class="chart" data-percent="60">
+            <span class="percent"></span>
+            <span class="center-block font-dosis-bold">jQuery</span>
+          </span>
+          <span class="chart" data-percent="65">
+            <span class="percent"></span>
+            <span class="center-block font-dosis-bold">Linux</span>
+          </span>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
+    <!-- projects -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="row text-center">
+            <h3 class="font-dosis-bold uppercase">Projects</h3>
+            <div class="card hovercard">
+              <img src="images/cart.png" alt="Request Mock" />
+              <div class="avatar">
+                <img src="images/requestmock.png" alt="written in Elixir" />
+              </div>
+              <div class="info">
+                <div class="title">
+                  <h5 class="font-dosis-bold uppercase hovercolor">
+                    Request Mock
+                  </h5>
+                </div>
+                <div class="description">
+                  <div class="small">
+                    allows you to set up custom endpoints to test and inspect
+                    HTTP requests &amp; responses
+                  </div>
+                </div>
+                <div class="spacer2"></div>
+                <a
+                  class="font-dosis-bold uppercase hovercolor small"
+                  href="https://www.requestmock.com"
+                  target="_blank"
+                  >View</a
+                >
+              </div>
+            </div>
+            <div class="card hovercard">
+              <img src="images/classifield.png" alt="Donate Things" />
+              <div class="avatar">
+                <img src="images/elixir.png" alt="written in Elixir" />
+              </div>
+              <div class="info">
+                <div class="title">
+                  <h5 class="font-dosis-bold uppercase hovercolor">
+                    Donez Lucruri
+                  </h5>
+                </div>
+                <div class="description">
+                  <div class="small">
+                    Classified application for donating things that you don't
+                    need any more
+                  </div>
+                </div>
+                <div class="spacer2"></div>
+                <a
+                  class="font-dosis-bold uppercase hovercolor small"
+                  href="https://www.donezlucruri.ro"
+                  target="_blank"
+                  >View</a
+                >
+              </div>
+            </div>
+          </div>
+          <div class="spacer1"></div>
+          <div class="row text-center">
+            <h5 class="font-dosis-bold uppercase hovercolor">
+              Open-Source Libraries
+            </h5>
+            <div class="card hovercard">
+              <img src="images/cart.png" alt="Cart Manager" />
+              <div class="avatar">
+                <img src="images/elixir.png" alt="written in Elixir" />
+              </div>
+              <div class="info">
+                <div class="title">
+                  <h5 class="font-dosis-bold uppercase hovercolor">
+                    cacheable
+                  </h5>
+                </div>
+                <div class="description">
+                  <div class="small">
+                    Decorate your functions with customizable cache
+                  </div>
+                </div>
+                <div class="spacer2"></div>
+                <a
+                  class="font-dosis-bold uppercase hovercolor small"
+                  href="https://github.com/alexandrubagu/cacheable"
+                  target="_blank"
+                  >View</a
+                >
+              </div>
+            </div>
+            <div class="card hovercard">
+              <img src="images/ecto_generator.png" alt="Ecto Generator" />
+              <div class="avatar">
+                <img src="images/elixir.png" alt="written in Elixir" />
+              </div>
+              <div class="info">
+                <div class="title">
+                  <h5 class="font-dosis-bold uppercase hovercolor">
+                    gcs_signed_url
+                  </h5>
+                </div>
+                <div class="description">
+                  <div class="small">
+                    Create Signed URLs for Google Cloud Storage
+                  </div>
+                  <div class="small">&nbsp;</div>
+                </div>
+                <div class="spacer2"></div>
+                <a
+                  class="font-dosis-bold uppercase hovercolor small"
+                  href="https://github.com/alexandrubagu/gcs_signed_url"
+                  target="_blank"
+                  >View</a
+                >
+              </div>
+            </div>
+            <div class="card hovercard">
+              <img src="images/simplehttp.png" alt="Simplehttp" />
+              <div class="avatar">
+                <img src="images/elixir.png" alt="written in Elixir" />
+              </div>
+              <div class="info">
+                <div class="title">
+                  <h5 class="font-dosis-bold uppercase hovercolor">
+                    simplehttp
+                  </h5>
+                </div>
+                <div class="description">
+                  <div class="small">HTTP client without dependencies</div>
+                  <div class="small">written in Elixir</div>
+                </div>
+                <div class="spacer2"></div>
+                <a
+                  class="font-dosis-bold uppercase hovercolor small"
+                  href="https://github.com/alexandrubagu/simplehttp"
+                  target="_blank"
+                  >View</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="spacer4"></div>
+        <div class="col-md-8 col-md-offset-2">
+          <div class="row text-center">
+            <h5 class="font-dosis-bold uppercase hovercolor">
+              GitHub Contributions
+            </h5>
+            <div class="spacer1"></div>
+            <a
+              class="notice notice-success"
+              href="https://github.com/msaraiva/surface/pull/79"
+            >
+              <span class="hovercolor">msaraiva/surface</span> - implements
+              input form elements
+            </a>
+            <a
+              class="notice notice-success"
+              href="https://github.com/ueberauth/guardian/pull/264"
+            >
+              <span class="hovercolor">ueberauth/guardian</span> - update mix
+              deps & small refactor
+            </a>
+            <a
+              class="notice notice-success"
+              href="https://github.com/rubencaro/sshex/pull/14"
+            >
+              <span class="hovercolor">rubencaro/sshex</span> - update
+              documentation: show how to use password
+            </a>
+            <a
+              class="notice notice-success"
+              href="https://github.com/ueberauth/guardian/pull/231"
+            >
+              <span class="hovercolor">ueberauth/guardian</span> - update
+              behaviours to reflect changes made in elixir 1.4
+            </a>
+            <a
+              class="notice notice-success"
+              href="https://github.com/potatosalad/erlang-jose/pull/26"
+            >
+              <span class="hovercolor">potatosalad/erlang-jose</span> - add
+              parentheses to remove the ambiguity on Elixir 1.4
+            </a>
+            <a
+              class="notice notice-danger"
+              href="https://github.com/elixir-ecto/ecto/pull/1722"
+            >
+              <span class="hovercolor">elixir-ecto/ecto</span> - Ecto dump
+              models
+            </a>
+            <a
+              class="notice notice-success"
+              href="https://github.com/slimphp/Slim/pull/851"
+            >
+              <span class="hovercolor">slimphp/Slim</span> - fix function log
+              from Slim/Log.php
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div class="back-to-top"></div>
+    <!-- contact -->
+    <section id="contact" class="section section-contact">
+      <div class="container">
+        <div class="row text-center">
+          <h3 class="font-dosis-bold uppercase">Contact</h3>
+          <div class="spacer4"></div>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158867046-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+          <div class="col-sm-3 col-xs-6">
+            <a href="https://www.linkedin.com/in/alexandrubagu" target="_blank">
+              <span class="fa fa-linkedin"></span>
+              <p class="small">Linkedin</p>
+            </a>
+          </div>
+          <div class="col-sm-3 col-xs-6">
+            <a href="https://github.com/alexandrubagu" target="_blank">
+              <span class="fa fa-github"></span>
+              <p class="small">Github</p>
+            </a>
+          </div>
+          <div class="col-sm-3 col-xs-6">
+            <a href="https://www.facebook.com/alexandrubagu" target="_blank">
+              <span class="fa fa-facebook"></span>
+              <p class="small">Facebook</p>
+            </a>
+          </div>
+          <div class="col-sm-3 col-xs-6">
+            <a href="https://twitter.com/alexandrubagu" target="_blank">
+              <span class="fa fa-twitter"></span>
+              <p class="small">Twitter</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    gtag('config', 'UA-158867046-1');
-  </script>
+    <div class="back-to-top"></div>
 
-  <script src="js/jquery-1.12.0.min.js"></script>
-  <script src="js/tether.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/wow.min.js"></script>
-  <script src="js/jquery.easypiechart.min.js"></script>
-  <script src="js/script.min.js"></script>
-</body>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-158867046-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
+      gtag("config", "UA-158867046-1");
+    </script>
+
+    <script src="js/jquery-1.12.0.min.js"></script>
+    <script src="js/tether.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/jquery.easypiechart.min.js"></script>
+    <script src="js/script.min.js"></script>
+  </body>
 </html>
