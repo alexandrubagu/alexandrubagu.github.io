@@ -1,962 +1,1399 @@
 <!DOCTYPE html>
-<html xml:lang="en" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>
-      B&#226;gu Alexandru Bogdan - Elixir / Phoenix / LiveView Developer, Ia&#x0219;i, Romania
-    </title>
-    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bâgu Alexandru Bogdan - Web Developer Portfolio</title>
+  <meta name="description" content="Professional web developer portfolio of Bâgu Alexandru Bogdan specializing in Elixir, Perl, and PHP. Based in Iasi, Romania with experience at eMAG, Host Europe Group, and more." />
+  <meta name="author" content="Bâgu Alexandru Bogdan" />
+  <meta name="keywords" content="web developer, elixir developer, perl developer, php developer, romania, iasi, portfolio" />
 
-    <!-- meta headers -->
-    <meta name="author" content="B&#226;gu Alexandru Bogdan" />
-    <meta
-      name="description"
-      content="I'm a Elixir Developer living in Iasi, Romania. I'm in love with scripting languages like Elixir, Perl and PHP. Programming is not just a job for me, it's a passion."
-    />
-    <meta
-      name="keywords"
-      content="alexandrubagu, bagu alexandru bogdan, elixir romania, elixir developer romania, elixir programmer romania, elixir enthusiast romania"
-    />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:title" content="Bâgu Alexandru Bogdan - Web Developer Portfolio" />
+  <meta property="og:description" content="Professional web developer specializing in Elixir, Perl, and PHP with experience at major tech companies." />
+  <meta property="og:type" content="website" />
 
-    
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-N53WP7XZ');</script>
-    <!-- End Google Tag Manager -->
-    
-    <!-- google developer tools -->
-    <meta
-      name="google-site-verification"
-      content="CUhRi_ohyKkM9999FzPiJiyScaNejWiwVqLWd27kuwI"
-    />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Bâgu Alexandru Bogdan - Web Developer Portfolio" />
 
-    <!-- bootstrap and animate -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
-    <link rel="stylesheet" href="css/animate.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- font icon -->
-    <link rel="stylesheet" href="css/flaticon.css" />
-    <link rel="stylesheet" href="css/font-awesome.min.css" />
-
-    <!-- my style -->
-    <link rel="stylesheet" href="css/style.min.css" />
-
-    <!-- google cards -->
-    <script type="application/ld+json">
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Bâgu Alexandru Bogdan",
+    "alternateName": "Alexandru Bogdan Bâgu",
+    "jobTitle": "Senior Software Engineer - Elixir / Phoenix",
+    "description": "Software Engineer from Romania with deep passion for programming and creating smart, maintainable distributed applications. Specialized in Elixir, Phoenix, and building scalable systems.",
+    "url": "https://alexandrubagu.github.io",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Iasi",
+      "addressCountry": "RO"
+    },
+    "worksFor": {
+      "@type": "Organization",
+      "name": "proSapient",
+      "url": "https://www.prosapient.com"
+    },
+    "alumniOf": {
+      "@type": "Organization",
+      "name": "Alexandru Ioan Cuza University"
+    },
+    "knowsAbout": [
+      "Elixir",
+      "Phoenix Framework",
+      "Erlang",
+      "Distributed Systems",
+      "Microservices",
+      "GraphQL",
+      "gRPC",
+      "PostgreSQL",
+      "PHP",
+      "Perl",
+      "React",
+      "Domain-Driven Design",
+      "Test-Driven Development",
+      "Software Architecture",
+      "Performance Optimization",
+      "Database Optimization",
+      "OAuth2",
+      "SAML",
+      "Auth0",
+      "AWS",
+      "Docker",
+      "Git"
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/in/alexandrubagu",
+      "https://github.com/alexandrubagu",
+      "https://www.facebook.com/alexandrubagu"
+    ],
+    "colleague": [
       {
-        "@context": "http://schema.org/",
-        "@type": "Person",
-        "name": "Bâgu Alexandru Bogdan",
-        "url": "http://alexandrubagu.info",
-        "jobTitle": "Web Developer",
-        "description": "I'm in love with scripting languages like Elixir, Perl and PHP. Programming is not just a job for me, it's a passion",
-        "image": "http://alexandrubagu.info/images/alexandrubagu.jpg",
-        "sameAs": [
-          "https://www.facebook.com/alexandrubagu",
-          "https://www.linkedin.com/in/alexandrubagu",
-          "https://twitter.com/alexandrubagu",
-          "https://github.com/alexandrubagu",
-          "https://www.xing.com/profile/Bagu_Alexandru"
-        ],
-        "homeLocation": {
-          "@type": "Place",
-          "name": "Iasi",
-          "address": "Str. Palat nr.3C, United Business Center, Iasi"
-        }
+        "@type": "Organization",
+        "name": "proSapient"
+      },
+      {
+        "@type": "Organization",
+        "name": "Yolo Group"
+      },
+      {
+        "@type": "Organization",
+        "name": "zenloop"
+      },
+      {
+        "@type": "Organization",
+        "name": "Intersoft Europe"
+      },
+      {
+        "@type": "Organization",
+        "name": "eMAG"
+      },
+      {
+        "@type": "Organization",
+        "name": "GoDaddy"
       }
-    </script>
-  </head>
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N53WP7XZ"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    ]
+  }
+  </script>
 
-    <!-- navigation -->
-    <nav id="top" class="navbar navbar-custom navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button
-            type="button"
-            class="navbar-toggle"
-            data-toggle="collapse"
-            data-target="#nav-collapse"
-          >
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Bâgu Alexandru Bogdan - Portfolio",
+    "description": "Professional web developer portfolio specializing in Elixir, Perl, and PHP with experience at major tech companies.",
+    "url": "https://alexandrubagu.github.io"
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: 'rgb(59, 130, 246)',
+            'primary-foreground': 'rgb(255, 255, 255)',
+            background: 'rgb(255, 255, 255)',
+            foreground: 'rgb(30, 41, 59)',
+            muted: 'rgb(241, 245, 249)',
+            'muted-foreground': 'rgb(100, 116, 139)',
+            border: 'rgb(226, 232, 240)',
+            slate: {
+              50: 'rgb(248, 250, 252)',
+              100: 'rgb(241, 245, 249)',
+              200: 'rgb(226, 232, 240)',
+              300: 'rgb(203, 213, 225)',
+              400: 'rgb(148, 163, 184)',
+              500: 'rgb(100, 116, 139)',
+              600: 'rgb(71, 85, 105)',
+              700: 'rgb(51, 65, 85)',
+              800: 'rgb(30, 41, 59)',
+              900: 'rgb(15, 23, 42)',
+            },
+          },
+        },
+      },
+    }
+  </script>
+  
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    section {
+      scroll-margin-top: 5rem;
+    }
+
+    .gradient-hero {
+      background: linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 100%);
+    }
+
+    .gradient-primary {
+      background: linear-gradient(135deg, rgb(59, 130, 246) 0%, rgb(96, 165, 250) 100%);
+    }
+
+    .gradient-subtle {
+      background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(248, 250, 252) 100%);
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900">
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="#home" id="navbar-logo" class="text-xl font-bold text-white hover:text-primary transition-colors">
+          Alexandru Bogdan
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-1" id="desktop-nav">
+          <a href="#home" class="px-3 py-2 text-sm font-medium text-white hover:text-primary transition-colors">Home</a>
+          <a href="#experience" class="px-3 py-2 text-sm font-medium text-white hover:text-primary transition-colors">Experience</a>
+          <a href="#projects" class="px-3 py-2 text-sm font-medium text-white hover:text-primary transition-colors">Projects</a>
+          <a href="#blog" class="px-3 py-2 text-sm font-medium text-white hover:text-primary transition-colors">Blog</a>
+          <a href="#contact" class="px-3 py-2 text-sm font-medium text-white hover:text-primary transition-colors">Contact</a>
         </div>
-        <div class="collapse navbar-collapse" id="nav-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="#intro">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#professional-timeline">Professional Timeline</a></li>
-            <li><a href="#education">Education</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2" id="mobile-nav">
+          <a href="#home" class="px-3 py-2 text-sm font-medium text-white hover:text-primary hover:bg-slate-700/50 rounded-md transition-colors">Home</a>
+          <a href="#experience" class="px-3 py-2 text-sm font-medium text-white hover:text-primary hover:bg-slate-700/50 rounded-md transition-colors">Experience</a>
+          <a href="#projects" class="px-3 py-2 text-sm font-medium text-white hover:text-primary hover:bg-slate-700/50 rounded-md transition-colors">Projects</a>
+          <a href="#blog" class="px-3 py-2 text-sm font-medium text-white hover:text-primary hover:bg-slate-700/50 rounded-md transition-colors">Blog</a>
+          <a href="#contact" class="px-3 py-2 text-sm font-medium text-white hover:text-primary hover:bg-slate-700/50 rounded-md transition-colors">Contact</a>
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <section id="intro" class="section hidden-xs">
-      <div class="text-center">
-        <div class="max-width-absolute-container">
-          <div class="table-container">
-            <div class="browser-container">
-              <h5 class="font-dosis-bold uppercase hovercolor">
-                Hello, I am <span>B&#226;gu Alexandru Bogdan</span>
-              </h5>
+  <main>
+    <!-- VS Code Hero Section -->
+    <section id="home" class="min-h-screen hidden lg:flex items-center bg-slate-900 py-20">
+      <div class="container mx-auto px-4">
+        <div class="max-w-8xl mx-auto">
+          <!-- VS Code Window -->
+          <div class="bg-[#1e1e1e] rounded-lg overflow-hidden shadow-2xl border border-slate-700">
+            <!-- Title Bar -->
+            <div class="bg-[#323233] px-4 py-2 flex items-center justify-between border-b border-slate-700">
+              <div class="flex items-center gap-2">
+                <div class="flex gap-2">
+                  <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <span class="ml-4 text-sm text-white">
+                  <span id="current-file">elixir.ex</span> - Alexandru Bogdan
+                </span>
+              </div>
+            </div>
+
+            <!-- Tab Bar -->
+            <div class="bg-[#252526] border-b border-slate-700 flex items-center">
+              <div class="flex items-center gap-1 px-2 py-1 bg-[#1e1e1e] border-r border-slate-700">
+                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                </svg>
+                <span class="text-sm text-white px-2" id="tab-name">elixir.ex</span>
+              </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex" style="height: 800px;">
+              <!-- Sidebar - File Explorer -->
+              <div class="w-64 bg-[#252526] border-r border-slate-700 overflow-y-auto">
+                <div class="p-3">
+                  <div class="text-xs text-white uppercase font-semibold mb-2 px-2">Explorer</div>
+                  <div class="space-y-1">
+                    <!-- Programming Languages Folder -->
+                    <div>
+                      <button onclick="toggleFolder('programming-languages')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                        <svg id="chevron-programming-languages" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span class="text-sm text-white">languages</span>
+                      </button>
+                      <div id="folder-programming-languages" class="ml-6 space-y-1">
+                        <button onclick="selectFile('elixir', 'ex')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors bg-slate-700/70">
+                          <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                          </svg>
+                          <span class="text-sm text-white">elixir.ex</span>
+                        </button>
+                        <button onclick="selectFile('perl', 'pl')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                          </svg>
+                          <span class="text-sm text-white">perl.pl</span>
+                        </button>
+                        <button onclick="selectFile('php', 'php')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                          </svg>
+                          <span class="text-sm text-white">php.php</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Frameworks Folder -->
+                    <div>
+                      <button onclick="toggleFolder('frameworks')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                        <svg id="chevron-frameworks" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        <span class="text-sm text-white">frameworks</span>
+                      </button>
+                      <div id="folder-frameworks" class="ml-6 space-y-1 hidden">
+                        <button onclick="selectFile('phoenix', 'ex')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                          </svg>
+                          <span class="text-sm text-white">phoenix.ex</span>
+                        </button>
+                        <button onclick="selectFile('react', 'jsx')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                          </svg>
+                          <span class="text-sm text-white">react.jsx</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Databases Folder -->
+                    <div>
+                      <button onclick="toggleFolder('databases')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                        <svg id="chevron-databases" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        <span class="text-sm text-white">databases</span>
+                      </button>
+                      <div id="folder-databases" class="ml-6 space-y-1 hidden"></div>
+                    </div>
+
+                    <!-- Tools Folder -->
+                    <div>
+                      <button onclick="toggleFolder('tools')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                        <svg id="chevron-tools" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        <span class="text-sm text-white">tools</span>
+                      </button>
+                      <div id="folder-tools" class="ml-6 space-y-1 hidden"></div>
+                    </div>
+
+                    <!-- Soft Skills Folder -->
+                    <div>
+                      <button onclick="toggleFolder('soft-skills')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                        <svg id="chevron-soft-skills" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        <span class="text-sm text-white">soft-skills</span>
+                      </button>
+                      <div id="folder-soft-skills" class="ml-6 space-y-1 hidden"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Editor -->
+              <div class="flex-1 bg-[#1e1e1e] overflow-y-auto">
+                <div class="p-6 font-mono text-sm">
+                  <pre class="text-white leading-relaxed" id="code-editor">defmodule AboutMe do
+  @moduledoc """
+  Personal philosophy and approach to software development
+  """
+
+  def who_am_i do
+    %{
+      name: "Bâgu Alexandru Bogdan",
+      location: "Iasi, Romania",
+      passion: "Programming is not just a job for me, it's a passion",
+      companies: ["Host Europe Groupe", "eMAG", "zenloop", "Intersoft Solutions"]
+    }
+  end
+
+  def creativity do
+    """
+    Programming can be fun and is ultimately a creative art.
+    I like creating applications out of nothing using rapid
+    development tools like Elixir and Ecto.
+    """
+  end
+
+  def self_motivation do
+    """
+    Even if programming is more about fixing than it is creating,
+    I always feel a burning desire to improve, rewrite and do
+    things better.
+    """
+  end
+
+  def problem_solving do
+    """
+    Approach each task knowing there is more than one solution.
+    This will help you develop skills used to solve problems,
+    improve or rewrite code.
+    """
+  end
+end</pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="bg-[#007acc] px-4 py-1 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-4 text-white">
+                <span class="flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-white"></span>
+                  Elixir
+                </span>
+                <span>UTF-8</span>
+                <span>LF</span>
+              </div>
+              <div class="flex items-center gap-4 text-white">
+                <a href="https://github.com/alexandrubagu" target="_blank" rel="noopener noreferrer" class="hover:opacity-80">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </a>
+                <a href="https://www.linkedin.com/in/alexandrubagu" target="_blank" rel="noopener noreferrer" class="hover:opacity-80">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  </svg>
+                </a>
+                <a href="https://www.facebook.com/alexandrubagu" target="_blank" rel="noopener noreferrer" class="hover:opacity-80">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- about me -->
-    <section id="about" class="section">
-      <div class="container">
-        <div class="row alexandrubagu">
-          <div class="col-sm-12">
-            <div class="im-centered">
-              <div class="hexagon">
-                <div class="hexTop"></div>
-                <div class="hexBottom"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="description row text-center">
-          <h3 class="font-dosis-bold uppercase">who am i</h3>
-          <h1 class="font-accident-one-bold uppercase hovercolor">
-            B&#226;gu Alexandru Bogdan
-          </h1>
-          <div class="dividewhite1"></div>
-          <h2 class="small">
-            a web developer living in Iasi, Romania. I have worked with
-            companies like <span class="hovercolor">Host Europe Groupe</span> and
-            <span class="hovercolor">eMAG</span>.<br />
-            <span
-              >I'm in love with scripting languages like
-              <span class="hovercolor">Elixir</span>,
-              <span class="hovercolor">Perl</span> and
-              <span class="hovercolor">PHP</span>. Programming is not just a job
-              for me, it's a passion.</span
-            >
-          </h2>
-        </div>
-        <div class="services row text-center">
-          <div class="col-sm-4">
-            <span class="generic-icon flaticon-light-bulb"></span>
-            <h6 class="font-accident-one-bold uppercase hovercolor">
-              Creative
-            </h6>
-            <p class="small">
-              Programming can be fun and is ultimately a creative art. I like
-              creating applications out of nothing using rapid development tools
-              like Elixir and Ecto.
+    <!-- Who Am I Section -->
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="max-w-5xl mx-auto">
+          <!-- Header -->
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">WHO AM I</h2>
+            <h3 class="text-2xl font-bold mb-6">BÂGU ALEXANDRU BOGDAN</h3>
+            <p class="text-lg text-slate-600 max-w-4xl mx-auto leading-relaxed">
+              <strong>Software Engineer</strong> from <strong>Romania</strong> with deep passion for <strong>programming</strong> and creating smart, <strong>maintainable distributed applications</strong>.
+              I focus on <strong>performance</strong> while constantly striving to enhance <strong>efficiency</strong> and simplify complex systems.
             </p>
-          </div>
-          <div class="col-sm-4">
-            <span class="generic-icon flaticon-cup"></span>
-            <h6 class="font-accident-one-bold uppercase hovercolor">
-              Self-motivated
-            </h6>
-            <p class="small">
-              Even if programming is more about fixing than it is creating, I
-              always feel a burning desire to improve, rewrite and do things
-              better.
+            <p class="text-lg text-slate-600 max-w-4xl mx-auto leading-relaxed mt-4">
+              With deep passion for <strong>thoughtful architecture</strong>—from <strong>domain-driven approaches</strong> that align code with business logic,
+              to <strong>layered designs</strong> that separate concerns cleanly, to <strong>distributed systems</strong> with seamless communication.
+              I believe the best software feels <strong>effortless</strong> to use and maintain.
             </p>
+            <div class="w-20 h-1 bg-primary mx-auto mt-8"></div>
           </div>
-          <div class="col-sm-4">
-            <span class="generic-icon flaticon-multiply"></span>
-            <h6 class="font-accident-one-bold uppercase hovercolor">
-              Solutions
-            </h6>
-            <p class="small">
-              Approach each task knowing there is more than one solution this
-              will help you develop skills used to solve problems, improve or
-              rewrite code.
+
+          <!-- Three Pillars -->
+          <div class="grid md:grid-cols-3 gap-8 mt-16">
+            <!-- Creative -->
+            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+              <div class="p-8 text-center">
+                <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                  <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-4">CREATIVE</h3>
+                <p class="text-slate-600 leading-relaxed">
+                  Programming can be fun and is ultimately a creative art.
+                  I like creating applications out of nothing using rapid development tools like Elixir and Ecto.
+                </p>
+              </div>
+            </div>
+
+            <!-- Self-Motivated -->
+            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+              <div class="p-8 text-center">
+                <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                  <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-4">SELF-MOTIVATED</h3>
+                <p class="text-slate-600 leading-relaxed">
+                  Even if programming is more about fixing than it is creating,
+                  I always feel a burning desire to improve, rewrite and do things better.
+                </p>
+              </div>
+            </div>
+
+            <!-- Solutions -->
+            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+              <div class="p-8 text-center">
+                <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+                  <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-4">SOLUTIONS</h3>
+                <p class="text-slate-600 leading-relaxed">
+                  Approach each task knowing there is more than one solution.
+                  This will help you develop skills used to solve problems, improve or rewrite code.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Professional Timeline Section -->
+    <section id="experience" class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Professional Timeline</h2>
+            <p class="text-lg text-slate-600">Work hard in silence, let success be your noise</p>
+            <div class="w-20 h-1 bg-primary mx-auto mt-6"></div>
+          </div>
+
+          <div class="space-y-8">
+            <!-- proSapient -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">proSapient</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">June 2025 - Present</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">[Remote] Senior Software Engineer - Elixir / Phoenix</p>
+                  <p class="text-sm text-slate-700 mb-3">ProSapient leverages AI-powered search and expert intelligence on demand to rapidly connect clients with top-industry experts, delivering >99% accurate transcripts and seamless insights to help make better decisions.</p>
+                  <div class="text-sm text-slate-700 space-y-2">
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul class="list-disc ml-5 space-y-1">
+                      <li>Architected high-performance call log filtering system using PostgreSQL fuzzy search and optimized indexing</li>
+                      <li>Led email infrastructure migration from Mailgun to Amazon SES with compliance-focused workflows</li>
+                      <li>Developed APIs for client surveys, transcript management, and secure third-party integrations</li>
+                      <li>Enhanced CRM operations by implementing granular filtering and seniority mapping for improved reporting</li>
+                      <li>Executed database schema migrations and implemented automated maintenance scripts for data cleanup</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Elixir</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Phoenix</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">GraphQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">PostgreSQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Datadog</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Grafana</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Code Refactoring</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Yolo Group -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">Yolo Group</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">May 2024 - May 2025</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">[Remote] Technical Team Lead / Senior Software Engineer - Elixir / Phoenix</p>
+                  <p class="text-sm text-slate-700 mb-3">Yolo Group is a global tech company pioneering in gaming, fintech, and blockchain, known for brands like Bitcasino.io and Sportsbet.io.</p>
+                  <div class="text-sm text-slate-700 space-y-2">
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul class="list-disc ml-5 space-y-1">
+                      <li>Architected and implemented multi-tenancy support in the lab_game microservice, enabling the platform to serve content from a unified codebase</li>
+                      <li>Designed intelligent site-specific caching mechanisms using Cachex to optimize configuration retrieval</li>
+                      <li>Spearheaded development of game inventory features including bulk site-game updates and RTP caching</li>
+                      <li>Optimized database query performance by implementing replica usage for heavy aggregation operations</li>
+                      <li>Extended Protocol Buffers definitions to support new features including demo sessions and bulk configuration updates</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Elixir</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Phoenix</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">gRPC</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Protocol Buffers</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">PostgreSQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Microservices</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Datadog</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Code Refactoring</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- zenloop -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">zenloop</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">May 2021 - March 2024</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">[Remote] Senior Software Engineer - Elixir / Phoenix</p>
+                  <p class="text-sm text-slate-700 mb-3">Zenloop is an integrated experience management platform based on the Net Promoter Score®. The SaaS solution automatically collects customer feedback, analyzes and derives customized measures.</p>
+                  <div class="text-sm text-slate-700 space-y-2">
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul class="list-disc ml-5 space-y-1">
+                      <li>Led a team of two developers to expand authorization capabilities by implementing custom role definitions</li>
+                      <li>Spearheaded migration of authentication system to Auth0, setting new security standards</li>
+                      <li>Increased test code coverage from 65% to 92% and convinced team to adopt Test-Driven Development (TDD)</li>
+                      <li>Improved database query performance through table normalization, building projections, and optimizing blob from tables/indexes</li>
+                      <li>Extended filtering of customer answers by incorporating relevant answer properties</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Elixir</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Phoenix</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">PostgreSQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Elasticsearch</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">RabbitMQ</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">AWS</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Auth0</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">OAuth2</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">SAML 2.0</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">SendGrid</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">REST APIs</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Intersoft Europe -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">Intersoft Europe</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">October 2018 - April 2021</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">[Remote] Senior Software Engineer - Elixir / Phoenix / React</p>
+                  <p class="text-sm text-slate-700 mb-3">INTERSOFT® is a digital transformation partner that helps solve customer experience and customer care challenges with experienced consultants and enterprise solutions.</p>
+                  <div class="text-sm text-slate-700 space-y-2">
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul class="list-disc ml-5 space-y-1">
+                      <li>Upgraded internal authentication system by integrating Keycloak</li>
+                      <li>Expanded functionality of dynamic survey forms by introducing new input types and deriving dynamic schemas</li>
+                      <li>Spearheaded development of 80% of the admin interface from scratch using React, Redux Thunk, and React Router</li>
+                      <li>Delivered Survey Flow module that orchestrates actions triggered after survey answers are submitted</li>
+                      <li>Contributed to application architecture design by adopting a modular approach with multiple contexts</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Elixir</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Phoenix</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">React.js</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Redux</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">PostgreSQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">GraphQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">REST APIs</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">OAuth</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Microservices</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- eMAG -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">eMAG</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">April 2015 - September 2018</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">PHP Developer</p>
+                  <p class="text-sm text-slate-700 mb-2">eMAG is one of the largest e-commerce platforms in Romania, with millions of products available from both local and international brands.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">PHP</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">MySQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Domain-Driven Design</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Memcached</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">RabbitMQ</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Gearman</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Varnish</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Nginx</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">REST APIs</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Microservices</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cognizant Softvision -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">Cognizant Softvision</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">October 2014 - March 2015</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">Full Stack Developer</p>
+                  <p class="text-sm text-slate-700 mb-2">Softvision is a big outsourcing IT company which creates impactful digital products and solutions for consumers.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Angular 1.3</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Node.js</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">JavaScript</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">jQuery</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Bootstrap</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">REST APIs</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Swagger API</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- GoDaddy (Host Europe Group) -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">GoDaddy (Host Europe Group)</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">September 2012 - September 2014</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">Perl Developer</p>
+                  <p class="text-sm text-slate-700 mb-3">Host Europe Group, now part of GoDaddy, provided domain registration, mass hosting, customized managed hosting, and cloud hosting services.</p>
+                  <div class="text-sm text-slate-700 space-y-2">
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul class="list-disc ml-5 space-y-1">
+                      <li>Implemented ability to release and transfer domains, enhancing user flexibility and control</li>
+                      <li>Conducted complete refactoring of the domain API client from Donhost.co.uk, optimizing performance</li>
+                      <li>Constructed integration of the gTLD portal with the Webfusion UK website from the ground up</li>
+                      <li>Successfully integrated OAuth with existing authentication system</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Perl</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Catalyst Framework</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">MySQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Apache</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Memcached</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">REST APIs</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">OAuth</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">JSON-RPC</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- streamWIDE -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">streamWIDE</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">June 2012 - August 2012</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">PHP Developer</p>
+                  <p class="text-sm text-slate-700 mb-3">Streamwide transforms digital communications, serving administrations, businesses, and over 130 million users in the telecom sector worldwide.</p>
+                  <div class="text-sm text-slate-700 space-y-2">
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul class="list-disc ml-5 space-y-1">
+                      <li>Elevated the XMLRPC Server/Client library by introducing support for multipart messages</li>
+                      <li>Ensured proper functioning of the SMS gateway through creation of comprehensive unit tests</li>
+                      <li>Authored comprehensive documentation to empower users in fully utilizing SMS features</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">PHP</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Zend Framework</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">MySQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">REST</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Git</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Webfusion -->
+            <div class="border-l-4 border-l-primary shadow-md hover:shadow-xl transition-shadow duration-300 bg-white rounded-lg p-6">
+              <div class="flex items-start gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-start justify-between gap-4 mb-1">
+                    <h3 class="text-xl font-bold">Webfusion</h3>
+                    <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full whitespace-nowrap">May 2011 - April 2012</span>
+                  </div>
+                  <p class="text-sm text-slate-600 mb-2">Perl Developer</p>
+                  <p class="text-sm text-slate-700 mb-3">Webfusion is one of the UK's leading web hosting groups, offering cost-effective, feature-rich hosting packages. Now part of GoDaddy EMEA.</p>
+                  <div class="text-sm text-slate-700 space-y-2">
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul class="list-disc ml-5 space-y-1">
+                      <li>Successfully implemented a comprehensive voucher system across all brands</li>
+                      <li>Improved loading times by strategically incorporating memcached where needed</li>
+                      <li>Modified the provisioning system tool to automatically identify failed baskets</li>
+                      <li>Refactored and fixed bundle promotions, elevating their functionality</li>
+                      <li>Enhanced the admin order interface for improved usability and efficiency</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 mt-4">
+                <div class="w-12 flex-shrink-0"></div>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Perl</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Catalyst Framework</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">MySQL</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Apache</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Memcached</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">REST APIs</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">OAuth</span>
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">SOAP</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 gradient-subtle">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Projects</h2>
+            <div class="w-20 h-1 bg-primary mx-auto"></div>
+          </div>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Project Card -->
+            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Library</span>
+                  <svg class="w-5 h-5 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">gcs_signed_url</h3>
+                <p class="text-sm text-slate-600 mb-4">
+                  Create signed URLs for Google Cloud Storage with time-limited secure access
+                </p>
+                <div class="flex items-center justify-between mt-auto">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Elixir</span>
+                  <a href="https://hex.pm/packages/gcs_signed_url" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline text-sm font-medium flex items-center gap-1">
+                    View
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- More project cards... -->
+            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Library</span>
+                  <svg class="w-5 h-5 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">cacheable</h3>
+                <p class="text-sm text-slate-600 mb-4">
+                  Decorate your functions with customizable cache
+                </p>
+                <div class="flex items-center justify-between mt-auto">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Elixir</span>
+                  <a href="https://github.com/alexandrubagu/cacheable" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline text-sm font-medium flex items-center gap-1">
+                    View
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Library</span>
+                  <svg class="w-5 h-5 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">mazex</h3>
+                <p class="text-sm text-slate-600 mb-4">
+                  Generate mazes using 7 different algorithms and render them as PNG images
+                </p>
+                <div class="flex items-center justify-between mt-auto">
+                  <span class="px-2 py-1 border border-slate-300 text-slate-700 text-xs rounded">Elixir</span>
+                  <a href="https://github.com/alexandrubagu/mazex" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline text-sm font-medium flex items-center gap-1">
+                    View
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GitHub Contributions Section -->
+    <section id="contributions" class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">GitHub Contributions</h2>
+            <div class="w-20 h-1 bg-primary mx-auto"></div>
+          </div>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Contribution Card -->
+            <a href="https://github.com/msaraiva/surface/pull/79" target="_blank" rel="noopener noreferrer" class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden p-6">
+              <h3 class="text-lg font-bold mb-2 text-primary">msaraiva/surface</h3>
+              <p class="text-sm text-slate-600">
+                Implements input form elements
+              </p>
+            </a>
+
+            <a href="https://github.com/ueberauth/guardian/pull/264" target="_blank" rel="noopener noreferrer" class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden p-6">
+              <h3 class="text-lg font-bold mb-2 text-primary">ueberauth/guardian</h3>
+              <p class="text-sm text-slate-600">
+                Update mix deps &amp; small refactor
+              </p>
+            </a>
+
+            <a href="https://github.com/rubencaro/sshex/pull/14" target="_blank" rel="noopener noreferrer" class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden p-6">
+              <h3 class="text-lg font-bold mb-2 text-primary">rubencaro/sshex</h3>
+              <p class="text-sm text-slate-600">
+                Update documentation: show how to use password
+              </p>
+            </a>
+
+            <a href="https://github.com/ueberauth/guardian/pull/231" target="_blank" rel="noopener noreferrer" class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden p-6">
+              <h3 class="text-lg font-bold mb-2 text-primary">ueberauth/guardian</h3>
+              <p class="text-sm text-slate-600">
+                Update behaviours to reflect changes made in Elixir 1.4
+              </p>
+            </a>
+
+            <a href="https://github.com/potatosalad/erlang-jose/pull/26" target="_blank" rel="noopener noreferrer" class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden p-6">
+              <h3 class="text-lg font-bold mb-2 text-primary">potatosalad/erlang-jose</h3>
+              <p class="text-sm text-slate-600">
+                Add parentheses to remove the ambiguity on Elixir 1.4
+              </p>
+            </a>
+
+            <a href="https://github.com/elixir-ecto/ecto/pull/1722" target="_blank" rel="noopener noreferrer" class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden p-6">
+              <h3 class="text-lg font-bold mb-2 text-primary">elixir-ecto/ecto</h3>
+              <p class="text-sm text-slate-600">
+                Ecto dump models
+              </p>
+            </a>
+
+            <a href="https://github.com/slimphp/Slim/pull/851" target="_blank" rel="noopener noreferrer" class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden p-6">
+              <h3 class="text-lg font-bold mb-2 text-primary">slimphp/Slim</h3>
+              <p class="text-sm text-slate-600">
+                Fix function log from Slim/Log.php
+              </p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="py-20 gradient-subtle">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Blog</h2>
+            <p class="text-lg text-slate-600">Thoughts, tutorials, and insights from my development journey</p>
+            <div class="w-20 h-1 bg-primary mx-auto mt-6"></div>
+          </div>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Blog Card 1 -->
+            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+              <div class="p-6">
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Elixir</span>
+                  <span class="text-xs text-slate-600">9 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Building Mazex: Maze Generation with Elixir</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  November 25, 2024
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">
+                  Exploring seven maze generation algorithms in Elixir, from Binary Tree to Wilson's algorithm. Learn how different approaches create unique patterns and performance characteristics.
+                </p>
+                <a href="blog/blog-mazex-project.html" class="text-primary hover:underline font-medium flex items-center gap-2">
+                  Read More
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center mt-12">
+            <a href="blog.html" class="px-6 py-3 border-2 border-primary text-primary font-medium rounded-lg hover:bg-primary hover:text-white transition-colors inline-block">
+              View All Posts
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 gradient-subtle">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Get In Touch</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-8"></div>
+          <p class="text-lg text-slate-600 mb-12">
+            Feel free to reach out for collaborations, opportunities, or just a friendly chat
+          </p>
+
+          <div class="flex justify-center gap-8 mb-16">
+            <a href="https://www.linkedin.com/in/alexandrubagu" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center gap-2 text-slate-600 hover:text-blue-700 transition-colors">
+              <div class="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center hover:scale-110 transition-transform">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </div>
+              <span class="text-sm font-medium">LinkedIn</span>
+            </a>
+            <a href="https://github.com/alexandrubagu" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors">
+              <div class="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center hover:scale-110 transition-transform">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+              <span class="text-sm font-medium">GitHub</span>
+            </a>
+            <a href="https://www.facebook.com/alexandrubagu" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors">
+              <div class="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center hover:scale-110 transition-transform">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                </svg>
+              </div>
+              <span class="text-sm font-medium">Facebook</span>
+            </a>
+          </div>
+
+          <footer class="border-t border-slate-300 pt-8">
+            <p class="text-sm text-slate-600">
+              © 2024 Bâgu Alexandru Bogdan. Built with passion using modern web technologies.
             </p>
-          </div>
+          </footer>
         </div>
       </div>
     </section>
+  </main>
 
-    <!-- professional timeline -->
-    <section
-      id="professional-timeline"
-      class="professional-timeline section"
-      style="overflow: hidden"
-    >
-      <div class="container light">
-        <div class="text-center">
-          <h3 class="font-dosis-bold uppercase">My Professional Timeline</h3>
-          <h5 class="font-dosis-bold uppercase hovercolor">
-            Work hard in silence, let success be your noise
-          </h5>
-          <div class="spacer1"></div>
-          <p class="small" hidden>Here is my professional timeline</p>
-        </div>
-        <div class="spacer4"></div>
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
 
-        <ul class="timeline-vert">
-          <li>
-            <div class="timeline-badge success">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> May 2021 - Present
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">zenloop GmbH</h4>
-                <h6 class="uppercase">[Remote] Elixir / Phoenix Developer</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Elixir / Plug / Phoenix
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Ecto / EctoSQL
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Elasticsearch
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> RabbitMQ
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Redis
-                </p>
-              </div>
-            </div>
-          </li>
-          <li class="timeline-inverted">
-            <div class="timeline-badge success">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> October 2018 - April 2021
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">Intersoft Solutions</h4>
-                <h6 class="uppercase">[Remote] Elixir / Phoenix Developer</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Elixir / Plug / Phoenix
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Ecto / EctoSQL
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> GraphQL using Absinthe
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Docker / Bitbucket CI
-                </p>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="timeline-badge success">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> April 2015 - September
-                2018
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">eMAG</h4>
-                <h6 class="uppercase">PHP Developer</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> PHP / Mysql
-                </p>
-                <p class="small"><i class="fa fa-angle-right"></i> Symfony2</p>
-                <p class="small"><i class="fa fa-angle-right"></i> Memcache</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Gearman / RabbitMQ
-                </p>
-                <p class="small"><i class="fa fa-angle-right"></i> Varnish</p>
-              </div>
-            </div>
-          </li>
-          <li class="timeline-inverted">
-            <div class="timeline-badge primary">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> October 2014 - March
-                2015
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">Softvision</h4>
-                <h6 class="uppercase">JavaScript Developer</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small"><i class="fa fa-angle-right"></i> AngularJS</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> jQuery + jQuery UI
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Underscore.js as templating
-                  engine
-                </p>
-                <p class="small"><i class="fa fa-angle-right"></i> RequireJS</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Promise API
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Bower / Yeoman
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Bootstrap 3
-                </p>
-                <p class="small"><i class="fa fa-angle-right"></i> Ajax</p>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="timeline-badge success">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> September 2012 -
-                September 2014
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">Host Europe Group</h4>
-                <h6 class="uppercase">Perl Developer</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Responsibilities:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Added release and transfer
-                  of domains and refactored the entire domain api client from
-                  <a href="http://donhost.co.uk" rel="nofollow"
-                    >Donhost.co.uk</a
-                  >
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Build from scrath the
-                  integration of gTLD portal with Webfusion UK website
-                  (integrated OAuth to existing authentication system, added new
-                  features to APIs to handle the gTLD portal requests)
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Resolve some of customer
-                  tickets
-                </p>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      const logo = document.getElementById('navbar-logo');
+      const desktopNav = document.querySelectorAll('#desktop-nav a');
+      const mobileNav = document.querySelectorAll('#mobile-nav a');
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 
-                <div class="spacer1"></div>
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Perl / Mysql
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Catalyst Framework
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> OAuth2 Protocol
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Apache2 - CGI / mod_perl
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> DBIx::Class & Rose::DB
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Web Services exposed with
-                  REST
-                </p>
-              </div>
-            </div>
-          </li>
-          <li class="timeline-inverted">
-            <div class="timeline-badge primary">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> May 2012 - September
-                2012
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">UrbanStudioNYC.com</h4>
-                <h6 class="uppercase">
-                  Remote - Ruby / Ruby on Rails Developer
-                </h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Ruby / Ruby On Rails
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Single sign on ( OAuth2 )
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Image Processing
-                </p>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="timeline-badge success">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> June 2012 - August 2012
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">StreamWIDE</h4>
-                <h6 class="uppercase">PHP Developer</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Responsibilities:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Added more features on sms
-                  gateway (Kannel) using Zend Framework
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Improved XMLRPC
-                  Server/Client library to support multipart messages
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Created unit tests for sms
-                  gateway
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Wrote documentation
-                </p>
+      if (window.scrollY > 50) {
+        // Add sticky navbar styles
+        navbar.classList.add('bg-white/95', 'backdrop-blur-md', 'shadow-md');
 
-                <div class="spacer1"></div>
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> PHP / Mysql
-                </p>
-                <p class="small"><i class="fa fa-angle-right"></i> Zend 1.6</p>
-                <p class="small"><i class="fa fa-angle-right"></i> Doctrine</p>
-                <p class="small"><i class="fa fa-angle-right"></i> Kannel</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Redis / Memcache
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> SMPP Protocol
-                </p>
-              </div>
-            </div>
-          </li>
-          <li class="timeline-inverted">
-            <div class="timeline-badge primary">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> May 2011 - April 2012
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">Webfusion</h4>
-                <h6 class="uppercase">Perl Developer</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Responsibilities:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Added two payment methods:
-                  Invoices and PayNow ( method which allows customer support to
-                  generate orders and send back to client to pay )
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Implemented the voucher
-                  system for all brands: Webfusion UK, Webfusion ES
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Improved website loading
-                  time by adding memcache
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Modified the provisioning
-                  system tool to pick up failed baskets automatically
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Refactored and fixed the
-                  bundle promotions and admin order interface
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Modified the firewall web
-                  interface
-                </p>
+        // Change text color to black
+        logo.classList.remove('text-white');
+        logo.classList.add('text-slate-900');
+        mobileMenuBtn.classList.remove('text-white');
+        mobileMenuBtn.classList.add('text-slate-900');
 
-                <div class="spacer1"></div>
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Perl / Mysql
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Catalyst Framework
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Apache2 - CGI / mod_perl
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Supervise monitoring
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> DBIx::Class
-                </p>
-                <p class="small"><i class="fa fa-angle-right"></i> Gearman</p>
-                <p class="small"><i class="fa fa-angle-right"></i> Memcache</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Web Services exposed with
-                  SOAP and JSON-RPC
-                </p>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="timeline-badge success">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> September 2009 - June
-                2011
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">Freelancer</h4>
-                <h6 class="uppercase">Remote - PHP Developer</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Libraries / technologies used:</p>
-                <p class="small"><i class="fa fa-angle-right"></i> PHP</p>
-                <p class="small"><i class="fa fa-angle-right"></i> Mysql</p>
-                <p class="small"><i class="fa fa-angle-right"></i> jQuery</p>
-                <p class="small"><i class="fa fa-angle-right"></i> CSS</p>
-                <p class="small"><i class="fa fa-angle-right"></i> HTML</p>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
+        desktopNav.forEach(link => {
+          link.classList.remove('text-white');
+          link.classList.add('text-slate-900');
+        });
 
-    <!-- education timeline -->
-    <section
-      id="education"
-      class="professional-timeline section"
-      style="overflow: hidden"
-    >
-      <div class="container light">
-        <div class="text-center">
-          <h3 class="font-dosis-bold uppercase">My Education Timeline</h3>
-        </div>
-        <div class="spacer4"></div>
+        mobileNav.forEach(link => {
+          link.classList.remove('text-white', 'hover:bg-slate-700/50');
+          link.classList.add('text-slate-900', 'hover:bg-slate-100');
+        });
+      } else {
+        // Remove sticky navbar styles
+        navbar.classList.remove('bg-white/95', 'backdrop-blur-md', 'shadow-md');
 
-        <ul class="timeline-vert">
-          <li>
-            <div class="timeline-badge primary">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInLeft" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> September 2008 - June
-                2011
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">
-                  Alexandru Ioan Cuza University
-                </h4>
-                <h6 class="uppercase">Computer Science - (BSc)</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Description:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Algorithms and Programming
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Computer Architecture and
-                  Operating Systems
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Object Oriented Programming
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Formal Languages, Automata
-                  and Compilers
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Design and Analysis of
-                  Algorithms
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Information Security
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Artificial Intelligence
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Bioinformatics
-                </p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Computer Networks
-                </p>
-                <p class="small"><i class="fa fa-angle-right"></i> C/C++</p>
-                <p class="small"><i class="fa fa-angle-right"></i> Java</p>
-                <p class="small"><i class="fa fa-angle-right"></i> .NET</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Web Programming
-                </p>
-              </div>
-            </div>
-          </li>
-          <li class="timeline-inverted">
-            <div class="timeline-badge success">
-              <i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="timeline-panel wow bounceInRight" data-wow-delay=".4s">
-              <p class="timeline-time fontcolor-invert">
-                <i class="glyphicon glyphicon-time"></i> September 2009 - June
-                2011
-              </p>
-              <div class="spacer4"></div>
-              <div class="timeline-heading">
-                <h4 class="font-dosis-bold uppercase">
-                  Calistrat Hogas High-School
-                </h4>
-                <h6 class="uppercase">Licentiate degree</h6>
-              </div>
-              <div class="spacer1"></div>
-              <div class="timeline-body">
-                <p class="font-dosis-bold">Field of Study:</p>
-                <p class="small">
-                  <i class="fa fa-angle-right"></i> Information Technology
-                </p>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
+        // Change text color back to white
+        logo.classList.remove('text-slate-900');
+        logo.classList.add('text-white');
+        mobileMenuBtn.classList.remove('text-slate-900');
+        mobileMenuBtn.classList.add('text-white');
 
-    <!-- main skills -->
-    <section id="skills" class="section">
-      <div class="container">
-        <div class="row text-center">
-          <h3 class="font-dosis-bold uppercase">My Main Skills</h3>
-          <h5 class="font-dosis-bold uppercase hovercolor">
-            Working hard and making the success
-          </h5>
-        </div>
-        <div class="row text-center">
-          <span class="chart" data-percent="85">
-            <span class="percent"></span>
-            <span class="center-block font-dosis-bold">Perl</span>
-          </span>
-          <span class="chart" data-percent="90">
-            <span class="percent"></span>
-            <span class="center-block font-dosis-bold">Elixir</span>
-          </span>
-          <span class="chart" data-percent="90">
-            <span class="percent"></span>
-            <span class="center-block font-dosis-bold">PHP</span>
-          </span>
-          <span class="chart" data-percent="75">
-            <span class="percent"></span>
-            <span class="center-block font-dosis-bold">React</span>
-          </span>
-          <span class="chart" data-percent="65">
-            <span class="percent"></span>
-            <span class="center-block font-dosis-bold">Linux</span>
-          </span>
-        </div>
-      </div>
-    </section>
+        desktopNav.forEach(link => {
+          link.classList.remove('text-slate-900');
+          link.classList.add('text-white');
+        });
 
-    <!-- projects -->
-    <section id="projects" class="section">
-      <div class="container">
-        <div class="col-md-12">
-          <div class="row text-center">
-            <h3 class="font-dosis-bold uppercase">Projects</h3>
-            <div class="card hovercard">
-              <img src="images/cart.png" alt="Request Mock" />
-              <div class="avatar">
-                <img src="images/requestmock.png" alt="written in Elixir" />
-              </div>
-              <div class="info">
-                <div class="title">
-                  <h5 class="font-dosis-bold uppercase hovercolor">
-                    Request Mock
-                  </h5>
-                </div>
-                <div class="description">
-                  <div class="small">
-                    allows you to set up custom endpoints to test and inspect
-                    HTTP requests &amp; responses
-                  </div>
-                </div>
-                <div class="spacer2"></div>
-                <a
-                  class="font-dosis-bold uppercase hovercolor small"
-                  href="https://www.requestmock.com"
-                  target="_blank"
-                  >View</a
-                >
-              </div>
-            </div>
-            <div class="card hovercard">
-              <img src="images/classifield.png" alt="Donate Things" />
-              <div class="avatar">
-                <img src="images/elixir.png" alt="written in Elixir" />
-              </div>
-              <div class="info">
-                <div class="title">
-                  <h5 class="font-dosis-bold uppercase hovercolor">
-                    Donez Lucruri
-                  </h5>
-                </div>
-                <div class="description">
-                  <div class="small">
-                    Classified application for donating things that you don't
-                    need any more
-                  </div>
-                </div>
-                <div class="spacer2"></div>
-                <a
-                  class="font-dosis-bold uppercase hovercolor small"
-                  href="https://www.donezlucruri.ro"
-                  target="_blank"
-                  >View</a
-                >
-              </div>
-            </div>
-          </div>
-          <div class="spacer1"></div>
-          <div class="row text-center">
-            <h5 class="font-dosis-bold uppercase hovercolor">
-              Open-Source Libraries
-            </h5>
-            <div class="card hovercard">
-              <img src="images/cart.png" alt="Cart Manager" />
-              <div class="avatar">
-                <img src="images/elixir.png" alt="written in Elixir" />
-              </div>
-              <div class="info">
-                <div class="title">
-                  <h5 class="font-dosis-bold uppercase hovercolor">
-                    cacheable
-                  </h5>
-                </div>
-                <div class="description">
-                  <div class="small">
-                    Decorate your functions with customizable cache
-                  </div>
-                </div>
-                <div class="spacer2"></div>
-                <a
-                  class="font-dosis-bold uppercase hovercolor small"
-                  href="https://github.com/alexandrubagu/cacheable"
-                  target="_blank"
-                  >View</a
-                >
-              </div>
-            </div>
-            <div class="card hovercard">
-              <img src="images/ecto_generator.png" alt="Ecto Generator" />
-              <div class="avatar">
-                <img src="images/elixir.png" alt="written in Elixir" />
-              </div>
-              <div class="info">
-                <div class="title">
-                  <h5 class="font-dosis-bold uppercase hovercolor">
-                    gcs_signed_url
-                  </h5>
-                </div>
-                <div class="description">
-                  <div class="small">
-                    Create Signed URLs for Google Cloud Storage
-                  </div>
-                  <div class="small">&nbsp;</div>
-                </div>
-                <div class="spacer2"></div>
-                <a
-                  class="font-dosis-bold uppercase hovercolor small"
-                  href="https://github.com/alexandrubagu/gcs_signed_url"
-                  target="_blank"
-                  >View</a
-                >
-              </div>
-            </div>
-            <div class="card hovercard">
-              <img src="images/simplehttp.png" alt="Simplehttp" />
-              <div class="avatar">
-                <img src="images/elixir.png" alt="written in Elixir" />
-              </div>
-              <div class="info">
-                <div class="title">
-                  <h5 class="font-dosis-bold uppercase hovercolor">
-                    simplehttp
-                  </h5>
-                </div>
-                <div class="description">
-                  <div class="small">HTTP client without dependencies</div>
-                  <div class="small">written in Elixir</div>
-                </div>
-                <div class="spacer2"></div>
-                <a
-                  class="font-dosis-bold uppercase hovercolor small"
-                  href="https://github.com/alexandrubagu/simplehttp"
-                  target="_blank"
-                  >View</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="spacer4"></div>
-        <div class="col-md-8 col-md-offset-2">
-          <div class="row text-center">
-            <h5 class="font-dosis-bold uppercase hovercolor">
-              GitHub Contributions
-            </h5>
-            <div class="spacer1"></div>
-            <a
-              class="notice notice-success"
-              href="https://github.com/msaraiva/surface/pull/79"
-            >
-              <span class="hovercolor">msaraiva/surface</span> - implements
-              input form elements
-            </a>
-            <a
-              class="notice notice-success"
-              href="https://github.com/ueberauth/guardian/pull/264"
-            >
-              <span class="hovercolor">ueberauth/guardian</span> - update mix
-              deps & small refactor
-            </a>
-            <a
-              class="notice notice-success"
-              href="https://github.com/rubencaro/sshex/pull/14"
-            >
-              <span class="hovercolor">rubencaro/sshex</span> - update
-              documentation: show how to use password
-            </a>
-            <a
-              class="notice notice-success"
-              href="https://github.com/ueberauth/guardian/pull/231"
-            >
-              <span class="hovercolor">ueberauth/guardian</span> - update
-              behaviours to reflect changes made in elixir 1.4
-            </a>
-            <a
-              class="notice notice-success"
-              href="https://github.com/potatosalad/erlang-jose/pull/26"
-            >
-              <span class="hovercolor">potatosalad/erlang-jose</span> - add
-              parentheses to remove the ambiguity on Elixir 1.4
-            </a>
-            <a
-              class="notice notice-danger"
-              href="https://github.com/elixir-ecto/ecto/pull/1722"
-            >
-              <span class="hovercolor">elixir-ecto/ecto</span> - Ecto dump
-              models
-            </a>
-            <a
-              class="notice notice-success"
-              href="https://github.com/slimphp/Slim/pull/851"
-            >
-              <span class="hovercolor">slimphp/Slim</span> - fix function log
-              from Slim/Log.php
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+        mobileNav.forEach(link => {
+          link.classList.remove('text-slate-900', 'hover:bg-slate-100');
+          link.classList.add('text-white', 'hover:bg-slate-700/50');
+        });
+      }
+    });
 
-    <!-- contact -->
-    <section id="contact" class="section section-contact">
-      <div class="container">
-        <div class="row text-center">
-          <h3 class="font-dosis-bold uppercase">Contact</h3>
-          <div class="spacer4"></div>
+    // VS Code file explorer
+    function toggleFolder(folderName) {
+      const folder = document.getElementById('folder-' + folderName);
+      const chevron = document.getElementById('chevron-' + folderName);
+      
+      if (folder.classList.contains('hidden')) {
+        folder.classList.remove('hidden');
+        chevron.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>';
+      } else {
+        folder.classList.add('hidden');
+        chevron.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>';
+      }
+    }
 
-          <div class="col-sm-3 col-xs-6">
-            <a href="https://www.linkedin.com/in/alexandrubagu" target="_blank">
-              <span class="fa fa-linkedin"></span>
-              <p class="small">Linkedin</p>
-            </a>
-          </div>
-          <div class="col-sm-3 col-xs-6">
-            <a href="https://github.com/alexandrubagu" target="_blank">
-              <span class="fa fa-github"></span>
-              <p class="small">Github</p>
-            </a>
-          </div>
-          <div class="col-sm-3 col-xs-6">
-            <a href="https://www.facebook.com/alexandrubagu" target="_blank">
-              <span class="fa fa-facebook"></span>
-              <p class="small">Facebook</p>
-            </a>
-          </div>
-          <div class="col-sm-3 col-xs-6">
-            <a href="https://twitter.com/alexandrubagu" target="_blank">
-              <span class="fa fa-twitter"></span>
-              <p class="small">Twitter</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+    // File content database
+    const fileContents = {
+      'elixir.ex': `defmodule AboutMe do
+  @moduledoc """
+  Personal philosophy and approach to software development
+  """
 
-    <div class="back-to-top"></div>
+  def who_am_i do
+    %{
+      name: "Bâgu Alexandru Bogdan",
+      location: "Iasi, Romania",
+      passion: "Programming is not just a job for me, it's a passion",
+      companies: ["Host Europe Groupe", "eMAG", "zenloop", "Intersoft Solutions"]
+    }
+  end
 
-    <script src="js/jquery-1.12.0.min.js"></script>
-    <script src="js/tether.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/jquery.easypiechart.min.js"></script>
-    <script src="js/script.min.js"></script>
-  </body>
+  def creativity do
+    """
+    Programming can be fun and is ultimately a creative art.
+    I like creating applications out of nothing using rapid
+    development tools like Elixir and Ecto.
+    """
+  end
+
+  def self_motivation do
+    """
+    Even if programming is more about fixing than it is creating,
+    I always feel a burning desire to improve, rewrite and do
+    things better.
+    """
+  end
+
+  def problem_solving do
+    """
+    Approach each task knowing there is more than one solution.
+    This will help you develop skills used to solve problems,
+    improve or rewrite code.
+    """
+  end
+end`,
+      'perl.pl': `#!/usr/bin/perl
+# Perl Developer - 85% proficiency
+# Years of experience: 2012-2014 (Host Europe Group)
+
+use strict;
+use warnings;
+use Catalyst qw/-Debug/;
+
+# Expertise Areas:
+# - Catalyst Framework
+# - DBIx::Class & Rose::DB
+# - OAuth2 Protocol
+# - RESTful Web Services
+# - Apache2 - CGI / mod_perl
+
+sub about_perl {
+    my $skills = {
+        proficiency => '85%',
+        frameworks  => ['Catalyst'],
+        databases   => ['DBIx::Class', 'Rose::DB'],
+        experience  => 'Enterprise-level web applications',
+    };
+    
+    return $skills;
+}`,
+      'php.php': `<?php
+/**
+ * PHP Developer - 90% proficiency
+ * Years of experience: 2011-2018 (eMAG, StreamWIDE)
+ */
+
+namespace AlexandruBagu\\Skills;
+
+class PHPExpertise
+{
+    private $proficiency = '90%';
+    
+    private $frameworks = [
+        'Symfony2',
+        'Zend Framework'
+    ];
+    
+    private $expertise = [
+        'MySQL',
+        'Doctrine ORM',
+        'RESTful APIs',
+        'Memcache',
+        'Gearman / RabbitMQ'
+    ];
+    
+    public function getExperience(): array
+    {
+        return [
+            'company' => 'eMAG',
+            'role' => 'PHP Developer',
+            'period' => '2015-2018',
+            'achievements' => 'Enterprise e-commerce platform'
+        ];
+    }
+}`,
+      'phoenix.ex': `# Phoenix Framework Expert
+# Building scalable web applications
+
+defmodule MyApp.Skills.Phoenix do
+  @moduledoc """
+  Expertise in Phoenix Framework for building
+  high-performance, real-time web applications
+  """
+
+  def capabilities do
+    [
+      "Real-time features with Channels",
+      "RESTful API development",
+      "GraphQL with Absinthe",
+      "Ecto database integration",
+      "LiveView for interactive UIs"
+    ]
+  end
+
+  def experience do
+    %{
+      companies: ["zenloop GmbH", "Intersoft Solutions"],
+      years: "2018 - Present",
+      specialization: "Remote Elixir/Phoenix Development"
+    }
+  end
+end`,
+      'react.jsx': `// React Developer - 75% proficiency
+// Modern front-end development
+
+import React from 'react';
+
+const ReactSkills = () => {
+  const expertise = {
+    proficiency: '75%',
+    experience: [
+      'Component-based architecture',
+      'Hooks and state management',
+      'Modern build tools (Vite, Webpack)',
+      'TypeScript integration',
+      'Responsive design'
+    ]
+  };
+
+  return (
+    <div className="skills">
+      <h2>React Development</h2>
+      <p>Building modern, performant web applications</p>
+    </div>
+  );
+};
+
+export default ReactSkills;`
+    };
+
+    function selectFile(fileName, extension) {
+      const fullName = fileName + '.' + extension;
+      const content = fileContents[fullName] || `# ${fullName}\n\nContent for this file...`;
+      
+      document.getElementById('code-editor').textContent = content;
+      document.getElementById('current-file').textContent = fullName;
+      document.getElementById('tab-name').textContent = fullName;
+      
+      // Remove active class from all files
+      document.querySelectorAll('#folder-programming-languages button, #folder-frameworks button').forEach(btn => {
+        btn.classList.remove('bg-slate-700/70');
+      });
+      
+      // Add active class to clicked file
+      event.target.closest('button').classList.add('bg-slate-700/70');
+    }
+
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+  </script>
+</body>
 </html>
