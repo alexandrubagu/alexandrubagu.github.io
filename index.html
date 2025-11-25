@@ -307,14 +307,14 @@
                     <div>
                       <button onclick="toggleFolder('frameworks')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
                         <svg id="chevron-frameworks" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                         </svg>
                         <span class="text-sm text-white">frameworks</span>
                       </button>
-                      <div id="folder-frameworks" class="ml-6 space-y-1 hidden">
+                      <div id="folder-frameworks" class="ml-6 space-y-1">
                         <button onclick="selectFile('phoenix', 'ex')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
                           <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
@@ -330,46 +330,82 @@
                       </div>
                     </div>
 
-                    <!-- Databases Folder -->
+                    <!-- Data Storage Folder -->
                     <div>
-                      <button onclick="toggleFolder('databases')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
-                        <svg id="chevron-databases" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      <button onclick="toggleFolder('data-storage')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                        <svg id="chevron-data-storage" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                         </svg>
-                        <span class="text-sm text-white">databases</span>
+                        <span class="text-sm text-white">data-storage</span>
                       </button>
-                      <div id="folder-databases" class="ml-6 space-y-1 hidden"></div>
-                    </div>
-
-                    <!-- Tools Folder -->
-                    <div>
-                      <button onclick="toggleFolder('tools')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
-                        <svg id="chevron-tools" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-                        </svg>
-                        <span class="text-sm text-white">tools</span>
-                      </button>
-                      <div id="folder-tools" class="ml-6 space-y-1 hidden"></div>
+                      <div id="folder-data-storage" class="ml-6 space-y-1">
+                        <button onclick="selectFile('postgresql', 'sql')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                          </svg>
+                          <span class="text-sm text-white">postgresql.sql</span>
+                        </button>
+                        <button onclick="selectFile('elasticsearch', 'json')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                          </svg>
+                          <span class="text-sm text-white">elasticsearch.json</span>
+                        </button>
+                        <button onclick="selectFile('redis', 'conf')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                          </svg>
+                          <span class="text-sm text-white">redis.conf</span>
+                        </button>
+                        <button onclick="selectFile('rabbitmq', 'ex')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20"></path>
+                          </svg>
+                          <span class="text-sm text-white">rabbitmq.ex</span>
+                        </button>
+                        <button onclick="selectFile('kafka', 'ex')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                          </svg>
+                          <span class="text-sm text-white">kafka.ex</span>
+                        </button>
+                      </div>
                     </div>
 
                     <!-- Soft Skills Folder -->
                     <div>
                       <button onclick="toggleFolder('soft-skills')" class="flex items-center gap-1 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
                         <svg id="chevron-soft-skills" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                         </svg>
                         <span class="text-sm text-white">soft-skills</span>
                       </button>
-                      <div id="folder-soft-skills" class="ml-6 space-y-1 hidden"></div>
+                      <div id="folder-soft-skills" class="ml-6 space-y-1">
+                        <button onclick="selectFile('creativity', 'md')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                          </svg>
+                          <span class="text-sm text-white">creativity.md</span>
+                        </button>
+                        <button onclick="selectFile('self-motivation', 'md')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                          </svg>
+                          <span class="text-sm text-white">self-motivation.md</span>
+                        </button>
+                        <button onclick="selectFile('problem-solving', 'md')" class="flex items-center gap-2 w-full px-2 py-1 hover:bg-slate-700/50 rounded text-left transition-colors">
+                          <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          <span class="text-sm text-white">problem-solving.md</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -378,42 +414,40 @@
               <!-- Editor -->
               <div class="flex-1 bg-[#1e1e1e] overflow-y-auto">
                 <div class="p-6 font-mono text-sm">
-                  <pre class="text-white leading-relaxed" id="code-editor">defmodule AboutMe do
-  @moduledoc """
-  Personal philosophy and approach to software development
+                  <pre class="text-white leading-relaxed" id="code-editor">defmodule MyApp.User do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  schema "users" do
+    field :name, :string
+    field :email, :string
+    field :age, :integer
+    field :active, :boolean, default: true
+
+    timestamps()
+  end
+
+  @doc """
+  Validates and casts user data with Ecto changesets.
+  Ensures data integrity before database operations.
   """
-
-  def who_am_i do
-    %{
-      name: "Bâgu Alexandru Bogdan",
-      location: "Iasi, Romania",
-      passion: "Programming is not just a job for me, it's a passion",
-      companies: ["Host Europe Groupe", "eMAG", "zenloop", "Intersoft Solutions"]
-    }
+  def changeset(user, attrs) do
+    user
+    |> cast(attrs, [:name, :email, :age, :active])
+    |> validate_required([:name, :email])
+    |> validate_format(:email, ~r/@/)
+    |> validate_number(:age, greater_than: 0, less_than: 150)
+    |> validate_length(:name, min: 2, max: 100)
+    |> unique_constraint(:email)
   end
 
-  def creativity do
-    """
-    Programming can be fun and is ultimately a creative art.
-    I like creating applications out of nothing using rapid
-    development tools like Elixir and Ecto.
-    """
-  end
-
-  def self_motivation do
-    """
-    Even if programming is more about fixing than it is creating,
-    I always feel a burning desire to improve, rewrite and do
-    things better.
-    """
-  end
-
-  def problem_solving do
-    """
-    Approach each task knowing there is more than one solution.
-    This will help you develop skills used to solve problems,
-    improve or rewrite code.
-    """
+  @doc """
+  Create a new user with validated data
+  """
+  def create_user(attrs) do
+    %__MODULE__{}
+    |> changeset(attrs)
+    |> MyApp.Repo.insert()
   end
 end</pre>
                 </div>
@@ -1218,42 +1252,40 @@ end</pre>
 
     // File content database
     const fileContents = {
-      'elixir.ex': `defmodule AboutMe do
-  @moduledoc """
-  Personal philosophy and approach to software development
+      'elixir.ex': `defmodule MyApp.User do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  schema "users" do
+    field :name, :string
+    field :email, :string
+    field :age, :integer
+    field :active, :boolean, default: true
+
+    timestamps()
+  end
+
+  @doc """
+  Validates and casts user data with Ecto changesets.
+  Ensures data integrity before database operations.
   """
-
-  def who_am_i do
-    %{
-      name: "Bâgu Alexandru Bogdan",
-      location: "Iasi, Romania",
-      passion: "Programming is not just a job for me, it's a passion",
-      companies: ["Host Europe Groupe", "eMAG", "zenloop", "Intersoft Solutions"]
-    }
+  def changeset(user, attrs) do
+    user
+    |> cast(attrs, [:name, :email, :age, :active])
+    |> validate_required([:name, :email])
+    |> validate_format(:email, ~r/@/)
+    |> validate_number(:age, greater_than: 0, less_than: 150)
+    |> validate_length(:name, min: 2, max: 100)
+    |> unique_constraint(:email)
   end
 
-  def creativity do
-    """
-    Programming can be fun and is ultimately a creative art.
-    I like creating applications out of nothing using rapid
-    development tools like Elixir and Ecto.
-    """
-  end
-
-  def self_motivation do
-    """
-    Even if programming is more about fixing than it is creating,
-    I always feel a burning desire to improve, rewrite and do
-    things better.
-    """
-  end
-
-  def problem_solving do
-    """
-    Approach each task knowing there is more than one solution.
-    This will help you develop skills used to solve problems,
-    improve or rewrite code.
-    """
+  @doc """
+  Create a new user with validated data
+  """
+  def create_user(attrs) do
+    %__MODULE__{}
+    |> changeset(attrs)
+    |> MyApp.Repo.insert()
   end
 end`,
       'perl.pl': `#!/usr/bin/perl
@@ -1316,31 +1348,38 @@ class PHPExpertise
         ];
     }
 }`,
-      'phoenix.ex': `# Phoenix Framework Expert
-# Building scalable web applications
+      'phoenix.ex': `defmodule MyAppWeb.PageController do
+  use MyAppWeb, :controller
 
-defmodule MyApp.Skills.Phoenix do
-  @moduledoc """
-  Expertise in Phoenix Framework for building
-  high-performance, real-time web applications
+  @doc """
+  Phoenix controller handling HTTP requests.
+  Renders templates with data and manages request/response cycle.
   """
+  def index(conn, _params) do
+    users = MyApp.Accounts.list_users()
 
-  def capabilities do
-    [
-      "Real-time features with Channels",
-      "RESTful API development",
-      "GraphQL with Absinthe",
-      "Ecto database integration",
-      "LiveView for interactive UIs"
-    ]
+    render(conn, "index.html",
+      users: users,
+      page_title: "Welcome"
+    )
   end
 
-  def experience do
-    %{
-      companies: ["zenloop GmbH", "Intersoft Solutions"],
-      years: "2018 - Present",
-      specialization: "Remote Elixir/Phoenix Development"
-    }
+  def show(conn, %{"id" => id}) do
+    user = MyApp.Accounts.get_user!(id)
+
+    render(conn, "show.html", user: user)
+  end
+
+  def create(conn, %{"user" => user_params}) do
+    case MyApp.Accounts.create_user(user_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "User created successfully")
+        |> redirect(to: ~p"/users/#{user}")
+
+      {:error, changeset} ->
+        render(conn, "new.html", changeset: changeset)
+    end
   end
 end`,
       'react.jsx': `// React Developer - 75% proficiency
@@ -1368,7 +1407,318 @@ const ReactSkills = () => {
   );
 };
 
-export default ReactSkills;`
+export default ReactSkills;`,
+      'postgresql.sql': `-- PostgreSQL Advanced Window Functions
+-- Analyzing sales data with PARTITION and LAG
+
+-- Sample query demonstrating PARTITION OVER and LAG
+SELECT
+  product_id,
+  sale_date,
+  amount,
+  -- Rank sales within each product category
+  RANK() OVER (
+    PARTITION BY category_id
+    ORDER BY amount DESC
+  ) as sales_rank,
+  -- Calculate running total per product
+  SUM(amount) OVER (
+    PARTITION BY product_id
+    ORDER BY sale_date
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) as running_total,
+  -- Get previous day's sales using LAG
+  LAG(amount, 1) OVER (
+    PARTITION BY product_id
+    ORDER BY sale_date
+  ) as previous_day_amount,
+  -- Calculate day-over-day change
+  amount - LAG(amount, 1) OVER (
+    PARTITION BY product_id
+    ORDER BY sale_date
+  ) as daily_change
+FROM sales
+WHERE sale_date >= CURRENT_DATE - INTERVAL '30 days'
+ORDER BY product_id, sale_date;`,
+      'elasticsearch.json': `// Elasticsearch Query DSL
+// Advanced search and aggregations
+
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "title": "software engineer"
+          }
+        }
+      ],
+      "filter": [
+        {
+          "range": {
+            "experience_years": {
+              "gte": 5
+            }
+          }
+        },
+        {
+          "terms": {
+            "skills": ["elixir", "phoenix", "postgresql"]
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "skills_distribution": {
+      "terms": {
+        "field": "skills.keyword",
+        "size": 10
+      }
+    },
+    "avg_experience": {
+      "avg": {
+        "field": "experience_years"
+      }
+    }
+  },
+  "size": 20,
+  "from": 0,
+  "_source": ["title", "skills", "experience_years"]
+}`,
+      'redis.conf': `# Redis Configuration & Commands
+# High-performance in-memory data store
+
+# String operations
+SET user:1000:name "Alexandru Bagu"
+GET user:1000:name
+SETEX session:abc123 3600 "user_data"
+
+# Hash operations for user profiles
+HSET user:1000 name "Alexandru" email "alex@example.com"
+HGETALL user:1000
+HINCRBY user:1000 login_count 1
+
+# List operations for queues
+LPUSH tasks:queue "process_payment"
+RPUSH tasks:queue "send_email"
+LPOP tasks:queue
+
+# Set operations for unique collections
+SADD user:1000:skills "elixir" "phoenix" "postgresql"
+SMEMBERS user:1000:skills
+SINTER user:1000:skills user:2000:skills
+
+# Sorted sets for leaderboards
+ZADD leaderboard 1500 "player1" 2000 "player2"
+ZRANGE leaderboard 0 -1 WITHSCORES
+ZRANK leaderboard "player1"
+
+# Pub/Sub for real-time messaging
+PUBLISH notifications "New message arrived"
+SUBSCRIBE notifications`,
+      'rabbitmq.ex': `defmodule MyApp.RabbitMQ do
+  @moduledoc """
+  RabbitMQ message broker integration.
+  Handles asynchronous messaging and task distribution.
+  """
+
+  use GenServer
+  require Logger
+
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  end
+
+  @doc """
+  Publish message to exchange
+  """
+  def publish(exchange, routing_key, message) do
+    GenServer.call(__MODULE__, {:publish, exchange, routing_key, message})
+  end
+
+  @doc """
+  Declare a queue and bind to exchange
+  """
+  def init(_) do
+    {:ok, connection} = AMQP.Connection.open("amqp://localhost")
+    {:ok, channel} = AMQP.Channel.open(connection)
+
+    # Declare exchange
+    AMQP.Exchange.declare(channel, "events", :topic, durable: true)
+
+    # Declare queue
+    AMQP.Queue.declare(channel, "user_events", durable: true)
+
+    # Bind queue to exchange
+    AMQP.Queue.bind(channel, "user_events", "events",
+      routing_key: "user.*")
+
+    # Start consuming
+    AMQP.Basic.consume(channel, "user_events")
+
+    {:ok, %{channel: channel, connection: connection}}
+  end
+
+  def handle_call({:publish, exchange, routing_key, message}, _from, state) do
+    payload = Jason.encode!(message)
+
+    result = AMQP.Basic.publish(
+      state.channel,
+      exchange,
+      routing_key,
+      payload,
+      persistent: true
+    )
+
+    {:reply, result, state}
+  end
+end`,
+      'kafka.ex': `defmodule MyApp.Kafka.Consumer do
+  @moduledoc """
+  Apache Kafka consumer for distributed event streaming.
+  Processes high-throughput message streams.
+  """
+
+  use KafkaEx.GenConsumer
+
+  alias KafkaEx.Protocol.Fetch.Message
+
+  require Logger
+
+  def handle_message_set(message_set, state) do
+    for %Message{value: message} <- message_set do
+      message
+      |> Jason.decode!()
+      |> process_event()
+    end
+
+    {:async_commit, state}
+  end
+
+  defp process_event(%{"type" => "user_registered", "data" => data}) do
+    Logger.info("Processing user registration: #{inspect(data)}")
+    # Handle user registration event
+    MyApp.Users.create_user(data)
+  end
+
+  defp process_event(%{"type" => "order_placed", "data" => data}) do
+    Logger.info("Processing order: #{inspect(data)}")
+    # Handle order event
+    MyApp.Orders.process_order(data)
+  end
+
+  defp process_event(event) do
+    Logger.warn("Unknown event type: #{inspect(event)}")
+  end
+end
+
+# Producer example
+defmodule MyApp.Kafka.Producer do
+  def publish_event(topic, event_type, data) do
+    message = %{
+      type: event_type,
+      data: data,
+      timestamp: DateTime.utc_now()
+    }
+
+    KafkaEx.produce(topic, 0, Jason.encode!(message))
+  end
+end`,
+      'creativity.md': `# Creativity in Software Development
+
+## Philosophy
+
+Programming can be fun and is ultimately a **creative art**.
+
+I like creating applications out of nothing using rapid
+development tools like Elixir and Ecto.
+
+## Approach
+
+- **Innovation**: Finding elegant solutions to complex problems
+- **Rapid Prototyping**: Quickly bringing ideas to life
+- **Technology Exploration**: Constantly learning new tools and techniques
+- **Artistic Expression**: Writing code that is both functional and beautiful
+
+## Key Principles
+
+> "The best code is the code that solves real problems
+> while being maintainable and enjoyable to work with."
+
+Creative programming means:
+- Thinking outside the box
+- Combining technologies in novel ways
+- Building solutions that delight users
+- Making complex systems simple and intuitive`,
+      'self-motivation.md': `# Self-Motivation & Continuous Improvement
+
+## Core Drive
+
+Even if programming is more about fixing than it is creating,
+I always feel a **burning desire** to improve, rewrite, and do
+things better.
+
+## Motivation Sources
+
+- **Passion for Excellence**: Never settling for "good enough"
+- **Continuous Learning**: Always seeking to expand my knowledge
+- **Code Quality**: Striving for cleaner, more efficient solutions
+- **Problem-Solving**: Finding satisfaction in overcoming challenges
+
+## Professional Growth
+
+### Daily Practices
+
+1. **Code Review**: Regularly reviewing and refactoring existing code
+2. **Learning**: Staying current with industry trends and best practices
+3. **Experimentation**: Testing new approaches and technologies
+4. **Reflection**: Analyzing what works and what can be improved
+
+### Long-term Goals
+
+- Master emerging technologies
+- Contribute to open-source projects
+- Share knowledge with the community
+- Build impactful, scalable systems`,
+      'problem-solving.md': `# Problem Solving & Technical Excellence
+
+## Mindset
+
+**Approach each task knowing there is more than one solution.**
+
+This will help you develop skills used to solve problems,
+improve, or rewrite code.
+
+## Problem-Solving Framework
+
+### 1. Understand the Problem
+- Analyze requirements thoroughly
+- Identify constraints and edge cases
+- Ask clarifying questions
+
+### 2. Explore Solutions
+- Consider multiple approaches
+- Evaluate trade-offs (performance, maintainability, scalability)
+- Research best practices and patterns
+
+### 3. Implement & Iterate
+- Start with a working solution
+- Refactor for clarity and efficiency
+- Test thoroughly
+- Gather feedback
+
+### 4. Learn & Document
+- Reflect on what worked and what didn't
+- Document decisions and rationale
+- Share knowledge with the team
+
+## Core Competencies
+
+- **Analytical Thinking**: Breaking down complex problems into manageable parts
+- **Adaptability**: Adjusting approaches based on new information
+- **Collaboration**: Working with teams to find optimal solutions
+- **Attention to Detail**: Ensuring code quality and reliability`
     };
 
     function selectFile(fileName, extension) {
@@ -1380,7 +1730,7 @@ export default ReactSkills;`
       document.getElementById('tab-name').textContent = fullName;
       
       // Remove active class from all files
-      document.querySelectorAll('#folder-programming-languages button, #folder-frameworks button').forEach(btn => {
+      document.querySelectorAll('#folder-programming-languages button, #folder-frameworks button, #folder-data-storage button, #folder-soft-skills button').forEach(btn => {
         btn.classList.remove('bg-slate-700/70');
       });
       
