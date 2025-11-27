@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mastering Parameter Validation in Elixir Phoenix Controllers - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Complete guide to parameter validation in Elixir Phoenix controllers using Ecto.Changeset. Learn practical implementation patterns with the Web.Utils.Validation module for building robust APIs." />
+
+  <!-- PWA and Mobile -->
+  <meta name="theme-color" content="#1e293b">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Mastering Parameter Validation in Elixir Phoenix Controllers",
+    "description": "Complete guide to parameter validation in Elixir Phoenix controllers using Ecto.Changeset. Learn practical implementation patterns with the Web.Utils.Validation module for building robust APIs.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "url": "https://alexandrubagu.github.io"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://alexandrubagu.github.io/profile.jpg"
+      }
+    },
+    "datePublished": "2024-11-27",
+    "dateModified": "2024-11-27",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://alexandrubagu.github.io/blog/parameter-validation.html"
+    },
+    "keywords": "Elixir parameter validation, Phoenix controller validation, Ecto.Changeset validation, API parameter validation, Phoenix framework, Elixir validation patterns, request validation",
+    "articleSection": "Development",
+    "inLanguage": "en-US",
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "Elixir Programming Language"
+      },
+      {
+        "@type": "Thing",
+        "name": "Phoenix Web Framework"
+      },
+      {
+        "@type": "Thing",
+        "name": "API Validation Patterns"
+      },
+      {
+        "@type": "Thing",
+        "name": "Ecto Database Library"
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "Web.Utils.Validation",
+    "description": "An Elixir utility module for building changeset-based parameter validation in Phoenix controllers with support for custom validators and default values",
+    "programmingLanguage": "Elixir",
+    "author": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan"
+    }
+  }
+  </script>
+
+  <!-- Performance optimizations -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    article code {
+      background-color: #f1f5f9;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    article pre {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    article pre code {
+      background-color: transparent;
+      padding: 0;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+    }
+
+    article h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+
+    article p {
+      margin-bottom: 1rem;
+      line-height: 1.75;
+      color: #475569;
+    }
+
+    article ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    article li {
+      margin-bottom: 0.5rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WK8MJ0B6R6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WK8MJ0B6R6');
+  </script>
+</head>
+<body class="bg-white text-slate-900">
+  <header class="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4">
+      <a href="/blog.html" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </div>
+  </header>
+
+  <article class="container mx-auto px-4 py-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Development</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">
+          Mastering Parameter Validation in Elixir Phoenix Controllers
+        </h1>
+        <div class="flex items-center gap-6 text-slate-600">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-sm">November 27, 2024</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm">7 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="prose max-w-none text-slate-900">
+        <p class="mb-4 text-lg">
+          Parameter validation is one of the most critical aspects of building robust Elixir Phoenix APIs. Invalid parameters can lead to runtime errors, security vulnerabilities, and poor user experiences. This guide walks you through implementing elegant, reusable parameter validation patterns using Ecto.Changeset and a clean utility module.
+        </p>
+
+        <h2>Why Parameter Validation Matters</h2>
+        <p>
+          Every API endpoint receives external input. Without proper validation, this untrusted data can crash your application, expose sensitive information, or cause unexpected behavior. Parameter validation is your first line of defense, ensuring that only valid data reaches your business logic.
+        </p>
+        <p>
+          Good validation achieves several things: it prevents invalid data from corrupting your database, it provides clear error messages to clients, and it reduces the complexity of your controller and service code. Phoenix developers often struggle with ad-hoc validation scattered across controllers. A centralized validation utility eliminates duplication and ensures consistency across your application.
+        </p>
+
+        <h2>Understanding the Web.Utils.Validation Module</h2>
+        <p>
+          The <code>Web.Utils.Validation</code> module provides a lightweight abstraction over Ecto.Changeset, specifically designed for Phoenix controllers. Rather than creating database schemas just for validation, this module lets you define simple schema specifications and leverage Ecto's powerful validation machinery.
+        </p>
+        <p>
+          The module implements three core functions:
+        </p>
+        <ul>
+          <li><strong>new/2:</strong> Builds a changeset from a schema definition and parameters</li>
+          <li><strong>apply_custom_validations/2:</strong> Applies custom validation functions to a changeset</li>
+          <li><strong>run/1:</strong> Executes the validation and returns either validated parameters or errors</li>
+        </ul>
+
+        <h2>Defining Your Validation Schema</h2>
+        <p>
+          The schema format is simple and intuitive. Each field is a tuple with the field name and a list containing the type followed by optional configuration:
+        </p>
+        <pre><code>@schema [
+  field: [:string, required: true],
+  order: [:string, default: "desc"],
+  limit: [:integer, required: false]
+]</code></pre>
+        <p>
+          The type (first element in the list) must be an Ecto type like <code>:string</code>, <code>:integer</code>, <code>:boolean</code>, or <code>:float</code>. Options like <code>required: true</code> and <code>default: "value"</code> control validation behavior. Fields without <code>required: true</code> are optional.
+        </p>
+
+        <h2>Building a Complete Controller Example</h2>
+        <p>
+          Let's build a practical example: a product listing endpoint with filtering and pagination. This demonstrates required fields, default values, and custom validation:
+        </p>
+        <pre><code>defmodule MyApp.ProductController do
+  use MyApp, :controller
+
+  alias MyApp.Repo
+  alias MyApp.Product
+  alias Web.Utils.Validation
+
+  @schema [
+    search: [:string, required: false],
+    order: [:string, default: "asc"],
+    limit: [:integer, default: 20],
+    offset: [:integer, default: 0]
+  ]
+
+  def index(conn, params) do
+    with {:ok, validated_params} <- validate_params(params) do
+      products = fetch_products(validated_params)
+      render(conn, :index, products: products)
+    else
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(:errors, changeset: changeset)
+    end
+  end
+
+  defp validate_params(params) do
+    custom_validators = [
+      &Ecto.Changeset.validate_inclusion(&1, :order, ["asc", "desc"]),
+      &validate_pagination/1
+    ]
+
+    @schema
+    |> Validation.new(params)
+    |> Validation.apply_custom_validations(custom_validators)
+    |> Validation.run()
+  end
+
+  defp validate_pagination(changeset) do
+    changeset
+    |> Ecto.Changeset.validate_number(:limit, greater_than: 0, less_than_or_equal_to: 100)
+    |> Ecto.Changeset.validate_number(:offset, greater_than_or_equal_to: 0)
+  end
+
+  defp fetch_products(%{"search" => search, "order" => order, "limit" => limit, "offset" => offset}) do
+    Product
+    |> Product.search(search)
+    |> Product.order_by(order)
+    |> Repo.paginate(limit: limit, offset: offset)
+  end
+end</code></pre>
+        <p>
+          This controller demonstrates several key patterns. The validation schema defines all accepted parameters with their types and constraints. The <code>validate_params/1</code> function chains validation: basic type checking and required field validation happen in <code>Validation.new/2</code>, then custom validators add domain-specific rules.
+        </p>
+        <p>
+          Notice how the endpoint uses pattern matching in the happy path with <code>with/1</code>. This keeps error handling separate from the business logic. Invalid parameters automatically trigger the error clause, which returns a 422 status with detailed error messages.
+        </p>
+
+        <h2>Custom Validation Rules</h2>
+        <p>
+          Basic type validation only gets you so far. The second validator in our example, <code>validate_pagination/1</code>, ensures pagination parameters are within reasonable bounds. This prevents clients from requesting massive result sets or using negative offsets.
+        </p>
+        <p>
+          Custom validators are simply functions that accept a changeset and return a modified changeset. Ecto provides many built-in validators you can compose:
+        </p>
+        <pre><code>defp validate_custom_rules(changeset) do
+  changeset
+  |> Ecto.Changeset.validate_length(:username, min: 3, max: 20)
+  |> Ecto.Changeset.validate_format(:email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
+  |> Ecto.Changeset.validate_number(:price, greater_than: 0)
+end</code></pre>
+        <p>
+          You can also write domain-specific validators. For example, if you need to validate that a slug is unique or that a user has permission to perform an action:
+        </p>
+        <pre><code>defp validate_unique_username(changeset) do
+  case Repo.get_by(User, username: Ecto.Changeset.get_field(changeset, :username)) do
+    nil -> changeset
+    _user -> Ecto.Changeset.add_error(changeset, :username, "already exists")
+  end
+end</code></pre>
+
+        <h2>Testing Parameter Validation</h2>
+        <p>
+          Testing validation is straightforward. You test both valid and invalid parameter combinations to ensure your validation rules work correctly. Here's a complete test example:
+        </p>
+        <pre><code>defmodule MyApp.ProductControllerTest do
+  use MyApp.ConnCase
+
+  describe "index" do
+    test "returns products with valid parameters", %{conn: conn} do
+      conn = get(conn, ~p"/api/products?search=laptop&order=asc&limit=10")
+      assert json_response(conn, 200)
+    end
+
+    test "uses default values when optional params omitted", %{conn: conn} do
+      conn = get(conn, ~p"/api/products")
+      assert json_response(conn, 200)
+    end
+
+    test "rejects invalid order parameter", %{conn: conn} do
+      conn = get(conn, ~p"/api/products?order=invalid")
+      response = json_response(conn, 422)
+      assert response["errors"]["order"]
+    end
+
+    test "rejects limit exceeding maximum", %{conn: conn} do
+      conn = get(conn, ~p"/api/products?limit=500")
+      response = json_response(conn, 422)
+      assert response["errors"]["limit"]
+    end
+
+    test "rejects negative offset", %{conn: conn} do
+      conn = get(conn, ~p"/api/products?offset=-5")
+      response = json_response(conn, 422)
+      assert response["errors"]["offset"]
+    end
+
+    test "coerces string parameters to correct types", %{conn: conn} do
+      conn = get(conn, ~p"/api/products?limit=25&offset=10")
+      assert json_response(conn, 200)
+    end
+  end
+end</code></pre>
+        <p>
+          Notice how tests cover multiple scenarios: valid requests, default values, invalid enum values, constraint violations, and type coercion. This comprehensive testing ensures your validation rules work as expected.
+        </p>
+
+        <h2>Practical Benefits and Use Cases</h2>
+        <p>
+          This validation pattern provides concrete advantages for real-world applications. First, it eliminates boilerplate. Instead of writing manual type checking and error handling in every controller, you declare your schema once and reuse it.
+        </p>
+        <p>
+          Second, it catches errors early. Invalid parameters are rejected before reaching your database or business logic, preventing cascading failures. Third, it improves developer experience. Error messages from Ecto changesets are clear and automatically formatted for API responses.
+        </p>
+        <p>
+          Common use cases include: API endpoints with filtering and pagination, form submissions from web frontends, webhook handlers that need to validate external data, and batch operations that require multiple parameters. Any place where you accept external input benefits from this pattern.
+        </p>
+
+        <h2>Advanced Patterns</h2>
+        <p>
+          For more complex scenarios, you can combine multiple validators and create reusable validator functions. For example, if multiple controllers need the same pagination validation, extract it into a shared module:
+        </p>
+        <pre><code>defmodule MyApp.Validators do
+  alias Ecto.Changeset
+
+  def validate_pagination(changeset) do
+    changeset
+    |> Changeset.validate_number(:limit, greater_than: 0, less_than_or_equal_to: 100)
+    |> Changeset.validate_number(:offset, greater_than_or_equal_to: 0)
+  end
+end</code></pre>
+        <p>
+          Then import and use it in your controllers. You can also nest validation logic when you have conditional requirements. If certain fields are only required when others have specific values, write custom validators that check these relationships.
+        </p>
+
+        <h2>Common Patterns and Pitfalls</h2>
+        <p>
+          One common mistake is treating validation as optional. Some developers skip validation for "internal" APIs, but this leads to bugs that surface later. Always validate, even internal endpoints.
+        </p>
+        <p>
+          Another pitfall is validating the same field multiple ways in different controllers. Standardize your validation rules. If an email field must match a specific pattern, define that pattern once in a validator function.
+        </p>
+        <p>
+          Finally, remember that Ecto's type coercion is powerful. It automatically converts "25" to 25 for integers, which matches query parameter behavior. Leverage this instead of fighting it.
+        </p>
+
+        <h2>Integrating with Your Application</h2>
+        <p>
+          To use this validation module in your Phoenix application, place it in <code>lib/web/utils/validation.ex</code> and add the following code:
+        </p>
+        <pre><code>defmodule Web.Utils.Validation do
+  @spec new(list(), map()) :: Ecto.Changeset.t()
+  def new(schema, params) do
+    types = for {field, [type | _]} <- schema, into: %{}, do: {field, type}
+
+    defaults =
+      for {field, [_type | opts]} when is_list(opts) <- schema,
+          into: %{},
+          do: {field, opts[:default]}
+
+    required =
+      for {field, [_type | opts]} when is_list(opts) <- schema,
+          opts[:required],
+          do: field
+
+    {defaults, types}
+    |> Ecto.Changeset.cast(params, Map.keys(types))
+    |> Ecto.Changeset.validate_required(required)
+  end
+
+  @spec apply_custom_validations(Ecto.Changeset.t(), [function()]) :: Ecto.Changeset.t()
+  def apply_custom_validations(%Ecto.Changeset{} = changeset, fns) do
+    Enum.reduce(fns, changeset, fn fun, acc -> fun.(acc) end)
+  end
+
+  @spec run(Ecto.Changeset.t()) :: {:error, Ecto.Changeset.t()} | {:ok, map()}
+  def run(%Ecto.Changeset{} = changeset) do
+    case Ecto.Changeset.apply_action(changeset, :insert) do
+      {:ok, map} -> {:ok, map}
+      {:error, _} = error -> error
+    end
+  end
+end</code></pre>
+        <p>
+          The module is stateless and has no dependencies beyond Ecto, making it portable and easy to integrate into existing projects.
+        </p>
+
+        <h2>Conclusion</h2>
+        <p>
+          Parameter validation in Elixir Phoenix doesn't have to be complex. By centralizing validation logic in a reusable utility module, you create more robust, maintainable APIs. The <code>Web.Utils.Validation</code> module demonstrates how to leverage Ecto.Changeset for clean, composable validation patterns that work across your entire application.
+        </p>
+        <p>
+          Start by identifying your most common validation patterns, build custom validators for them, and watch how your controller code becomes simpler and more reliable. Your future self will thank you when validation catches a bug before it reaches production.
+        </p>
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-slate-200">
+        <a href="/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Back to All Posts
+        </a>
+      </footer>
+    </div>
+  </article>
+</body>
+</html>
