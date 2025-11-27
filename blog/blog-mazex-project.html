@@ -194,159 +194,54 @@
 
       <div class="prose max-w-none text-slate-900">
         <p class="mb-4 text-lg">
-          I've always been fascinated by algorithmic art and procedural generation. There's something magical about watching an algorithm create complex, intricate patterns from simple rules. This fascination led me to build Mazex, an Elixir-based tool for maze generation that implements seven different algorithms. In this post, I'll share what I learned about maze algorithms, how I built the project in Elixir, and why this approach outperforms traditional maze generation tools.
+          Mazex is an Elixir-based tool for maze generation implementing seven different algorithms. Each algorithm produces unique visual patterns and performance characteristics, making it suitable for games, education, and art.
         </p>
 
-        <h2>The Allure of Algorithmic Mazes</h2>
+        <h2>Why Different Algorithms Matter</h2>
         <p>
-          Mazes have captured human imagination for centuries. From ancient labyrinths to modern escape rooms, there's something deeply satisfying about navigating through a path with choice and challenge. But what fascinated me more was the mathematics behind maze generation—how different algorithms produce wildly different maze characteristics, each with unique strengths and visual patterns.
-        </p>
-        <p>
-          Most maze generation tools implement one or two algorithms. I wanted to explore how different approaches to the same problem produce different results. Some algorithms create long, meandering corridors. Others produce dense, interconnected passages. Some create visible patterns and biases. Understanding why required diving deep into each algorithm's approach and implementing them from scratch.
-        </p>
-        <p>
-          This is where Elixir proved to be an excellent choice. Its pattern matching capabilities, immutable data structures, and recursive nature align perfectly with how many maze algorithms work conceptually.
+          Different maze algorithms produce wildly different results. Some create long corridors, others produce dense passages. Some are fast but biased, others are slow but perfectly uniform. Elixir's pattern matching and immutable data structures make implementing these algorithms elegant and efficient.
         </p>
 
-        <h2>Understanding Maze Generation Algorithms</h2>
+        <h2>The Seven Algorithms</h2>
         <p>
-          At their core, all maze generation algorithms solve the same problem: create a spanning tree of a grid where each cell connects to others without creating loops. But they take different approaches to this problem, resulting in mazes with different characteristics.
-        </p>
-        <p>
-          Here are the seven algorithms implemented in Mazex:
+          All maze algorithms create a spanning tree of a grid without loops. Here's what Mazex implements:
         </p>
         <ul>
-          <li><strong>Binary Tree:</strong> The simplest algorithm. For each cell, carve a passage either north or south (randomly) until you reach the edge, then carve east or west. Fast but creates visible diagonal bias in the resulting maze.</li>
-          <li><strong>Sidewinder:</strong> Similar to Binary Tree but groups adjacent cells horizontally before carving southward. This produces mazes with fewer long corridors and less bias than Binary Tree.</li>
-          <li><strong>Aldous-Broder:</strong> A random walk algorithm that moves through unvisited cells. Slower but produces unbiased, uniform mazes with no algorithmic patterns visible to the eye.</li>
-          <li><strong>Wilson's Algorithm:</strong> Another unbiased algorithm that uses loop-erasing random walks. More efficient than Aldous-Broder while maintaining uniform distribution.</li>
-          <li><strong>Recursive Backtracker:</strong> A depth-first search approach that carves passages as it explores. Creates mazes with longer corridors and a more organic feel. Very popular for game development.</li>
-          <li><strong>Kruskal's Algorithm:</strong> Uses a minimum spanning tree approach based on randomized edge selection. Creates mazes with distinctive visual characteristics and good performance.</li>
-          <li><strong>Prim's Algorithm:</strong> Similar to Kruskal's but uses a weighted minimum spanning tree approach. Creates different visual patterns and has excellent performance on large grids.</li>
+          <li><strong>Binary Tree:</strong> Fastest (~5ms for 100x100). Carves passages north/south or east/west. Creates visible diagonal bias.</li>
+          <li><strong>Sidewinder:</strong> Very fast (~10ms). Groups cells horizontally before carving south. Less bias than Binary Tree.</li>
+          <li><strong>Aldous-Broder:</strong> Slow (~250ms) random walk. Perfectly uniform, no visible patterns.</li>
+          <li><strong>Wilson's Algorithm:</strong> Slower (~200ms) but more efficient than Aldous-Broder. Perfectly uniform distribution.</li>
+          <li><strong>Recursive Backtracker:</strong> Popular for games (~40ms). Depth-first search creates long corridors and organic feel.</li>
+          <li><strong>Kruskal's:</strong> Good performance (~25ms). Uses randomized edge selection with distinctive visual patterns.</li>
+          <li><strong>Prim's:</strong> Solid performance (~30ms). Weighted spanning tree approach with different visual patterns.</li>
         </ul>
 
-        <h2>Why Algorithm Choice Matters</h2>
+        <h2>Usage</h2>
         <p>
-          The choice of algorithm isn't just academic. Different algorithms excel in different scenarios. For game design, Recursive Backtracker produces mazes that feel natural and explorable. For pure aesthetic interest, Wilson's and Aldous-Broder create perfectly uniform mazes without visible patterns.
-        </p>
-        <p>
-          Bias isn't always bad. In some applications, the directional preference of Binary Tree or the corridor structure of Recursive Backtracker is exactly what you want. Understanding the trade-offs between speed, uniformity, and visual characteristics became central to building Mazex as a flexible tool.
-        </p>
-        <p>
-          I also became fascinated with randomness. Each algorithm uses different sources of randomness, and the quality of random number generation directly impacts the visual result. Elixir's built-in random module proved sufficient for most uses, though careful seed management became important for reproducible results.
+          Generate mazes with simple commands. For real-time applications, use Binary Tree or Sidewinder. For visual quality, choose Wilson's or Aldous-Broder. For games, Recursive Backtracker creates explorable layouts.
         </p>
 
-        <h2>Building Mazex in Elixir</h2>
         <p>
-          I chose Elixir for Mazex because of how naturally the language maps to algorithmic thinking. Maze generation algorithms are fundamentally about transforming data structures (grid states) through a series of operations. Elixir's immutability and pattern matching make this transformation transparent and bug-resistant.
-        </p>
-        <p>
-          The core architecture uses a grid representation as a map of cell coordinates to their states. Each algorithm operates on this map, progressively adding connections between cells. The use of recursion and tail-call optimization made implementing depth-first algorithms like Recursive Backtracker elegant and efficient.
-        </p>
-        <p>
-          One particular advantage of Elixir was the ability to mix different data structures optimally. Maps for quick cell lookups, lists for algorithm state tracking, and sets for visited cell tracking. Pattern matching allowed me to write clean conditional logic without deep nesting.
-        </p>
-
-        <h2>Getting Started with Mazex</h2>
-        <p>
-          Using Mazex is straightforward. After cloning the repository and ensuring Elixir is installed, you can generate mazes with a simple command:
+          Basic command:
         </p>
         <pre><code>mix mazex --rows=10 --columns=15 --algorithm=binary_tree</code></pre>
         <p>
-          This generates a 10x15 maze using the Binary Tree algorithm and saves it as a PNG image. The tool supports several command-line options:
-        </p>
-        <ul>
-          <li><code>--rows</code> and <code>--columns</code> - Define the maze dimensions</li>
-          <li><code>--algorithm</code> - Choose from binary_tree, sidewinder, aldous_broder, wilsons, recursive_backtracker, kruskals, or prims</li>
-          <li><code>--output</code> - Specify the output directory</li>
-          <li><code>--filename</code> - Set a custom filename for the generated maze</li>
-        </ul>
-        <p>
-          Let's say I want to compare how different algorithms handle the same grid size. I might run:
-        </p>
-        <pre><code>mix mazex --rows=20 --columns=20 --algorithm=wilsons
-mix mazex --rows=20 --columns=20 --algorithm=recursive_backtracker
-mix mazex --rows=20 --columns=20 --algorithm=binary_tree</code></pre>
-        <p>
-          The resulting images reveal exactly how different each algorithm's approach is. Wilson's produces an apparently random, evenly distributed maze. Recursive Backtracker creates longer corridors and a more organic feel. Binary Tree's diagonal bias is immediately apparent.
+          Available options: <code>--rows</code>, <code>--columns</code>, <code>--algorithm</code> (binary_tree, sidewinder, aldous_broder, wilsons, recursive_backtracker, kruskals, prims), <code>--output</code>, <code>--filename</code>
         </p>
 
-        <h2>Technical Implementation Insights</h2>
+        <h2>Technical Implementation</h2>
         <p>
-          Building this project taught me several lessons about Elixir and algorithmic programming. First, recursive algorithms in Elixir require careful attention to tail recursion. Some of my initial implementations were elegant but created deep call stacks. Refactoring to use accumulator patterns improved performance significantly.
-        </p>
-        <p>
-          Second, the choice of data structure matters enormously. Initially, I used lists for tracking visited cells, which led to O(n) lookups. Switching to sets reduced this to O(log n), making the difference between a 20x20 maze taking seconds and completing instantly.
-        </p>
-        <p>
-          Third, PNG generation in Elixir is possible through libraries that wrap native image processing tools. The integration required learning how Elixir interfaces with external programs through ports, which opened my eyes to the language's flexibility beyond pure functional programming.
-        </p>
-        <p>
-          Pattern matching became my greatest ally. Functions like handling grid boundaries or determining available directions could be written with multiple pattern-matched clauses, making the code read almost like mathematical specifications rather than procedural instructions.
+          The core uses a map of cell coordinates with immutable transformations. Key optimizations: tail recursion for depth-first algorithms, sets instead of lists for O(log n) lookups, and pattern matching for clean boundary handling. PNG generation uses Elixir ports to interface with native image processing.
         </p>
 
-        <h2>Performance Characteristics and Trade-offs</h2>
+        <h2>Applications</h2>
         <p>
-          Not all algorithms perform equally. On my machine, Mazex can generate a 100x100 maze in:
-        </p>
-        <ul>
-          <li>Binary Tree: ~5ms (fastest, biased)</li>
-          <li>Sidewinder: ~10ms (very fast, slightly biased)</li>
-          <li>Kruskal's: ~25ms (good performance, good randomness)</li>
-          <li>Prim's: ~30ms (solid performance, different visual pattern)</li>
-          <li>Recursive Backtracker: ~40ms (slower, produces explorable mazes)</li>
-          <li>Wilson's: ~200ms (slowest, perfectly uniform)</li>
-          <li>Aldous-Broder: ~250ms (slowest, perfectly uniform)</li>
-        </ul>
-        <p>
-          For real-time applications, Binary Tree or Sidewinder might be the right choice. For applications where visual quality matters more than speed, Wilson's or Aldous-Broder's uniformity is worth the performance cost. This flexibility is exactly why implementing multiple algorithms matters.
-        </p>
-
-        <h2>Real-World Applications</h2>
-        <p>
-          While mazes might seem like a niche interest, they have practical applications. Game developers use maze generation for dungeon creation and level design. Educational software uses them to teach graph theory and algorithms. Artists use them as source material for visual works. Some cryptography applications even use maze structures for security design.
-        </p>
-        <p>
-          Mazex could power any of these use cases. Its MIT license and open-source nature make it freely available. The performance characteristics mean you can generate mazes at game runtime without noticeable lag, and the variety of algorithms means you can pick the right approach for your specific visual or performance requirements.
-        </p>
-        <p>
-          I've already used it in a personal project exploring procedural generation in games. The ability to quickly switch algorithms and see how they affect gameplay dynamics is invaluable.
-        </p>
-
-        <h2>What I Learned Building Mazex</h2>
-        <p>
-          Beyond the technical aspects, this project reinforced several important software engineering lessons. First, sometimes the best way to understand a concept is to implement it from scratch. Reading about Wilson's algorithm is educational, but implementing it makes you truly understand why it works.
-        </p>
-        <p>
-          Second, language choice matters. Some languages would have made implementing these algorithms more verbose or less elegant. Elixir's expressiveness allowed me to focus on the algorithm itself rather than fighting the language.
-        </p>
-        <p>
-          Third, open-sourcing a small project is valuable even if it seems niche. Building Mazex for myself was one thing, but publishing it means anyone interested in maze generation, algorithms, or learning Elixir can benefit. The 7 stars on GitHub might seem modest, but if even a few people learned something from the code, it was worth the effort.
-        </p>
-        <p>
-          Fourth, testing algorithmic code requires a different mindset than testing typical web applications. You can't easily assert that an algorithm produces exactly the expected output because the randomness is intentional. Instead, I focused on ensuring each algorithm terminates correctly and produces valid mazes by validating the structural properties.
-        </p>
-
-        <h2>Future Improvements and Extensions</h2>
-        <p>
-          Mazex is already functional and useful, but there's room for evolution. Perfect mazes are interesting, but adding support for passages, weave mazes (mazes where paths can overlap), and even three-dimensional structures would be fascinating extensions.
-        </p>
-        <p>
-          Adding more sophisticated visualization options—different cell representations, color schemes based on algorithm characteristics, or animated generation visualization—would increase its appeal to artists and educators.
-        </p>
-        <p>
-          Performance optimization using Elixir's NIF (Native Implemented Functions) interface could push generation times even lower, though current performance is already excellent for most use cases.
+          Mazex works for game dungeons, educational tools for graph theory, visual art, and procedural generation. MIT licensed and fast enough for runtime generation without lag.
         </p>
 
         <h2>Conclusion</h2>
         <p>
-          Building Mazex was a reminder of why I fell in love with programming in the first place. It combined the joy of algorithmic thinking with the satisfaction of creating a working tool. Working in Elixir made the implementation elegant and correct, and the language's strengths in handling complex data transformations shined throughout.
-        </p>
-        <p>
-          If you're interested in maze generation, algorithm implementation, or just exploring what Elixir is capable of, I encourage you to check out Mazex on GitHub. Try different algorithms on the same grid and observe how their outputs differ. Implement your own variations. Build games or art projects using it as a foundation.
-        </p>
-        <p>
-          Sometimes the most valuable projects are those that help us explore a problem deeply. Mazex did exactly that for me, and I hope it does the same for anyone who uses it.
+          Mazex demonstrates how Elixir's pattern matching and immutability make algorithm implementation elegant. Check it out on <a href="https://github.com/alexandrubagu/mazex" class="text-blue-600 hover:underline">GitHub</a> to explore different maze generation approaches.
         </p>
       </div>
 
