@@ -8,9 +8,15 @@
   </url>
   <url>
     <loc>https://alexandrubagu.github.io/blog.html</loc>
-    <lastmod>2025-11-27</lastmod>
+    <lastmod>2025-12-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://alexandrubagu.github.io/blog/pg-repack-guide.html</loc>
+    <lastmod>2025-12-03</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://alexandrubagu.github.io/blog/parameter-validation.html</loc>
