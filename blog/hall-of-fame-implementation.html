@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building a Hall of Fame Leaderboard: Three Approaches Compared - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Compare three approaches to building a high-performance Hall of Fame leaderboard for gaming platforms: Cachex distributed cache, PostgreSQL transactions, and Redis sorted sets. Learn pros, cons, and performance considerations." />
+
+  <!-- PWA and Mobile -->
+  <meta name="theme-color" content="#1e293b">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Building a Hall of Fame Leaderboard: Three Approaches Compared",
+    "description": "Compare three approaches to building a high-performance Hall of Fame leaderboard for gaming platforms: Cachex distributed cache, PostgreSQL transactions, and Redis sorted sets. Learn pros, cons, and performance considerations.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "url": "https://alexandrubagu.github.io"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://alexandrubagu.github.io/profile.jpg"
+      }
+    },
+    "datePublished": "2025-12-04T09:00:00+08:00",
+    "dateModified": "2025-12-04T09:00:00+08:00",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://alexandrubagu.github.io/blog/hall-of-fame-implementation.html"
+    },
+    "keywords": "hall of fame, leaderboard, Cachex, Redis, PostgreSQL, sorted sets, gaming, real-time leaderboard, Elixir, performance optimization",
+    "articleSection": "Backend Development",
+    "inLanguage": "en-US",
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "Leaderboard Systems"
+      },
+      {
+        "@type": "Thing",
+        "name": "Redis Sorted Sets"
+      },
+      {
+        "@type": "Thing",
+        "name": "Cachex Distributed Cache"
+      },
+      {
+        "@type": "Thing",
+        "name": "PostgreSQL Performance"
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "Hall of Fame Leaderboard Implementation Guide",
+    "description": "Technical comparison of three architectures for building high-performance gaming leaderboards",
+    "proficiencyLevel": "Intermediate",
+    "dependencies": "Elixir, Phoenix, PostgreSQL, Redis, Cachex",
+    "author": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan"
+    }
+  }
+  </script>
+
+  <!-- Performance optimizations -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: 'rgb(59, 130, 246)',
+            'primary-foreground': 'rgb(255, 255, 255)',
+            background: 'rgb(255, 255, 255)',
+            foreground: 'rgb(30, 41, 59)',
+            muted: 'rgb(241, 245, 249)',
+            'muted-foreground': 'rgb(100, 116, 139)',
+            border: 'rgb(226, 232, 240)',
+            slate: {
+              50: 'rgb(248, 250, 252)',
+              100: 'rgb(241, 245, 249)',
+              200: 'rgb(226, 232, 240)',
+              300: 'rgb(203, 213, 225)',
+              400: 'rgb(148, 163, 184)',
+              500: 'rgb(100, 116, 139)',
+              600: 'rgb(71, 85, 105)',
+              700: 'rgb(51, 65, 85)',
+              800: 'rgb(30, 41, 59)',
+              900: 'rgb(15, 23, 42)',
+            },
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    section {
+      scroll-margin-top: 5rem;
+    }
+
+    .gradient-hero {
+      background: linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 100%);
+    }
+
+    .gradient-primary {
+      background: linear-gradient(135deg, rgb(59, 130, 246) 0%, rgb(96, 165, 250) 100%);
+    }
+
+    .gradient-subtle {
+      background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(248, 250, 252) 100%);
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    article code {
+      background-color: #f1f5f9;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    article pre {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    article pre code {
+      background-color: transparent;
+      padding: 0;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+    }
+
+    article h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+
+    article h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: #334155;
+    }
+
+    article p {
+      margin-bottom: 1rem;
+      line-height: 1.75;
+      color: #475569;
+    }
+
+    article ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    article li {
+      margin-bottom: 0.5rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+
+    article strong {
+      color: #1e293b;
+      font-weight: 600;
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WK8MJ0B6R6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WK8MJ0B6R6');
+  </script>
+</head>
+<body class="bg-white text-slate-900">
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" id="navbar-logo" class="text-xl font-bold text-slate-900 hover:text-primary transition-colors">
+          Alexandru Bogdan
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-1" id="desktop-nav">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Contact</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2" id="mobile-nav">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <article class="container mx-auto px-4 pt-24 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Backend</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">
+          Building a Hall of Fame Leaderboard: Three Approaches Compared
+        </h1>
+        <div class="flex items-center gap-6 text-slate-600">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-sm">December 4, 2025</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm">8 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="prose max-w-none text-slate-900">
+        <p class="mb-4 text-lg">
+          Building a real-time leaderboard for gaming platforms presents unique challenges. When players are constantly generating wins across multiple games, you need a system that maintains top rankings efficiently while handling high-frequency updates. This article explores three different approaches to implementing a Hall of Fame feature that displays the top 25 players by highest wins for each game.
+        </p>
+
+        <h2>The Requirements</h2>
+        <p>
+          Our gaming platform has a straightforward architecture:
+        </p>
+        <ul>
+          <li>Admins configure multiple games</li>
+          <li>Users register and play various games</li>
+          <li>Each game emits events for bets, wins, and rollbacks</li>
+        </ul>
+        <p>
+          We need to build a Hall of Fame widget that displays the top 25 users with the highest wins for each game. The solution must handle high-frequency updates, maintain accuracy across concurrent operations, and deliver sub-second read performance.
+        </p>
+
+        <h2>Approach 1: Cachex Distributed Cache</h2>
+        <p>
+          Cachex is an in-memory caching library for Elixir that offers distributed caching capabilities. The strategy here is to maintain the top 100 highest wins per game in cache, displaying only the top 25 to users.
+        </p>
+
+        <h3>Implementation</h3>
+        <p>
+          Store a sorted list of the top 100 wins per game in Cachex. When a new win occurs, check if it exceeds the minimum cached win, then update and re-sort if necessary:
+        </p>
+        <pre><code>defmodule HallOfFame.Cachex do
+  @cache_name :hall_of_fame
+  @top_count 100
+
+  def record_win(game_id, user_id, win_amount) do
+    cache_key = "game_#{game_id}"
+
+    # Get current top wins
+    current_top = Cachex.get!(@cache_name, cache_key) || []
+
+    # Check if win qualifies
+    if length(current_top) < @top_count or
+       win_amount > get_min_win(current_top) do
+      # Add new win and re-sort
+      updated = [{user_id, win_amount} | current_top]
+                |> Enum.sort_by(&elem(&1, 1), :desc)
+                |> Enum.take(@top_count)
+
+      Cachex.put(@cache_name, cache_key, updated)
+    end
+  end
+
+  def get_top_25(game_id) do
+    cache_key = "game_#{game_id}"
+
+    Cachex.get!(@cache_name, cache_key)
+    |> Enum.take(25)
+  end
+
+  defp get_min_win([]), do: 0
+  defp get_min_win(wins), do: elem(List.last(wins), 1)
+end</code></pre>
+
+        <h3>Pros</h3>
+        <ul>
+          <li><strong>Extreme read performance:</strong> Sub-millisecond reads directly from memory</li>
+          <li><strong>Low latency:</strong> No network calls or database queries for reads</li>
+          <li><strong>Simple implementation:</strong> Straightforward logic without complex data structures</li>
+          <li><strong>Resource efficient:</strong> Minimal memory footprint for top 100 entries per game</li>
+        </ul>
+
+        <h3>Cons</h3>
+        <ul>
+          <li><strong>Cache synchronization complexity:</strong> In distributed environments with multiple nodes, cache updates require coordination. Without proper synchronization, different nodes may have inconsistent views of the leaderboard</li>
+          <li><strong>Race conditions:</strong> Concurrent writes from multiple processes can lead to lost updates. Two simultaneous wins might both read the same cached state, update independently, and overwrite each other</li>
+          <li><strong>Expensive sorting operations:</strong> Every qualifying win triggers a full sort of 100 entries, creating O(n log n) overhead on the write path</li>
+          <li><strong>Data persistence risk:</strong> Cache is volatile - a node restart loses all leaderboard data unless backed by persistent storage</li>
+          <li><strong>Manual cache warming:</strong> Cold starts require rebuilding the cache from database, adding complexity to deployment</li>
+        </ul>
+
+        <h3>When to Use</h3>
+        <p>
+          Cachex works well for single-node applications or when eventual consistency is acceptable. It's ideal for read-heavy workloads where leaderboards update infrequently and accuracy can tolerate slight delays.
+        </p>
+
+        <h2>Approach 2: PostgreSQL with Transactions</h2>
+        <p>
+          Using a dedicated <code>hall_of_fame</code> table, we can maintain exactly 25 top entries per game. Each win triggers a database transaction that checks if it qualifies and atomically updates the leaderboard.
+        </p>
+
+        <h3>Implementation</h3>
+        <p>
+          Create a table to store top wins and use transactions to ensure atomic updates:
+        </p>
+        <pre><code>CREATE TABLE hall_of_fame (
+  id BIGSERIAL PRIMARY KEY,
+  game_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  win_amount DECIMAL(20, 2) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE(game_id, user_id)
+);
+
+CREATE INDEX idx_hall_of_fame_game_wins
+  ON hall_of_fame(game_id, win_amount DESC);</code></pre>
+
+        <pre><code>defmodule HallOfFame.Postgres do
+  import Ecto.Query
+  alias MyApp.Repo
+
+  def record_win(game_id, user_id, win_amount) do
+    Repo.transaction(fn ->
+      # Get minimum win for this game's hall of fame
+      min_win = from(h in HallOfFame,
+                     where: h.game_id == ^game_id,
+                     order_by: [asc: h.win_amount],
+                     limit: 1,
+                     select: h.win_amount)
+                |> Repo.one()
+
+      # Count current entries
+      count = from(h in HallOfFame,
+                   where: h.game_id == ^game_id,
+                   select: count(h.id))
+              |> Repo.one()
+
+      # Insert if hall of fame not full or win exceeds minimum
+      if count < 25 or (min_win && win_amount > min_win) do
+        # Insert or update user's win
+        %HallOfFame{}
+        |> HallOfFame.changeset(%{
+          game_id: game_id,
+          user_id: user_id,
+          win_amount: win_amount
+        })
+        |> Repo.insert(
+          on_conflict: [set: [win_amount: win_amount]],
+          conflict_target: [:game_id, :user_id]
+        )
+
+        # Remove lowest entry if we exceed 25
+        if count >= 25 do
+          from(h in HallOfFame,
+               where: h.game_id == ^game_id,
+               order_by: [asc: h.win_amount],
+               limit: 1)
+          |> Repo.delete_all()
+        end
+      end
+    end)
+  end
+
+  def get_top_25(game_id) do
+    from(h in HallOfFame,
+         where: h.game_id == ^game_id,
+         order_by: [desc: h.win_amount],
+         limit: 25)
+    |> Repo.all()
+  end
+end</code></pre>
+
+        <h3>Pros</h3>
+        <ul>
+          <li><strong>ACID guarantees:</strong> Transactions ensure consistency and prevent race conditions</li>
+          <li><strong>Data persistence:</strong> Leaderboards survive crashes and restarts</li>
+          <li><strong>Familiar tooling:</strong> Leverage existing PostgreSQL infrastructure and monitoring</li>
+          <li><strong>Atomic operations:</strong> No risk of concurrent updates creating inconsistent state</li>
+          <li><strong>Backup and recovery:</strong> Standard database backup procedures protect leaderboard data</li>
+        </ul>
+
+        <h3>Cons</h3>
+        <ul>
+          <li><strong>Write performance overhead:</strong> Each win requires multiple queries in a transaction - checking minimum, counting entries, inserting/updating, and potentially deleting</li>
+          <li><strong>Lock contention:</strong> High-frequency updates to the same game's leaderboard create transaction serialization, reducing throughput</li>
+          <li><strong>Index maintenance cost:</strong> Every write updates indexes, adding I/O overhead</li>
+          <li><strong>Scalability limits:</strong> Database becomes a bottleneck under heavy concurrent load</li>
+          <li><strong>Network latency:</strong> Every operation requires round-trip to database server</li>
+        </ul>
+
+        <h3>When to Use</h3>
+        <p>
+          PostgreSQL excels when data consistency is paramount and write volume is moderate. It's the right choice for applications that already use PostgreSQL and can't tolerate eventual consistency or data loss.
+        </p>
+
+        <h2>Approach 3: Redis Sorted Sets</h2>
+        <p>
+          Redis sorted sets are purpose-built for leaderboards. Each member has an associated score, and Redis maintains them in sorted order automatically. This eliminates manual sorting and provides atomic operations.
+        </p>
+
+        <h3>Implementation</h3>
+        <p>
+          Use one sorted set per game, with user IDs as members and win amounts as scores:
+        </p>
+        <pre><code>defmodule HallOfFame.Redis do
+  def record_win(game_id, user_id, win_amount) do
+    key = "hall_of_fame:game:#{game_id}"
+
+    # Add/update user's win (atomic operation)
+    Redix.command(:redix, [
+      "ZADD", key, win_amount, user_id
+    ])
+
+    # Keep only top 100 entries to manage memory
+    Redix.command(:redix, [
+      "ZREMRANGEBYRANK", key, 0, -101
+    ])
+  end
+
+  def get_top_25(game_id) do
+    key = "hall_of_fame:game:#{game_id}"
+
+    # Get top 25 with scores (O(log(N) + M) complexity)
+    Redix.command(:redix, [
+      "ZREVRANGE", key, 0, 24, "WITHSCORES"
+    ])
+    |> parse_results()
+  end
+
+  defp parse_results({:ok, results}) do
+    results
+    |> Enum.chunk_every(2)
+    |> Enum.map(fn [user_id, score] ->
+      {user_id, String.to_float(score)}
+    end)
+  end
+end</code></pre>
+
+        <h3>Pros</h3>
+        <ul>
+          <li><strong>Optimal performance:</strong> O(log(N)) insertion, no manual sorting required</li>
+          <li><strong>Atomic operations:</strong> ZADD and ZREVRANGE are atomic, preventing race conditions</li>
+          <li><strong>Purpose-built data structure:</strong> Sorted sets are designed exactly for this use case</li>
+          <li><strong>Horizontal scalability:</strong> Redis Cluster enables sharding across multiple nodes</li>
+          <li><strong>High throughput:</strong> Can handle thousands of concurrent updates per second</li>
+          <li><strong>Simple codebase:</strong> Minimal application logic due to Redis built-in capabilities</li>
+          <li><strong>Memory efficiency:</strong> Configurable retention with ZREMRANGEBYRANK to control memory usage</li>
+        </ul>
+
+        <h3>Cons</h3>
+        <ul>
+          <li><strong>Additional infrastructure:</strong> Requires running and maintaining Redis servers</li>
+          <li><strong>Memory constraints:</strong> All data lives in memory - need capacity planning for all games and users</li>
+          <li><strong>Data persistence configuration:</strong> Requires setting up RDB/AOF persistence to prevent data loss</li>
+          <li><strong>Network dependency:</strong> Every operation requires network round-trip to Redis</li>
+          <li><strong>Monitoring complexity:</strong> Need separate monitoring for Redis health and performance</li>
+        </ul>
+
+        <h3>When to Use</h3>
+        <p>
+          Redis sorted sets are the optimal choice for high-traffic leaderboards requiring real-time updates and excellent read performance. If you're building a production gaming platform with thousands of concurrent players, this is the recommended approach.
+        </p>
+
+        <h2>Performance Comparison</h2>
+        <p>
+          For a typical gaming platform with 100 concurrent games and 1000 wins per second:
+        </p>
+        <ul>
+          <li><strong>Cachex:</strong> Reads under 1ms, writes 5-10ms (sorting overhead), potential inconsistency across nodes</li>
+          <li><strong>PostgreSQL:</strong> Reads 5-15ms (indexed query), writes 20-50ms (transaction overhead), guaranteed consistency</li>
+          <li><strong>Redis:</strong> Reads 1-3ms (network + lookup), writes 2-5ms (atomic operation), guaranteed consistency with high throughput</li>
+        </ul>
+
+        <h2>Conclusion</h2>
+        <p>
+          Each approach has distinct trade-offs:
+        </p>
+        <p>
+          <strong>Choose Cachex</strong> if you're running a single-node application or can accept eventual consistency. It's the simplest implementation with the fastest reads, but falls short in distributed environments.
+        </p>
+        <p>
+          <strong>Choose PostgreSQL</strong> if you prioritize data durability and consistency over raw performance, have moderate traffic, and want to minimize infrastructure dependencies. It's reliable but doesn't scale to high-frequency updates.
+        </p>
+        <p>
+          <strong>Choose Redis</strong> for production gaming platforms requiring real-time leaderboards with high concurrency. The infrastructure investment pays off with optimal performance, scalability, and purpose-built semantics for ranking data.
+        </p>
+        <p>
+          For the Hall of Fame feature described in the <a href="https://github.com/alexandrubagu/hall_of_fame_task" target="_blank" rel="noopener noreferrer">requirements</a>, Redis sorted sets provide the best combination of performance, correctness, and scalability. The atomic operations, automatic sorting, and high throughput make it the clear winner for real-time leaderboards at scale.
+        </p>
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-slate-200">
+        <a href="/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Back to All Posts
+        </a>
+      </footer>
+    </div>
+  </article>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
