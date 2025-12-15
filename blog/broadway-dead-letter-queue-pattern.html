@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dead Letter Queue Pattern with Broadway and RabbitMQ: Complete Implementation Guide - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Master the Dead Letter Queue pattern with Broadway and RabbitMQ. Learn retry strategies, exponential backoff, and failure isolation for resilient message processing in Elixir." />
+
+  <!-- PWA and Mobile -->
+  <meta name="theme-color" content="#1e293b">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Dead Letter Queue Pattern with Broadway and RabbitMQ: Complete Implementation Guide",
+    "description": "Master the Dead Letter Queue pattern with Broadway and RabbitMQ. Learn retry strategies, exponential backoff, and failure isolation for resilient message processing in Elixir.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "url": "https://alexandrubagu.github.io"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://alexandrubagu.github.io/profile.jpg"
+      }
+    },
+    "datePublished": "2025-12-15T12:00:00+08:00",
+    "dateModified": "2025-12-15T12:00:00+08:00",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://alexandrubagu.github.io/blog/broadway-dead-letter-queue-pattern.html"
+    },
+    "keywords": "Broadway DLQ, RabbitMQ dead letter queue, Elixir message queue, retry pattern, exponential backoff, Broadway failed messages, RabbitMQ TTL, message processing resilience, Elixir error handling, Broadway pipeline",
+    "articleSection": "Elixir Development",
+    "inLanguage": "en-US",
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "Message Queue Patterns"
+      },
+      {
+        "@type": "Thing",
+        "name": "Broadway Framework"
+      },
+      {
+        "@type": "Thing",
+        "name": "RabbitMQ Configuration"
+      },
+      {
+        "@type": "Thing",
+        "name": "Resilient Systems"
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "Broadway Dead Letter Queue Implementation Guide",
+    "description": "Complete guide to implementing the Dead Letter Queue pattern with Broadway and RabbitMQ for resilient message processing",
+    "proficiencyLevel": "Intermediate",
+    "dependencies": "Elixir ~> 1.12, Broadway ~> 1.0, RabbitMQ",
+    "author": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Implement Dead Letter Queue Pattern with Broadway",
+    "description": "Step-by-step guide to implementing resilient message processing with Broadway and RabbitMQ dead letter queues",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Configure Queue Architecture",
+        "text": "Set up worker, retry, and dead queues with proper RabbitMQ exchange configuration"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Implement Retry Logic",
+        "text": "Configure exponential backoff and retry limits in Broadway pipeline"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Handle Failed Messages",
+        "text": "Implement handle_failed/2 callback to route messages to retry or dead queues"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Monitor Queue Health",
+        "text": "Set up observability for worker, retry, and dead queues"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Performance optimizations -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: 'rgb(59, 130, 246)',
+            'primary-foreground': 'rgb(255, 255, 255)',
+            background: 'rgb(255, 255, 255)',
+            foreground: 'rgb(30, 41, 59)',
+            muted: 'rgb(241, 245, 249)',
+            'muted-foreground': 'rgb(100, 116, 139)',
+            border: 'rgb(226, 232, 240)',
+            slate: {
+              50: 'rgb(248, 250, 252)',
+              100: 'rgb(241, 245, 249)',
+              200: 'rgb(226, 232, 240)',
+              300: 'rgb(203, 213, 225)',
+              400: 'rgb(148, 163, 184)',
+              500: 'rgb(100, 116, 139)',
+              600: 'rgb(71, 85, 105)',
+              700: 'rgb(51, 65, 85)',
+              800: 'rgb(30, 41, 59)',
+              900: 'rgb(15, 23, 42)',
+            },
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    section {
+      scroll-margin-top: 5rem;
+    }
+
+    .gradient-hero {
+      background: linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 100%);
+    }
+
+    .gradient-primary {
+      background: linear-gradient(135deg, rgb(59, 130, 246) 0%, rgb(96, 165, 250) 100%);
+    }
+
+    .gradient-subtle {
+      background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(248, 250, 252) 100%);
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    article code {
+      background-color: #f1f5f9;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    article pre {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    article pre code {
+      background-color: transparent;
+      padding: 0;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+    }
+
+    article h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+
+    article h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: #334155;
+    }
+
+    article p {
+      margin-bottom: 1rem;
+      line-height: 1.75;
+      color: #475569;
+    }
+
+    article ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    article li {
+      margin-bottom: 0.5rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+
+    article strong {
+      color: #1e293b;
+      font-weight: 600;
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WK8MJ0B6R6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WK8MJ0B6R6');
+  </script>
+</head>
+<body class="bg-white text-slate-900">
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" id="navbar-logo" class="text-xl font-bold text-slate-900 hover:text-primary transition-colors">
+          Alexandru Bogdan
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-1" id="desktop-nav">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Contact</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2" id="mobile-nav">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <article class="container mx-auto px-4 pt-24 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Elixir</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">
+          Dead Letter Queue Pattern with Broadway and RabbitMQ
+        </h1>
+        <div class="flex items-center gap-6 text-slate-600">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-sm">December 15, 2025</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm">10 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="prose max-w-none text-slate-900">
+        <p class="mb-4 text-lg">
+          Building resilient message processing systems requires handling failures gracefully. When Broadway processes messages through pipelines, transient failures happen. Network issues, temporary service outages, and data inconsistencies are inevitable in distributed systems.
+        </p>
+
+        <p>
+          The Dead Letter Queue (DLQ) pattern provides a robust solution for handling failed messages at the infrastructure level. By leveraging RabbitMQ's native capabilities, you can implement automatic retries, exponential backoff, and failure isolation without cluttering your application code.
+        </p>
+
+        <h2>Understanding the Pattern</h2>
+        <p>
+          Broadway excels at processing messages through concurrent pipelines but doesn't provide built-in retry mechanisms. The DLQ pattern fills this gap by implementing retry logic at the RabbitMQ infrastructure level using exchange and queue configurations.
+        </p>
+
+        <p>The architecture separates concerns cleanly:</p>
+
+        <ul>
+          <li><strong>Broadway</strong> handles message acknowledgment and processing</li>
+          <li><strong>RabbitMQ</strong> manages retry timing and routing</li>
+          <li><strong>Your Pipeline</strong> implements business logic and retry decisions</li>
+        </ul>
+
+        <h2>Queue Architecture</h2>
+        <p>The system creates three specialized queues per processing step:</p>
+
+        <h3>1. Worker Queue</h3>
+        <p>
+          The primary queue where Broadway consumers receive messages for processing. Normal message flow starts here. Successful processing completes the cycle, while failures trigger the retry mechanism.
+        </p>
+
+        <h3>2. Retry Queue</h3>
+        <p>
+          Failed messages land here with a TTL (Time To Live) configuration. RabbitMQ automatically moves expired messages back to the worker queue using Dead Letter Exchange (DLX) routing. This creates time-delayed retries without custom timers or scheduled jobs.
+        </p>
+
+        <h3>3. Dead Queue</h3>
+        <p>
+          Permanently failed messages accumulate here after exhausting retry attempts. This queue enables manual inspection, debugging, and alternative handling strategies without blocking the main processing pipeline.
+        </p>
+
+        <h2>How It Works</h2>
+
+        <h3>Queue Setup</h3>
+        <p>When a producer starts, it declares the complete queue topology:</p>
+
+        <pre><code># Declare retry queue with dead-letter exchange configuration
+AMQP.Queue.declare(channel, "my_queue.retry",
+  durable: true,
+  arguments: [
+    {"x-dead-letter-exchange", :longstr, "my_exchange.worker"},
+    {"x-dead-letter-routing-key", :longstr, "my_queue.worker"},
+    {"x-queue-version", 2}
+  ]
+)</code></pre>
+
+        <p>
+          The retry queue's <code>x-dead-letter-exchange</code> argument tells RabbitMQ where to route expired messages. When a message's TTL expires, RabbitMQ automatically publishes it back to the worker queue.
+        </p>
+
+        <h3>Normal Processing Flow</h3>
+        <p>Messages flow through the happy path:</p>
+
+        <pre><code>Message → Worker Queue → Broadway Pipeline → Success → ACK</code></pre>
+
+        <p>Broadway acknowledges successful messages, and they're removed from the queue permanently.</p>
+
+        <h3>Failure and Retry Flow</h3>
+        <p>When processing fails, Broadway's <code>handle_failed/2</code> callback routes messages to the retry queue:</p>
+
+        <pre><code>Message → Worker Queue → Broadway Pipeline → Failure
+  ↓
+handle_failed/2 callback publishes to Retry Queue (with expiration)
+  ↓
+After TTL expires → RabbitMQ DLX routes back to Worker Queue
+  ↓
+Retry processing attempt</code></pre>
+
+        <p>
+          The retry queue acts as a holding area. RabbitMQ's TTL mechanism provides automatic time delays, creating exponential backoff without complex scheduling logic.
+        </p>
+
+        <h3>Permanent Failure</h3>
+        <p>
+          After exhausting retries, messages move to the dead queue. This prevents infinite retry loops and provides visibility into systemic issues requiring manual intervention.
+        </p>
+
+        <h2>Implementation Guide</h2>
+
+        <h3>Step 1: Configure Producer with Queue Declaration</h3>
+        <p>The producer declares all three queues with proper configuration:</p>
+
+        <pre><code>defmodule AnswerProcessing.MyStep.Producer do
+  use Broadway.Producer
+
+  def start_link(opts) do
+    connection = Keyword.fetch!(opts, :connection)
+    queue_name = "my_step"
+
+    # Declare exchanges
+    AMQP.Exchange.declare(channel, "#{queue_name}.worker", :direct, durable: true)
+    AMQP.Exchange.declare(channel, "#{queue_name}.failed", :direct, durable: true)
+
+    # Declare worker queue
+    AMQP.Queue.declare(channel, "#{queue_name}.worker", durable: true)
+    AMQP.Queue.bind(channel, "#{queue_name}.worker", "#{queue_name}.worker")
+
+    # Declare retry queue with DLX
+    AMQP.Queue.declare(channel, "#{queue_name}.retry",
+      durable: true,
+      arguments: [
+        {"x-dead-letter-exchange", :longstr, "#{queue_name}.worker"},
+        {"x-dead-letter-routing-key", :longstr, "#{queue_name}.worker"}
+      ]
+    )
+
+    # Declare dead queue
+    AMQP.Queue.declare(channel, "#{queue_name}.dead", durable: true)
+
+    # ... producer implementation
+  end
+
+  def publish(queue_type, message, opts \\\\ []) do
+    case queue_type do
+      :worker -> publish_to_worker(message, opts)
+      :retry -> publish_to_retry(message, opts)
+      :dead -> publish_to_dead(message, opts)
+    end
+  end
+end</code></pre>
+
+        <h3>Step 2: Implement Retry Logic with Exponential Backoff</h3>
+        <p>The pipeline's <code>handle_failed/2</code> callback implements retry strategy:</p>
+
+        <pre><code>defmodule MyApp.Pipeline do
+  use Broadway
+
+  @max_retries 3
+
+  def handle_failed(messages, _context) do
+    Enum.map(messages, fn message ->
+      retry_count = get_retry_count(message)
+
+      if retry_count < @max_retries do
+        # Calculate exponential backoff: 30s, 60s, 120s
+        expiration = :timer.seconds(30 * :math.pow(2, retry_count))
+
+        # Publish to retry queue
+        message.data
+        |> increment_retry_count()
+        |> Jason.encode!()
+        |> MyStep.Producer.publish(:retry,
+             expiration: expiration,
+             priority: message.metadata.priority
+           )
+      else
+        # Max retries exhausted, send to dead queue
+        message.data
+        |> Jason.encode!()
+        |> MyStep.Producer.publish(:dead, priority: 0)
+      end
+
+      message
+    end)
+  end
+
+  defp get_retry_count(%{data: %{"retry_count" => count}}), do: count
+  defp get_retry_count(_), do: 0
+
+  defp increment_retry_count(%{"retry_count" => count} = data),
+    do: %{data | "retry_count" => count + 1}
+  defp increment_retry_count(data),
+    do: Map.put(data, "retry_count", 1)
+end</code></pre>
+
+        <p>This implementation provides:</p>
+
+        <ul>
+          <li><strong>Exponential backoff</strong> - Each retry waits progressively longer (30s, 60s, 120s)</li>
+          <li><strong>Retry limits</strong> - Prevents infinite loops with max retry count</li>
+          <li><strong>Metadata tracking</strong> - Embeds retry count in message payload</li>
+          <li><strong>Priority preservation</strong> - Maintains message priority through retries</li>
+        </ul>
+
+        <h3>Step 3: Configure Complete Step</h3>
+        <p>Wire everything together in your supervision tree:</p>
+
+        <pre><code>defmodule AnswerProcessing.MyStep do
+  use AnswerProcessing.Step,
+    implementation: AnswerProcessing.MyStepImpl,
+    producer: [queue_name: "my_step"],
+    pipeline: [queue: "my_step.worker"]
+end
+
+# In supervisor
+children = [
+  {AnswerProcessing.MyStep.Producer, connection: rabbitmq_connection},
+  {AnswerProcessing.MyStep.Pipeline,
+   connection: rabbitmq_connection,
+   next_step: AnswerProcessing.NextStep
+  }
+]
+
+Supervisor.start_link(children, strategy: :one_for_one)</code></pre>
+
+        <h2>Key Benefits</h2>
+
+        <h3>Automatic Retry Without Custom Timers</h3>
+        <p>
+          RabbitMQ's TTL + DLX combination provides time-delayed reprocessing automatically. No GenServer timers, no external schedulers, no manual tracking. The message broker handles everything.
+        </p>
+
+        <h3>Failure Isolation</h3>
+        <p>
+          Dead queue separates permanent failures from transient ones. Your monitoring system can alert on dead queue growth, while retry queue fluctuations are normal and expected.
+        </p>
+
+        <h3>No Message Loss</h3>
+        <p>
+          Every message exists in exactly one queue at all times. Worker, retry, or dead. Nothing falls through the cracks. Durable queues survive broker restarts.
+        </p>
+
+        <h3>Independent Queue Monitoring</h3>
+        <p>
+          Each queue provides distinct metrics. Worker queue depth indicates processing capacity. Retry queue shows transient failure rate. Dead queue reveals systemic problems requiring attention.
+        </p>
+
+        <h3>Stateless Pipeline Logic</h3>
+        <p>
+          Broadway callbacks remain stateless. No retry state tracking, no timer management, no complex error handling logic. The infrastructure handles retry mechanics.
+        </p>
+
+        <h2>Broadway's Role</h2>
+        <p>Broadway focuses on what it does best:</p>
+
+        <ul>
+          <li><strong>Message acknowledgment</strong> - Handles successful and failed message acknowledgment</li>
+          <li><strong>Failure isolation</strong> - Processes messages through stateless callbacks</li>
+          <li><strong>Immediate acknowledgment</strong> - Prevents RabbitMQ redelivery by acknowledging failures immediately</li>
+        </ul>
+
+        <p>Broadway does NOT handle:</p>
+
+        <ul>
+          <li><strong>Retry logic</strong> - Delegated to producer/pipeline routing decisions</li>
+          <li><strong>TTL management</strong> - Handled by RabbitMQ queue configuration</li>
+          <li><strong>DLQ routing</strong> - Implemented at infrastructure level</li>
+        </ul>
+
+        <p>This separation of concerns keeps the architecture clean and maintainable.</p>
+
+        <h2>Production Considerations</h2>
+
+        <h3>Monitoring and Alerting</h3>
+        <p>Monitor queue depths independently:</p>
+
+        <ul>
+          <li><strong>Worker queue</strong> - Alert on sustained high depth (processing bottleneck)</li>
+          <li><strong>Retry queue</strong> - Track for transient failure patterns</li>
+          <li><strong>Dead queue</strong> - Alert immediately on growth (systemic issues)</li>
+        </ul>
+
+        <h3>Message Expiration Tuning</h3>
+        <p>
+          Adjust exponential backoff parameters based on your failure characteristics. Network issues might need shorter delays, while rate-limited APIs benefit from longer waits.
+        </p>
+
+        <h3>Dead Queue Processing</h3>
+        <p>
+          Implement tooling to inspect and reprocess dead queue messages. Consider administrative endpoints for manual retry or batch reprocessing after fixing underlying issues.
+        </p>
+
+        <h3>Retry Count Persistence</h3>
+        <p>
+          Store retry count in message payload, not headers. This ensures retry tracking survives message transformations and provides debugging visibility.
+        </p>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li><strong>Infrastructure-level retries</strong> using RabbitMQ TTL and Dead Letter Exchange</li>
+          <li><strong>Three-queue architecture</strong> separating worker, retry, and dead messages</li>
+          <li><strong>Exponential backoff</strong> implemented through increasing TTL values</li>
+          <li><strong>Stateless Broadway pipelines</strong> with routing decisions in handle_failed/2</li>
+          <li><strong>No message loss</strong> with durable queues and explicit acknowledgment</li>
+          <li><strong>Independent monitoring</strong> for worker, retry, and dead queue health</li>
+          <li><strong>Clean separation</strong> between Broadway processing and retry infrastructure</li>
+        </ul>
+
+        <p>
+          The Dead Letter Queue pattern with Broadway and RabbitMQ provides production-grade message processing resilience. By leveraging infrastructure capabilities, you build robust systems without complex application logic.
+        </p>
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-slate-200">
+        <a href="/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Back to All Posts
+        </a>
+      </footer>
+    </div>
+  </article>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
