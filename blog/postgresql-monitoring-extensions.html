@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Essential PostgreSQL Monitoring Extensions: pg_buffercache, pg_stat_statements, pgstattuple, pg_prewarm - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Learn how to use PostgreSQL monitoring extensions pg_buffercache, pg_stat_statements, pgstattuple, and pg_prewarm to optimize database performance with practical examples." />
+
+  <!-- PWA and Mobile -->
+  <meta name="theme-color" content="#1e293b">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Essential PostgreSQL Monitoring Extensions: pg_buffercache, pg_stat_statements, pgstattuple, pg_prewarm",
+    "description": "Learn how to use PostgreSQL monitoring extensions pg_buffercache, pg_stat_statements, pgstattuple, and pg_prewarm to optimize database performance with practical examples.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "url": "https://alexandrubagu.github.io"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://alexandrubagu.github.io/profile.jpg"
+      }
+    },
+    "datePublished": "2026-01-30T08:00:00+08:00",
+    "dateModified": "2026-01-30T08:00:00+08:00",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://alexandrubagu.github.io/blog/postgresql-monitoring-extensions.html"
+    },
+    "keywords": "PostgreSQL extensions, pg_buffercache, pg_stat_statements, pgstattuple, pg_prewarm, database monitoring, PostgreSQL performance, buffer cache, query optimization",
+    "articleSection": "Database",
+    "inLanguage": "en-US",
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "PostgreSQL Database"
+      },
+      {
+        "@type": "Thing",
+        "name": "Database Monitoring"
+      },
+      {
+        "@type": "Thing",
+        "name": "Performance Optimization"
+      },
+      {
+        "@type": "Thing",
+        "name": "PostgreSQL Extensions"
+      }
+    ]
+  }
+  </script>
+
+
+
+  <!-- Performance optimizations -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: 'rgb(59, 130, 246)',
+            'primary-foreground': 'rgb(255, 255, 255)',
+            background: 'rgb(255, 255, 255)',
+            foreground: 'rgb(30, 41, 59)',
+            muted: 'rgb(241, 245, 249)',
+            'muted-foreground': 'rgb(100, 116, 139)',
+            border: 'rgb(226, 232, 240)',
+            slate: {
+              50: 'rgb(248, 250, 252)',
+              100: 'rgb(241, 245, 249)',
+              200: 'rgb(226, 232, 240)',
+              300: 'rgb(203, 213, 225)',
+              400: 'rgb(148, 163, 184)',
+              500: 'rgb(100, 116, 139)',
+              600: 'rgb(71, 85, 105)',
+              700: 'rgb(51, 65, 85)',
+              800: 'rgb(30, 41, 59)',
+              900: 'rgb(15, 23, 42)',
+            },
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    section {
+      scroll-margin-top: 5rem;
+    }
+
+    .gradient-hero {
+      background: linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 100%);
+    }
+
+    .gradient-primary {
+      background: linear-gradient(135deg, rgb(59, 130, 246) 0%, rgb(96, 165, 250) 100%);
+    }
+
+    .gradient-subtle {
+      background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(248, 250, 252) 100%);
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    article code {
+      background-color: #f1f5f9;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    article pre {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    article pre code {
+      background-color: transparent;
+      padding: 0;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+    }
+
+    article h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+
+    article p {
+      margin-bottom: 1rem;
+      line-height: 1.75;
+      color: #475569;
+    }
+
+    article ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    article li {
+      margin-bottom: 0.5rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+
+    article strong {
+      color: #1e293b;
+      font-weight: 600;
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WK8MJ0B6R6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WK8MJ0B6R6');
+  </script>
+</head>
+<body class="bg-white text-slate-900">
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" id="navbar-logo" class="text-xl font-bold text-slate-900 hover:text-primary transition-colors">
+          Alexandru Bogdan
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-1" id="desktop-nav">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Contact</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2" id="mobile-nav">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <article class="container mx-auto px-4 pt-24 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Database</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">
+          Essential PostgreSQL Monitoring Extensions: pg_buffercache, pg_stat_statements, pgstattuple, pg_prewarm
+        </h1>
+        <div class="flex items-center gap-6 text-slate-600">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-sm">January 30, 2026</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm">8 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="prose max-w-none text-slate-900">
+        <p class="mb-4 text-lg">
+          PostgreSQL ships with powerful extensions for monitoring and optimizing database performance. This guide covers four essential extensions: pg_buffercache for buffer pool analysis, pg_stat_statements for query tracking, pgstattuple for table bloat detection, and pg_prewarm for cache warming.
+        </p>
+
+        <h2>1. pg_buffercache: Analyze Buffer Pool Usage</h2>
+        <p>
+          The <code>pg_buffercache</code> extension provides real-time visibility into PostgreSQL's shared buffer cache. It shows which tables and indexes are consuming buffer memory and helps identify caching inefficiencies.
+        </p>
+
+        <p><strong>Installation:</strong></p>
+        <pre><code>CREATE EXTENSION pg_buffercache;</code></pre>
+
+        <p><strong>Check buffer usage by table:</strong></p>
+        <pre><code>SELECT
+  c.relname AS table_name,
+  pg_size_pretty(count(*) * 8192) AS buffered_size,
+  round(100.0 * count(*) / (SELECT setting FROM pg_settings WHERE name = 'shared_buffers')::integer, 2) AS buffer_percent
+FROM pg_buffercache b
+JOIN pg_class c ON b.relfilenode = pg_relation_filenode(c.oid)
+WHERE c.relkind IN ('r', 'i')
+GROUP BY c.relname
+ORDER BY count(*) DESC
+LIMIT 10;</code></pre>
+
+        <p>This query reveals which objects consume the most buffer space, helping you understand memory utilization patterns.</p>
+
+        <p><strong>Check buffer hit ratio:</strong></p>
+        <pre><code>SELECT
+  count(*) FILTER (WHERE usagecount > 0) AS used_buffers,
+  count(*) FILTER (WHERE usagecount = 0) AS unused_buffers,
+  round(100.0 * count(*) FILTER (WHERE usagecount > 0) / count(*), 2) AS usage_percent
+FROM pg_buffercache;</code></pre>
+
+        <h2>2. pg_stat_statements: Track Query Performance</h2>
+        <p>
+          <code>pg_stat_statements</code> tracks execution statistics for all SQL statements. It's essential for identifying slow queries, high-frequency queries, and optimization opportunities.
+        </p>
+
+        <p><strong>Installation:</strong></p>
+        <pre><code>-- Add to postgresql.conf:
+-- shared_preload_libraries = 'pg_stat_statements'
+
+CREATE EXTENSION pg_stat_statements;</code></pre>
+
+        <p><strong>Find slowest queries by total time:</strong></p>
+        <pre><code>SELECT
+  substring(query, 1, 80) AS query_preview,
+  calls,
+  round(total_exec_time::numeric, 2) AS total_time_ms,
+  round(mean_exec_time::numeric, 2) AS avg_time_ms,
+  rows
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 10;</code></pre>
+
+        <p><strong>Find most frequently executed queries:</strong></p>
+        <pre><code>SELECT
+  substring(query, 1, 80) AS query_preview,
+  calls,
+  round(mean_exec_time::numeric, 2) AS avg_time_ms,
+  round(100.0 * shared_blks_hit / nullif(shared_blks_hit + shared_blks_read, 0), 2) AS cache_hit_pct
+FROM pg_stat_statements
+ORDER BY calls DESC
+LIMIT 10;</code></pre>
+
+        <p><strong>Reset statistics:</strong></p>
+        <pre><code>SELECT pg_stat_statements_reset();</code></pre>
+
+        <h2>3. pgstattuple: Detect Table and Index Bloat</h2>
+        <p>
+          <code>pgstattuple</code> provides detailed statistics about table and index physical storage, including dead tuple counts and free space. Use it to identify bloated tables needing maintenance.
+        </p>
+
+        <p><strong>Installation:</strong></p>
+        <pre><code>CREATE EXTENSION pgstattuple;</code></pre>
+
+        <p><strong>Check table bloat:</strong></p>
+        <pre><code>SELECT
+  table_len AS total_bytes,
+  tuple_count AS live_tuples,
+  dead_tuple_count AS dead_tuples,
+  round(100.0 * dead_tuple_len / nullif(table_len, 0), 2) AS dead_tuple_pct,
+  round(100.0 * free_space / nullif(table_len, 0), 2) AS free_space_pct
+FROM pgstattuple('your_table_name');</code></pre>
+
+        <p><strong>Check index bloat:</strong></p>
+        <pre><code>SELECT
+  avg_leaf_density,
+  leaf_fragmentation
+FROM pgstatindex('your_index_name');</code></pre>
+
+        <p>A healthy index has leaf density above 90% and low fragmentation. Values below this threshold suggest the index needs rebuilding.</p>
+
+        <p><strong>Quick bloat estimate (faster for large tables):</strong></p>
+        <pre><code>SELECT
+  approx_tuple_count AS estimated_rows,
+  dead_tuple_estimate AS estimated_dead_tuples,
+  round(100.0 * dead_tuple_estimate / nullif(approx_tuple_count, 0), 2) AS dead_pct
+FROM pgstattuple_approx('your_table_name');</code></pre>
+
+        <h2>4. pg_prewarm: Warm Up the Buffer Cache</h2>
+        <p>
+          <code>pg_prewarm</code> loads table and index data into the buffer cache or OS cache. Use it after server restarts to restore cache state and avoid cold-start performance degradation.
+        </p>
+
+        <p><strong>Installation:</strong></p>
+        <pre><code>CREATE EXTENSION pg_prewarm;</code></pre>
+
+        <p><strong>Prewarm a table into buffer cache:</strong></p>
+        <pre><code>SELECT pg_prewarm('your_table_name', 'buffer');</code></pre>
+
+        <p><strong>Prewarm an index:</strong></p>
+        <pre><code>SELECT pg_prewarm('your_index_name', 'buffer');</code></pre>
+
+        <p><strong>Prewarm with different modes:</strong></p>
+        <pre><code>-- Load into PostgreSQL buffer cache
+SELECT pg_prewarm('orders', 'buffer');
+
+-- Load into OS page cache only (faster, less memory pressure)
+SELECT pg_prewarm('orders', 'prefetch');
+
+-- Read data but don't advise OS (useful for testing)
+SELECT pg_prewarm('orders', 'read');</code></pre>
+
+        <p><strong>Automate cache restoration on startup:</strong></p>
+        <pre><code>-- Add to postgresql.conf:
+-- shared_preload_libraries = 'pg_prewarm'
+-- pg_prewarm.autoprewarm = true
+
+-- This saves buffer contents on shutdown and restores them on startup</code></pre>
+
+        <h2>Combining Extensions for Effective Monitoring</h2>
+        <p>
+          These extensions work best together. Use <code>pg_stat_statements</code> to identify problem queries, <code>pg_buffercache</code> to verify caching behavior, <code>pgstattuple</code> to detect bloat, and <code>pg_prewarm</code> to optimize cold starts.
+        </p>
+
+        <p><strong>Example monitoring workflow:</strong></p>
+        <pre><code>-- 1. Find slow queries
+SELECT query, mean_exec_time
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC LIMIT 5;
+
+-- 2. Check if related tables are cached
+SELECT relname, count(*) * 8192 AS cached_bytes
+FROM pg_buffercache b
+JOIN pg_class c ON b.relfilenode = pg_relation_filenode(c.oid)
+WHERE c.relname = 'orders'
+GROUP BY relname;
+
+-- 3. Check for bloat
+SELECT dead_tuple_count, free_space
+FROM pgstattuple('orders');
+
+-- 4. Prewarm critical tables after maintenance
+SELECT pg_prewarm('orders');
+SELECT pg_prewarm('orders_pkey');</code></pre>
+
+        <h2>Conclusion</h2>
+        <p>
+          These four PostgreSQL extensions provide essential visibility into database performance. <code>pg_buffercache</code> reveals memory usage, <code>pg_stat_statements</code> tracks query performance, <code>pgstattuple</code> detects bloat, and <code>pg_prewarm</code> ensures fast restarts. Together, they form a solid foundation for PostgreSQL monitoring and optimization.
+        </p>
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-slate-200">
+        <a href="/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Back to All Posts
+        </a>
+      </footer>
+    </div>
+  </article>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
