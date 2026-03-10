@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TigerBeetle: High-Performance Financial Database for OLTP Workloads - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Complete guide to TigerBeetle, a specialized financial database for OLTP workloads. Master the five account types, debits vs credits, compound transfers with linked events, two-phase transfers, and real-world Elixir integration with practical examples." />
+
+  <!-- PWA and Mobile -->
+  <meta name="theme-color" content="#1e293b">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "TigerBeetle: High-Performance Financial Database for OLTP Workloads",
+    "description": "Complete guide to TigerBeetle, a specialized financial database for OLTP workloads. Master the five account types, debits vs credits, compound transfers with linked events, two-phase transfers, and real-world Elixir integration with practical examples.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "url": "https://alexandrubagu.github.io"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Bâgu Alexandru Bogdan",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://alexandrubagu.github.io/profile.jpg"
+      }
+    },
+    "datePublished": "2026-03-10T12:00:00+08:00",
+    "dateModified": "2026-03-10T12:00:00+08:00",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://alexandrubagu.github.io/blog/tigerbeetle-financial-database.html"
+    },
+    "keywords": "TigerBeetle, OLTP database, financial accounting, debit-credit, double-entry bookkeeping, Elixir integration, high-performance database, financial transactions, distributed ledger, consensus algorithm, compound transfers, linked events, two-phase transfers, asset accounts, liability accounts, equity accounts, income accounts, expense accounts, accounting equation",
+    "articleSection": "Database Systems",
+    "inLanguage": "en-US",
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "TigerBeetle Database"
+      },
+      {
+        "@type": "Thing",
+        "name": "OLTP Workloads"
+      },
+      {
+        "@type": "Thing",
+        "name": "Financial Accounting"
+      },
+      {
+        "@type": "Thing",
+        "name": "Elixir Integration"
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Integrate TigerBeetle with Elixir",
+    "description": "Step-by-step guide to integrating TigerBeetle financial database with Elixir applications",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Install TigerBeetle",
+        "text": "Download and install TigerBeetle binary for your platform"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Initialize Cluster",
+        "text": "Create and format TigerBeetle data files for your cluster"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Add Elixir Client",
+        "text": "Add the tigerbeetle-elixir client library to your mix.exs dependencies"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Create Accounts",
+        "text": "Define and create accounts with ledgers, codes, and flags"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Process Transfers",
+        "text": "Execute atomic transfers between accounts using debit-credit semantics"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Performance optimizations -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: 'rgb(59, 130, 246)',
+            'primary-foreground': 'rgb(255, 255, 255)',
+            background: 'rgb(255, 255, 255)',
+            foreground: 'rgb(30, 41, 59)',
+            muted: 'rgb(241, 245, 249)',
+            'muted-foreground': 'rgb(100, 116, 139)',
+            border: 'rgb(226, 232, 240)',
+            slate: {
+              50: 'rgb(248, 250, 252)',
+              100: 'rgb(241, 245, 249)',
+              200: 'rgb(226, 232, 240)',
+              300: 'rgb(203, 213, 225)',
+              400: 'rgb(148, 163, 184)',
+              500: 'rgb(100, 116, 139)',
+              600: 'rgb(71, 85, 105)',
+              700: 'rgb(51, 65, 85)',
+              800: 'rgb(30, 41, 59)',
+              900: 'rgb(15, 23, 42)',
+            },
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    section {
+      scroll-margin-top: 5rem;
+    }
+
+    .gradient-hero {
+      background: linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 100%);
+    }
+
+    .gradient-primary {
+      background: linear-gradient(135deg, rgb(59, 130, 246) 0%, rgb(96, 165, 250) 100%);
+    }
+
+    .gradient-subtle {
+      background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(248, 250, 252) 100%);
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    article code {
+      background-color: #f1f5f9;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    article pre {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    article pre code {
+      background-color: transparent;
+      padding: 0;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+    }
+
+    article h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+    }
+
+    article h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: #334155;
+    }
+
+    article h4 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #475569;
+    }
+
+    article p {
+      margin-bottom: 1rem;
+      line-height: 1.75;
+      color: #475569;
+    }
+
+    article ul, article ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    article li {
+      margin-bottom: 0.5rem;
+      color: #475569;
+      line-height: 1.75;
+    }
+
+    article strong {
+      color: #1e293b;
+      font-weight: 600;
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WK8MJ0B6R6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WK8MJ0B6R6');
+  </script>
+</head>
+<body class="bg-white text-slate-900">
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" id="navbar-logo" class="text-xl font-bold text-slate-900 hover:text-primary transition-colors">
+          Alexandru Bogdan
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-1" id="desktop-nav">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Contact</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2" id="mobile-nav">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <article class="container mx-auto px-4 pt-24 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded-full">Database Systems</span>
+          <span class="text-xs text-slate-600">15 min read</span>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">TigerBeetle: High-Performance Financial Database for OLTP Workloads</h1>
+        <div class="flex items-center gap-2 text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          March 10, 2026
+        </div>
+      </header>
+
+          <h2>What is TigerBeetle?</h2>
+          <p>TigerBeetle is a purpose-built financial accounting database designed specifically for <strong>Online Transaction Processing (OLTP)</strong> workloads. Unlike general-purpose databases like PostgreSQL or MySQL, TigerBeetle is architected from the ground up to handle the unique challenges of financial transactions at scale.</p>
+
+          <p>Built in Zig for maximum performance, TigerBeetle uses a debit-credit accounting model and provides strong consistency guarantees through distributed consensus. It's designed to process up to <strong>1 million transactions per second</strong> while maintaining strict safety and durability requirements.</p>
+
+          <h2>Understanding OLTP: The World is Becoming More Transactional</h2>
+          <p>OLTP (Online Transaction Processing) focuses on recording business transactions in real-time. This includes payments, money transfers, API usage billing, ride-sharing transactions, and more.</p>
+
+          <p>The scale of transactional workloads has exploded:</p>
+          <ul>
+            <li>India's UPI payment system processed 10 billion payments in 2019. By January 2025, it processed <strong>16.9 billion payments in a single month</strong></li>
+            <li>Serverless APIs charge per-request or per-second, requiring real-time transaction processing</li>
+            <li>Smart energy metering enables trading by the kilowatt-hour with billing every 15-30 minutes</li>
+          </ul>
+
+          <p>Traditional general-purpose databases struggle with these write-heavy, highly-contended workloads. TigerBeetle solves these challenges through specialized design.</p>
+
+          <h2>The Debit-Credit Model: Centuries of Proven Accounting</h2>
+          <p>TigerBeetle uses <strong>double-entry bookkeeping</strong>, the lingua franca of business and accounting since the 13th century. This model captures the "who, what, when, where, why, and how much" of every transaction.</p>
+
+          <h3>Core Principles</h3>
+          <ul>
+            <li><strong>Every transfer records movement of value</strong> from one account to another (single debit, single credit)</li>
+            <li><strong>Money never appears or disappears</strong> - it always has a source and destination</li>
+            <li><strong>Immutability</strong> - once recorded, transfers cannot be erased. Corrections use separate reversal transfers</li>
+            <li><strong>Simple and complete</strong> - two entities (accounts, transfers) and one invariant (every debit has an equal credit) model any exchange of value</li>
+          </ul>
+
+          <h2>Understanding Financial Account Types</h2>
+          <p>TigerBeetle implements the five fundamental account types from classical accounting. Understanding these types is crucial for proper data modeling.</p>
+
+          <h3>The Five Account Types</h3>
+
+          <h4>1. Asset Accounts</h4>
+          <p><strong>Definition:</strong> What you own that could produce income or be sold.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>Cash in bank</li>
+            <li>Accounts receivable (money owed to you)</li>
+            <li>Inventory</li>
+            <li>Equipment and property</li>
+          </ul>
+          <p><strong>Balance calculation:</strong> <code>balance = debits - credits</code></p>
+          <p><strong>TigerBeetle flag:</strong> <code>credits_must_not_exceed_debits</code> (prevents negative balances)</p>
+
+          <h4>2. Liability Accounts</h4>
+          <p><strong>Definition:</strong> What you owe to other people or entities.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>Loans and mortgages</li>
+            <li>Accounts payable (money you owe)</li>
+            <li>Customer deposits (e.g., a bank account from the bank's perspective)</li>
+            <li>Deferred revenue</li>
+          </ul>
+          <p><strong>Balance calculation:</strong> <code>balance = credits - debits</code></p>
+          <p><strong>TigerBeetle flag:</strong> <code>debits_must_not_exceed_credits</code> (prevents negative balances)</p>
+
+          <h4>3. Equity Accounts</h4>
+          <p><strong>Definition:</strong> The residual value owned by shareholders after deducting liabilities.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>Shareholder capital</li>
+            <li>Retained earnings</li>
+            <li>Owner's equity</li>
+          </ul>
+          <p><strong>Balance calculation:</strong> <code>balance = credits - debits</code></p>
+
+          <h4>4. Income Accounts</h4>
+          <p><strong>Definition:</strong> Increases in assets or decreases in liabilities that increase equity.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>Sales revenue</li>
+            <li>Service fees</li>
+            <li>Interest income</li>
+            <li>Commission income</li>
+          </ul>
+          <p><strong>Balance calculation:</strong> <code>balance = credits - debits</code></p>
+
+          <h4>5. Expense Accounts</h4>
+          <p><strong>Definition:</strong> Decreases in assets or increases in liabilities that decrease equity.</p>
+          <p><strong>Examples:</strong></p>
+          <ul>
+            <li>Salaries and wages</li>
+            <li>Rent</li>
+            <li>Utilities</li>
+            <li>Marketing costs</li>
+          </ul>
+          <p><strong>Balance calculation:</strong> <code>balance = debits - credits</code></p>
+
+          <h3>The Accounting Equation</h3>
+          <p>All five account types maintain this fundamental equation:</p>
+          <pre><code>Assets - Liabilities = Equity + Income - Expenses</code></pre>
+          <p>Every transaction involves at least one debit and one credit, ensuring both sides of the equation remain balanced.</p>
+
+          <h3>Debits and Credits Explained</h3>
+          <p>Unlike intuitive "positive/negative" systems, accounting uses debits and credits based on account type:</p>
+
+          <table class="w-full border-collapse border border-slate-300 my-4">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="border border-slate-300 p-2 text-left">Account Type</th>
+                <th class="border border-slate-300 p-2 text-left">Debit Effect</th>
+                <th class="border border-slate-300 p-2 text-left">Credit Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border border-slate-300 p-2"><strong>Asset</strong></td>
+                <td class="border border-slate-300 p-2">Increases balance</td>
+                <td class="border border-slate-300 p-2">Decreases balance</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-300 p-2"><strong>Liability</strong></td>
+                <td class="border border-slate-300 p-2">Decreases balance</td>
+                <td class="border border-slate-300 p-2">Increases balance</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-300 p-2"><strong>Equity</strong></td>
+                <td class="border border-slate-300 p-2">Decreases balance</td>
+                <td class="border border-slate-300 p-2">Increases balance</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-300 p-2"><strong>Income</strong></td>
+                <td class="border border-slate-300 p-2">Decreases balance</td>
+                <td class="border border-slate-300 p-2">Increases balance</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-300 p-2"><strong>Expense</strong></td>
+                <td class="border border-slate-300 p-2">Increases balance</td>
+                <td class="border border-slate-300 p-2">Decreases balance</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Real-World Example: User Makes a Purchase</h3>
+          <p>When a user pays $100 to a merchant:</p>
+          <pre><code>Transfer 1:
+  debit_account_id: user_cash_account (Asset)      # Decreases user's cash
+  credit_account_id: merchant_cash_account (Asset) # Increases merchant's cash
+  amount: 10000 # $100.00 in cents
+
+Transfer 2 (merchant records revenue):
+  debit_account_id: merchant_cash_account (Asset)  # Cash received
+  credit_account_id: merchant_revenue (Income)     # Records income
+  amount: 10000</code></pre>
+
+          <h3>Perspective Matters</h3>
+          <p>The same financial instrument appears as different account types depending on perspective:</p>
+          <ul>
+            <li><strong>Bank deposit:</strong> Asset for the depositor, Liability for the bank</li>
+            <li><strong>Loan:</strong> Asset for the lender, Liability for the borrower</li>
+            <li><strong>Invoice:</strong> Asset (receivable) for seller, Liability (payable) for buyer</li>
+          </ul>
+
+          <h3>TigerBeetle's Data Model</h3>
+          <p>TigerBeetle enforces the debit-credit schema natively with each transfer capturing:</p>
+          <ul>
+            <li><strong>debit_account_id</strong> and <strong>credit_account_id</strong> - Who is transacting</li>
+            <li><strong>ledger</strong> - What type of asset (each ledger tracks a separate asset type, e.g., USD, EUR, loyalty points)</li>
+            <li><strong>timestamp</strong> - When the transfer was processed</li>
+            <li><strong>user_data_32/64/128</strong> - Custom metadata (e.g., transaction locale, reference IDs)</li>
+            <li><strong>code</strong> - Why the transfer happened (maps to business events like "purchase", "refund", "fee")</li>
+            <li><strong>amount</strong> - How much was transferred (unsigned 128-bit integer)</li>
+          </ul>
+
+          <h3>Handling Fractional Amounts</h3>
+          <p>TigerBeetle stores amounts as unsigned 128-bit integers. To represent fractional currencies, map the smallest useful unit to 1.</p>
+          <p><strong>Asset scale</strong> expresses this as a power of 10:</p>
+          <ul>
+            <li>USD cents: scale = 2 (100 cents = $1.00), so $123.45 = 12345</li>
+            <li>BTC satoshis: scale = 8, so 0.00000001 BTC = 1</li>
+            <li>JPY: scale = 0 (no fractional units), so ¥1000 = 1000</li>
+          </ul>
+          <p><strong>Important:</strong> Asset scales cannot be changed after account creation due to immutability constraints.</p>
+
+          <h2>Compound Transfers: Multi-Party Transactions</h2>
+          <p>While TigerBeetle's core transfer model supports single debit/single credit for maximum performance, real-world scenarios often require multi-party transactions. TigerBeetle provides patterns for implementing these using <strong>linked events</strong>.</p>
+
+          <h3>Linked Events for Atomicity</h3>
+          <p>The <code>flags.linked</code> property creates chains of transfers that succeed or fail together as an atomic unit. When a transfer has the linked flag set, it connects to the next transfer in the request. If any transfer in the chain fails, all transfers in that chain fail.</p>
+
+          <pre><code>// Example: Three linked transfers (A, B, C)
+// All three succeed together or all three fail together
+Transfer A: { ..., flags: [:linked] }
+Transfer B: { ..., flags: [:linked] }
+Transfer C: { ..., flags: [] } // Last one terminates the chain</code></pre>
+
+          <h3>Pattern 1: One-to-Many Transfers</h3>
+          <p>Scenario: Split a single payment across multiple recipients (e.g., splitting tips, revenue sharing).</p>
+
+          <pre><code>defmodule PaymentSystem.CompoundTransfers do
+  # Split $100 from user to three recipients ($50, $30, $20)
+  def split_payment(user_account, recipients_and_amounts) do
+    transfers = recipients_and_amounts
+    |> Enum.with_index()
+    |> Enum.map(fn {{recipient_account, amount}, index} ->
+      is_last = index == length(recipients_and_amounts) - 1
+
+      %{
+        id: generate_transfer_id(),
+        debit_account_id: user_account,
+        credit_account_id: recipient_account,
+        amount: amount,
+        ledger: @ledger_usd,
+        code: @code_split_payment,
+        flags: if(is_last, do: [], else: [:linked])
+      }
+    end)
+
+    TigerBeetle.create_transfers(transfers)
+  end
+end
+
+# Usage
+split_payment(user_wallet, [
+  {recipient_1, 5000}, # $50.00
+  {recipient_2, 3000}, # $30.00
+  {recipient_3, 2000}  # $20.00
+])</code></pre>
+
+          <h3>Pattern 2: Many-to-One Transfers</h3>
+          <p>Scenario: Collect funds from multiple sources into one account (e.g., collecting fees, pooling funds).</p>
+
+          <pre><code># Collect $10 fee from 5 different users into platform account
+def collect_fees(user_accounts, platform_account, fee_amount) do
+  transfers = user_accounts
+  |> Enum.with_index()
+  |> Enum.map(fn {user_account, index} ->
+    is_last = index == length(user_accounts) - 1
+
+    %{
+      id: generate_transfer_id(),
+      debit_account_id: user_account,
+      credit_account_id: platform_account,
+      amount: fee_amount,
+      ledger: @ledger_usd,
+      code: @code_platform_fee,
+      flags: if(is_last, do: [], else: [:linked])
+    }
+  end)
+
+  TigerBeetle.create_transfers(transfers)
+end</code></pre>
+
+          <h3>Pattern 3: Many-to-Many with Control Account</h3>
+          <p>For complex scenarios with multiple debits <strong>and</strong> multiple credits, use an intermediary <strong>control account</strong>:</p>
+
+          <pre><code># Transfer funds from 3 users to 2 merchants (e.g., group purchase)
+def group_purchase(buyer_accounts, seller_accounts, control_account) do
+  # Phase 1: Debit all buyers to control account (linked)
+  buyer_transfers = buyer_accounts
+  |> Enum.with_index()
+  |> Enum.map(fn {{account, amount}, index} ->
+    %{
+      id: generate_transfer_id(),
+      debit_account_id: account,
+      credit_account_id: control_account,
+      amount: amount,
+      ledger: @ledger_usd,
+      code: @code_group_purchase,
+      flags: [:linked] # All buyer transfers are linked
+    }
+  end)
+
+  # Phase 2: Credit all sellers from control account (linked)
+  seller_transfers = seller_accounts
+  |> Enum.with_index()
+  |> Enum.map(fn {{account, amount}, index} ->
+    is_last = index == length(seller_accounts) - 1
+
+    %{
+      id: generate_transfer_id(),
+      debit_account_id: control_account,
+      credit_account_id: account,
+      amount: amount,
+      ledger: @ledger_usd,
+      code: @code_group_purchase,
+      flags: if(is_last, do: [], else: [:linked])
+    }
+  end)
+
+  all_transfers = buyer_transfers ++ seller_transfers
+  TigerBeetle.create_transfers(all_transfers)
+end</code></pre>
+
+          <h3>Balancing Transfers</h3>
+          <p>TigerBeetle provides special flags for conditional transfers based on available balance:</p>
+          <ul>
+            <li><code>flags.balancing_debit</code> - Transfer up to the available debit balance (useful for "drain account" operations)</li>
+            <li><code>flags.balancing_credit</code> - Transfer up to the available credit balance</li>
+          </ul>
+
+          <pre><code># Drain all available funds from an account
+%{
+  id: generate_transfer_id(),
+  debit_account_id: source_account,
+  credit_account_id: destination_account,
+  amount: 0, # Will be calculated based on available balance
+  ledger: @ledger_usd,
+  code: @code_account_closure,
+  flags: [:balancing_debit]
+}</code></pre>
+
+          <h2>Performance: Built for Speed</h2>
+          <p>TigerBeetle achieves exceptional performance through multiple design decisions:</p>
+
+          <h3>1. Interface Designed for OLTP</h3>
+          <p>Unlike traditional databases where business logic lives in the application, <strong>TigerBeetle embeds the accounting logic inside the database</strong>. Applications speak debit-credit directly without translating to SQL. This eliminates expensive network locks and round trips.</p>
+
+          <h3>2. Pervasive Batching</h3>
+          <p>TigerBeetle processes batches of up to <strong>8,190 transfers per request</strong>. The cost of replication through consensus is paid once per batch, making it nearly as fast as an in-memory hash map while providing extreme durability.</p>
+
+          <p>Under light load, batches automatically shrink to trade unnecessary throughput for better latency.</p>
+
+          <h3>3. Extreme Engineering</h3>
+          <ul>
+            <li><strong>Built from scratch in Zig</strong> - no dependencies, all layers co-designed for OLTP</li>
+            <li><strong>Cache-aligned data structures</strong> - transfers are 128 bytes, cache-line aligned. Processing a batch is one tight CPU loop</li>
+            <li><strong>Static memory allocation</strong> - never runs out of memory, no GC pauses, no mutex contention, no fragmentation</li>
+            <li><strong>io_uring support</strong> - zero-syscall networking and storage I/O</li>
+            <li><strong>Single-threaded by design</strong> - avoids contention issues and lock overhead</li>
+          </ul>
+
+          <h3>Why Single-Threaded?</h3>
+          <p>Financial databases are notoriously difficult to shard because:</p>
+          <ul>
+            <li>Business transactions involve multiple accounts across shards</li>
+            <li>Hot accounts (business income/expense accounts) are involved in many transactions</li>
+            <li>Cross-shard transactions become complex and slow</li>
+            <li>Row locks on hot accounts create bottlenecks</li>
+          </ul>
+
+          <p>TigerBeetle provides strong consistency without row locks, sidestepping contention issues entirely. The single-core design with extreme optimizations delivers higher throughput than multi-threaded approaches.</p>
+
+          <h2>Safety and Reliability</h2>
+          <p>TigerBeetle provides enterprise-grade safety guarantees essential for financial systems:</p>
+
+          <h3>Distributed Consensus</h3>
+          <p>TigerBeetle uses a <strong>consensus algorithm</strong> to replicate data across multiple nodes. This provides:</p>
+          <ul>
+            <li><strong>Fault tolerance</strong> - continues operating if nodes fail</li>
+            <li><strong>Strong consistency</strong> - all nodes see the same state</li>
+            <li><strong>Durability</strong> - data is safely replicated before acknowledging writes</li>
+          </ul>
+
+          <h3>Immutability</h3>
+          <p>Unlike SQL databases with UPDATE and DELETE, TigerBeetle enforces <strong>append-only immutability</strong>. Transfers cannot be modified or deleted, ensuring:</p>
+          <ul>
+            <li>Complete audit trail</li>
+            <li>Protection against accidental data loss</li>
+            <li>Regulatory compliance</li>
+            <li>Easy reconciliation</li>
+          </ul>
+
+          <h2>Real-World Example: Payment Processing System with Elixir</h2>
+          <p>Let's build a practical payment processing system that handles user wallets, merchant payments, and platform fees using TigerBeetle and Elixir.</p>
+
+          <h3>Designing the Account Structure</h3>
+          <p>Before coding, let's design our account structure using the five account types. This is a critical step in any TigerBeetle implementation.</p>
+
+          <h4>For a Payment Platform (e.g., Stripe-like service)</h4>
+          <table class="w-full border-collapse border border-slate-300 my-4">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="border border-slate-300 p-2 text-left">Account</th>
+                <th class="border border-slate-300 p-2 text-left">Type</th>
+                <th class="border border-slate-300 p-2 text-left">Flag</th>
+                <th class="border border-slate-300 p-2 text-left">Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border border-slate-300 p-2">User Wallet</td>
+                <td class="border border-slate-300 p-2">Asset</td>
+                <td class="border border-slate-300 p-2">credits_must_not_exceed_debits</td>
+                <td class="border border-slate-300 p-2">User's cash balance (what they own)</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-300 p-2">Merchant Account</td>
+                <td class="border border-slate-300 p-2">Asset</td>
+                <td class="border border-slate-300 p-2">credits_must_not_exceed_debits</td>
+                <td class="border border-slate-300 p-2">Merchant's receivable funds</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-300 p-2">Platform Revenue</td>
+                <td class="border border-slate-300 p-2">Income</td>
+                <td class="border border-slate-300 p-2">debits_must_not_exceed_credits</td>
+                <td class="border border-slate-300 p-2">Platform's fee income</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-300 p-2">User Liability (Bank View)</td>
+                <td class="border border-slate-300 p-2">Liability</td>
+                <td class="border border-slate-300 p-2">debits_must_not_exceed_credits</td>
+                <td class="border border-slate-300 p-2">What platform owes to users (bank perspective)</td>
+              </tr>
+              <tr>
+                <td class="border border-slate-300 p-2">Operating Expenses</td>
+                <td class="border border-slate-300 p-2">Expense</td>
+                <td class="border border-slate-300 p-2">credits_must_not_exceed_debits</td>
+                <td class="border border-slate-300 p-2">Platform operational costs</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Example Transaction Flow</h4>
+          <p>When a user pays $100 to a merchant with a $2.50 platform fee:</p>
+          <pre><code># Step 1: Debit user wallet (Asset decreases)
+Transfer 1:
+  debit_account_id: user_wallet (Asset)
+  credit_account_id: merchant_account (Asset)
+  amount: 9750 # $97.50 to merchant
+
+# Step 2: Collect platform fee (Income increases)
+Transfer 2:
+  debit_account_id: user_wallet (Asset)
+  credit_account_id: platform_revenue (Income)
+  amount: 250 # $2.50 fee
+
+# These can be linked for atomicity
+transfers = [
+  %{..., flags: [:linked]},  # Merchant payment
+  %{..., flags: []}          # Platform fee
+]</code></pre>
+
+          <h3>Installation</h3>
+          <p>First, install TigerBeetle:</p>
+          <pre><code># Download TigerBeetle binary
+curl -L https://tigerbeetle.com/download/tigerbeetle-latest-x86_64-linux.zip -o tigerbeetle.zip
+unzip tigerbeetle.zip
+chmod +x tigerbeetle
+
+# Create and format a data file (for a 3-replica cluster)
+./tigerbeetle format --cluster=0 --replica=0 --replica-count=3 0_0.tigerbeetle
+./tigerbeetle format --cluster=0 --replica=1 --replica-count=3 0_1.tigerbeetle
+./tigerbeetle format --cluster=0 --replica=2 --replica-count=3 0_2.tigerbeetle
+
+# Start the cluster
+./tigerbeetle start --addresses=3000,3001,3002 0_0.tigerbeetle &
+./tigerbeetle start --addresses=3000,3001,3002 0_1.tigerbeetle &
+./tigerbeetle start --addresses=3000,3001,3002 0_2.tigerbeetle &</code></pre>
+
+          <h3>Elixir Integration</h3>
+          <p>Add the TigerBeetle Elixir client to your <code>mix.exs</code>:</p>
+          <pre><code>defp deps do
+  [
+    {:tigerbeetle, "~> 0.1"}
+  ]
+end</code></pre>
+
+          <h3>Payment System Architecture</h3>
+          <p>Our system will handle:</p>
+          <ul>
+            <li><strong>User wallets</strong> - each user has a wallet account</li>
+            <li><strong>Merchant accounts</strong> - merchants receive payments</li>
+            <li><strong>Platform revenue account</strong> - collects fees</li>
+            <li><strong>Pending transfers</strong> - two-phase transfers for authorization and capture</li>
+          </ul>
+
+          <h3>Account Setup</h3>
+          <pre><code>defmodule PaymentSystem.Accounts do
+  @moduledoc """
+  Manages TigerBeetle accounts for the payment system.
+  """
+
+  @ledger_usd 1
+  @code_wallet 1
+  @code_merchant 2
+  @code_platform 3
+
+  def create_user_wallet(user_id) do
+    account = %{
+      id: generate_account_id(user_id, :wallet),
+      ledger: @ledger_usd,
+      code: @code_wallet,
+      flags: [:debits_must_not_exceed_credits], # Prevent overdrafts
+      user_data_128: encode_user_id(user_id)
+    }
+
+    TigerBeetle.create_accounts([account])
+  end
+
+  def create_merchant_account(merchant_id) do
+    account = %{
+      id: generate_account_id(merchant_id, :merchant),
+      ledger: @ledger_usd,
+      code: @code_merchant,
+      flags: [],
+      user_data_128: encode_merchant_id(merchant_id)
+    }
+
+    TigerBeetle.create_accounts([account])
+  end
+
+  def create_platform_revenue_account() do
+    account = %{
+      id: platform_account_id(),
+      ledger: @ledger_usd,
+      code: @code_platform,
+      flags: [],
+      user_data_128: 0
+    }
+
+    TigerBeetle.create_accounts([account])
+  end
+
+  defp generate_account_id(entity_id, type) do
+    # Use consistent hashing to generate unique 128-bit account IDs
+    :crypto.hash(:sha256, "#{type}:#{entity_id}")
+    |> :binary.decode_unsigned()
+    |> rem(340_282_366_920_938_463_463_374_607_431_768_211_456)
+  end
+
+  defp platform_account_id(), do: 1
+
+  defp encode_user_id(user_id), do: user_id
+  defp encode_merchant_id(merchant_id), do: merchant_id
+end</code></pre>
+
+          <h2>Two-Phase Transfers: Authorization and Settlement</h2>
+          <p>TigerBeetle implements two-phase transfers, inspired by the <a href="https://en.wikipedia.org/wiki/Two-phase_commit_protocol" target="_blank" rel="noopener noreferrer">two-phase commit protocol</a> used in distributed transactions. This pattern separates fund reservation (authorization) from fund movement (settlement).</p>
+
+          <h3>How Two-Phase Transfers Work</h3>
+
+          <h4>Phase 1: Reserve Funds (Pending Transfer)</h4>
+          <p>Create a transfer with <code>flags.pending</code>. This reserves the amount in the accounts' <code>debits_pending</code> and <code>credits_pending</code> fields without affecting the posted balance.</p>
+          <pre><code>pending_transfer = %{
+  id: transfer_id,
+  debit_account_id: user_wallet,
+  credit_account_id: merchant_account,
+  amount: 10000, # $100.00
+  ledger: @ledger_usd,
+  code: @code_payment,
+  flags: [:pending],
+  timeout: 3600 # Optional: auto-void after 1 hour
+}</code></pre>
+
+          <h4>Phase 2: Resolve Funds (Post, Void, or Expire)</h4>
+          <p>You have three options to resolve a pending transfer:</p>
+
+          <p><strong>1. Post (Capture):</strong> Move funds to destination</p>
+          <pre><code>post_transfer = %{
+  id: new_transfer_id,
+  pending_id: transfer_id, # Reference to pending transfer
+  amount: 10000, # Can post partial amount or full amount
+  flags: [:post_pending_transfer]
+  # Other fields can be 0 or match the pending transfer
+}</code></pre>
+
+          <p><strong>2. Void (Cancel):</strong> Return funds to original account</p>
+          <pre><code>void_transfer = %{
+  id: new_transfer_id,
+  pending_id: transfer_id,
+  flags: [:void_pending_transfer]
+  # Amount and accounts are ignored
+}</code></pre>
+
+          <p><strong>3. Expire (Automatic):</strong> If timeout is set and elapses, funds automatically return</p>
+
+          <h3>Key Constraints</h3>
+          <ul>
+            <li><strong>Single resolution:</strong> Each pending transfer can only be resolved once</li>
+            <li><strong>Partial posting:</strong> You can post less than the pending amount; the remainder returns to the debit account</li>
+            <li><strong>Immutability:</strong> Posting/voiding creates a new transfer; the pending transfer remains unchanged</li>
+            <li><strong>Account invariants respected:</strong> Reserved amounts respect balance constraints during all phases</li>
+          </ul>
+
+          <h3>When to Use Two-Phase Transfers</h3>
+          <ul>
+            <li><strong>Hotel/rental reservations:</strong> Hold funds during booking, capture on check-in, void on cancellation</li>
+            <li><strong>E-commerce:</strong> Authorize at checkout, capture when shipping, void if out of stock</li>
+            <li><strong>Ride-sharing:</strong> Pre-authorize estimated fare, capture actual amount after ride</li>
+            <li><strong>Marketplace escrow:</strong> Hold buyer funds, release to seller after delivery confirmation</li>
+            <li><strong>Recurring subscriptions:</strong> Authorize before billing period, capture if service is active</li>
+          </ul>
+
+          <h3>Payment Processing with Two-Phase Transfers</h3>
+          <p>Let's implement a complete payment flow with authorization, capture, and void capabilities:</p>
+
+          <pre><code>defmodule PaymentSystem.Transfers do
+  @moduledoc """
+  Handles payment transfers with authorization and capture flow.
+  """
+
+  @ledger_usd 1
+  @code_payment 100
+  @code_fee 101
+  @code_refund 102
+
+  @platform_fee_percent 2.5
+
+  def authorize_payment(user_wallet_id, merchant_id, amount_cents, payment_id) do
+    merchant_account_id = PaymentSystem.Accounts.generate_account_id(merchant_id, :merchant)
+    platform_account_id = PaymentSystem.Accounts.platform_account_id()
+
+    # Calculate platform fee
+    fee_cents = calculate_fee(amount_cents)
+    merchant_amount = amount_cents - fee_cents
+
+    # Create pending transfer (authorization)
+    transfer_to_merchant = %{
+      id: generate_transfer_id(payment_id, :merchant),
+      debit_account_id: user_wallet_id,
+      credit_account_id: merchant_account_id,
+      amount: merchant_amount,
+      ledger: @ledger_usd,
+      code: @code_payment,
+      flags: [:pending], # Two-phase: pending authorization
+      user_data_128: payment_id
+    }
+
+    transfer_to_platform = %{
+      id: generate_transfer_id(payment_id, :platform),
+      debit_account_id: user_wallet_id,
+      credit_account_id: platform_account_id,
+      amount: fee_cents,
+      ledger: @ledger_usd,
+      code: @code_fee,
+      flags: [:pending],
+      user_data_128: payment_id
+    }
+
+    case TigerBeetle.create_transfers([transfer_to_merchant, transfer_to_platform]) do
+      {:ok, _} -> {:ok, :authorized}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  def capture_payment(payment_id) do
+    # Post the pending transfers (capture authorization)
+    merchant_transfer_id = generate_transfer_id(payment_id, :merchant)
+    platform_transfer_id = generate_transfer_id(payment_id, :platform)
+
+    capture_merchant = %{
+      id: generate_transfer_id(payment_id, :merchant_capture),
+      debit_account_id: 0, # Not used for posting
+      credit_account_id: 0, # Not used for posting
+      amount: 0,
+      pending_id: merchant_transfer_id, # References pending transfer
+      ledger: @ledger_usd,
+      code: @code_payment,
+      flags: [:post_pending_transfer],
+      user_data_128: payment_id
+    }
+
+    capture_platform = %{
+      id: generate_transfer_id(payment_id, :platform_capture),
+      debit_account_id: 0,
+      credit_account_id: 0,
+      amount: 0,
+      pending_id: platform_transfer_id,
+      ledger: @ledger_usd,
+      code: @code_fee,
+      flags: [:post_pending_transfer],
+      user_data_128: payment_id
+    }
+
+    case TigerBeetle.create_transfers([capture_merchant, capture_platform]) do
+      {:ok, _} -> {:ok, :captured}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  def void_payment(payment_id) do
+    # Void pending transfers (cancel authorization)
+    merchant_transfer_id = generate_transfer_id(payment_id, :merchant)
+    platform_transfer_id = generate_transfer_id(payment_id, :platform)
+
+    void_merchant = %{
+      id: generate_transfer_id(payment_id, :merchant_void),
+      debit_account_id: 0,
+      credit_account_id: 0,
+      amount: 0,
+      pending_id: merchant_transfer_id,
+      ledger: @ledger_usd,
+      code: @code_payment,
+      flags: [:void_pending_transfer],
+      user_data_128: payment_id
+    }
+
+    void_platform = %{
+      id: generate_transfer_id(payment_id, :platform_void),
+      debit_account_id: 0,
+      credit_account_id: 0,
+      amount: 0,
+      pending_id: platform_transfer_id,
+      ledger: @ledger_usd,
+      code: @code_fee,
+      flags: [:void_pending_transfer],
+      user_data_128: payment_id
+    }
+
+    case TigerBeetle.create_transfers([void_merchant, void_platform]) do
+      {:ok, _} -> {:ok, :voided}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  def refund_payment(user_wallet_id, merchant_id, amount_cents, payment_id, refund_id) do
+    merchant_account_id = PaymentSystem.Accounts.generate_account_id(merchant_id, :merchant)
+    platform_account_id = PaymentSystem.Accounts.platform_account_id()
+
+    fee_cents = calculate_fee(amount_cents)
+    merchant_amount = amount_cents - fee_cents
+
+    # Reverse the original transfers
+    refund_from_merchant = %{
+      id: generate_transfer_id(refund_id, :merchant),
+      debit_account_id: merchant_account_id,
+      credit_account_id: user_wallet_id,
+      amount: merchant_amount,
+      ledger: @ledger_usd,
+      code: @code_refund,
+      flags: [],
+      user_data_128: payment_id # Reference original payment
+    }
+
+    refund_from_platform = %{
+      id: generate_transfer_id(refund_id, :platform),
+      debit_account_id: platform_account_id,
+      credit_account_id: user_wallet_id,
+      amount: fee_cents,
+      ledger: @ledger_usd,
+      code: @code_refund,
+      flags: [],
+      user_data_128: payment_id
+    }
+
+    case TigerBeetle.create_transfers([refund_from_merchant, refund_from_platform]) do
+      {:ok, _} -> {:ok, :refunded}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  defp calculate_fee(amount_cents) do
+    trunc(amount_cents * @platform_fee_percent / 100)
+  end
+
+  defp generate_transfer_id(payment_id, suffix) do
+    :crypto.hash(:sha256, "#{payment_id}:#{suffix}")
+    |> :binary.decode_unsigned()
+    |> rem(340_282_366_920_938_463_463_374_607_431_768_211_456)
+  end
+end</code></pre>
+
+          <h3>Querying Account Balances</h3>
+          <pre><code>defmodule PaymentSystem.Queries do
+  @moduledoc """
+  Query account balances and transfer history.
+  """
+
+  def get_wallet_balance(user_id) do
+    account_id = PaymentSystem.Accounts.generate_account_id(user_id, :wallet)
+
+    case TigerBeetle.lookup_accounts([account_id]) do
+      {:ok, [account]} ->
+        balance = account.credits_posted - account.debits_posted
+        pending = account.credits_pending - account.debits_pending
+
+        {:ok, %{
+          available: balance,
+          pending: pending,
+          total: balance + pending
+        }}
+
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  def get_transfer_history(account_id, opts \\ []) do
+    limit = Keyword.get(opts, :limit, 100)
+
+    filter = %{
+      account_id: account_id,
+      timestamp_min: 0,
+      timestamp_max: :max,
+      limit: limit,
+      flags: [:debits, :credits]
+    }
+
+    case TigerBeetle.get_account_transfers(filter) do
+      {:ok, transfers} -> {:ok, transfers}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+end</code></pre>
+
+          <h3>Usage Example</h3>
+          <pre><code># Create accounts
+{:ok, _} = PaymentSystem.Accounts.create_user_wallet(user_id: 12345)
+{:ok, _} = PaymentSystem.Accounts.create_merchant_account(merchant_id: 67890)
+{:ok, _} = PaymentSystem.Accounts.create_platform_revenue_account()
+
+# Process payment with authorization and capture
+user_wallet_id = PaymentSystem.Accounts.generate_account_id(12345, :wallet)
+payment_id = generate_unique_payment_id()
+
+# Step 1: Authorize payment ($100.00)
+{:ok, :authorized} = PaymentSystem.Transfers.authorize_payment(
+  user_wallet_id,
+  67890,
+  10_000, # $100.00 in cents
+  payment_id
+)
+
+# Check pending balance
+{:ok, balance} = PaymentSystem.Queries.get_wallet_balance(12345)
+# balance.pending == 10_000
+
+# Step 2: Capture payment (or void if needed)
+{:ok, :captured} = PaymentSystem.Transfers.capture_payment(payment_id)
+# Or: {:ok, :voided} = PaymentSystem.Transfers.void_payment(payment_id)
+
+# Check final balance
+{:ok, balance} = PaymentSystem.Queries.get_wallet_balance(12345)
+# balance.available reduced by 10_000
+
+# Process refund if needed
+refund_id = generate_unique_refund_id()
+{:ok, :refunded} = PaymentSystem.Transfers.refund_payment(
+  user_wallet_id,
+  67890,
+  10_000,
+  payment_id,
+  refund_id
+)</code></pre>
+
+          <h2>Key Benefits of This Architecture</h2>
+          <ul>
+            <li><strong>Atomic operations</strong> - merchant payment and platform fee execute atomically</li>
+            <li><strong>Two-phase transfers</strong> - authorize first, capture or void later</li>
+            <li><strong>Immutable audit trail</strong> - all transfers are permanent records</li>
+            <li><strong>Balance guarantees</strong> - the <code>debits_must_not_exceed_credits</code> flag prevents overdrafts</li>
+            <li><strong>High performance</strong> - batch operations, no SQL overhead, optimized for financial workloads</li>
+            <li><strong>Strong consistency</strong> - distributed consensus ensures data integrity</li>
+          </ul>
+
+          <h2>System Architecture Considerations</h2>
+          <p>TigerBeetle works alongside your existing stack:</p>
+
+          <h3>Complementary to OLGP Databases</h3>
+          <ul>
+            <li><strong>TigerBeetle</strong> - handles financial transactions (accounts, transfers, balances)</li>
+            <li><strong>PostgreSQL/MySQL</strong> - stores user profiles, product catalog, order details, etc.</li>
+            <li><strong>Application layer</strong> - coordinates between databases</li>
+          </ul>
+
+          <h3>Elixir Integration Patterns</h3>
+          <pre><code>defmodule PaymentSystem.Coordinator do
+  @moduledoc """
+  Coordinates between PostgreSQL (order data) and TigerBeetle (financial transactions).
+  """
+
+  alias PaymentSystem.{Repo, Order}
+
+  def process_order(user_id, merchant_id, order_params) do
+    Repo.transaction(fn ->
+      # 1. Create order in PostgreSQL
+      {:ok, order} = create_order(user_id, merchant_id, order_params)
+
+      # 2. Authorize payment in TigerBeetle
+      user_wallet_id = PaymentSystem.Accounts.generate_account_id(user_id, :wallet)
+
+      case PaymentSystem.Transfers.authorize_payment(
+        user_wallet_id,
+        merchant_id,
+        order.total_cents,
+        order.id
+      ) do
+        {:ok, :authorized} ->
+          # 3. Update order status
+          order
+          |> Order.changeset(%{status: :authorized})
+          |> Repo.update()
+
+        {:error, reason} ->
+          Repo.rollback(reason)
+      end
+    end)
+  end
+
+  def fulfill_order(order_id) do
+    order = Repo.get!(Order, order_id)
+
+    # Capture payment in TigerBeetle
+    case PaymentSystem.Transfers.capture_payment(order.id) do
+      {:ok, :captured} ->
+        order
+        |> Order.changeset(%{status: :completed})
+        |> Repo.update()
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+end</code></pre>
+
+          <h2>Production Deployment</h2>
+          <p>TigerBeetle supports several deployment options:</p>
+
+          <h3>Docker Deployment</h3>
+          <pre><code>docker run -p 3000:3000 \
+  -v $(pwd)/data:/data \
+  ghcr.io/tigerbeetle/tigerbeetle:latest \
+  start --addresses=3000 /data/0_0.tigerbeetle</code></pre>
+
+          <h3>Systemd Service</h3>
+          <pre><code>[Unit]
+Description=TigerBeetle Replica 0
+After=network.target
+
+[Service]
+Type=simple
+User=tigerbeetle
+ExecStart=/usr/local/bin/tigerbeetle start --addresses=3000,3001,3002 /var/lib/tigerbeetle/0_0.tigerbeetle
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+
+          <h3>Cluster Configuration</h3>
+          <p>For production, run a 3 or 5 replica cluster for fault tolerance:</p>
+          <ul>
+            <li><strong>3 replicas</strong> - tolerates 1 failure</li>
+            <li><strong>5 replicas</strong> - tolerates 2 failures</li>
+          </ul>
+
+          <h2>When to Use TigerBeetle</h2>
+          <p>TigerBeetle excels in scenarios requiring:</p>
+          <ul>
+            <li><strong>High-volume financial transactions</strong> - payment processing, money transfers, wallet systems</li>
+            <li><strong>Real-time balance tracking</strong> - gaming currency, loyalty points, credits systems</li>
+            <li><strong>Strict audit requirements</strong> - regulatory compliance, financial reporting</li>
+            <li><strong>Write-heavy workloads</strong> - continuous transaction recording</li>
+            <li><strong>Hot account scenarios</strong> - merchant accounts, platform revenue accounts with high contention</li>
+          </ul>
+
+          <h2>Comparison with Traditional Approaches</h2>
+
+          <h3>PostgreSQL Ledger Tables</h3>
+          <ul>
+            <li><strong>Pros</strong>: Familiar, flexible schema, rich query capabilities</li>
+            <li><strong>Cons</strong>: Slower (10x+), requires careful index management, complex concurrency handling, no built-in two-phase transfers</li>
+          </ul>
+
+          <h3>Third-Party Ledger APIs (Stripe, Modern Treasury)</h3>
+          <ul>
+            <li><strong>Pros</strong>: Managed service, no infrastructure</li>
+            <li><strong>Cons</strong>: Network latency, vendor lock-in, usage-based pricing, limited customization</li>
+          </ul>
+
+          <h3>TigerBeetle</h3>
+          <ul>
+            <li><strong>Pros</strong>: Extreme performance, purpose-built for accounting, two-phase transfers, immutability, self-hosted</li>
+            <li><strong>Cons</strong>: Specialized use case, smaller ecosystem, requires cluster management</li>
+          </ul>
+
+          <h2>Conclusion</h2>
+          <p>TigerBeetle represents a paradigm shift in financial data storage. By embracing the centuries-old debit-credit model and building a database specifically for OLTP workloads, it delivers performance and safety guarantees that general-purpose databases simply cannot match.</p>
+
+          <p>For Elixir developers building financial applications, TigerBeetle integrates seamlessly and provides a rock-solid foundation for transaction processing. Whether you're building a payment platform, digital wallet, gaming economy, or any system requiring precise financial tracking, TigerBeetle is worth serious consideration.</p>
+
+          <h3>Resources</h3>
+          <p><strong>Official TigerBeetle Resources:</strong></p>
+          <ul>
+            <li><a href="https://tigerbeetle.com" target="_blank" rel="noopener noreferrer">TigerBeetle Official Website</a></li>
+            <li><a href="https://docs.tigerbeetle.com" target="_blank" rel="noopener noreferrer">TigerBeetle Documentation</a></li>
+            <li><a href="https://github.com/tigerbeetle/tigerbeetle" target="_blank" rel="noopener noreferrer">TigerBeetle GitHub Repository</a></li>
+            <li><a href="https://hex.pm/packages/tigerbeetle" target="_blank" rel="noopener noreferrer">TigerBeetle Elixir Client</a></li>
+          </ul>
+
+          <p><strong>Specific Documentation Guides:</strong></p>
+          <ul>
+            <li><a href="https://docs.tigerbeetle.com/coding/data-modeling/" target="_blank" rel="noopener noreferrer">Data Modeling Guide</a> - Core concepts, debits vs credits, fractional amounts</li>
+            <li><a href="https://docs.tigerbeetle.com/coding/financial-accounting/" target="_blank" rel="noopener noreferrer">Financial Accounting Deep Dive</a> - The five account types and double-entry bookkeeping</li>
+            <li><a href="https://docs.tigerbeetle.com/coding/two-phase-transfers/" target="_blank" rel="noopener noreferrer">Two-Phase Transfers</a> - Authorization, capture, and void patterns</li>
+            <li><a href="https://docs.tigerbeetle.com/coding/linked-events/" target="_blank" rel="noopener noreferrer">Linked Events</a> - Atomic multi-transfer operations</li>
+            <li><a href="https://docs.tigerbeetle.com/coding/recipes/multi-debit-credit-transfers/" target="_blank" rel="noopener noreferrer">Compound Transfers Recipe</a> - Multi-debit and multi-credit patterns</li>
+          </ul>
+
+          <p><strong>External References:</strong></p>
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Two-phase_commit_protocol" target="_blank" rel="noopener noreferrer">Two-Phase Commit Protocol (Wikipedia)</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Double-entry_bookkeeping" target="_blank" rel="noopener noreferrer">Double-Entry Bookkeeping (Wikipedia)</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Debits_and_credits" target="_blank" rel="noopener noreferrer">Debits and Credits (Wikipedia)</a></li>
+          </ul>
+
+          <div class="mt-12 p-6 bg-slate-50 border-l-4 border-primary rounded-r-lg">
+            <p class="text-slate-900 font-semibold mb-2">Ready to build with TigerBeetle?</p>
+            <p class="text-slate-600">Start with the installation guide and experiment with the examples above. The performance and safety guarantees will transform how you think about financial data storage.</p>
+          </div>
+
+      <div class="mt-16 pt-8 border-t border-slate-300">
+        <a href="/blog.html" class="inline-flex items-center gap-2 text-primary hover:underline font-medium">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Back to Blog
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
