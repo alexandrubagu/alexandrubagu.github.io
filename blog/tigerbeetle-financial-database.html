@@ -316,20 +316,8 @@
 
           <p>Built in Zig for maximum performance, TigerBeetle uses a debit-credit accounting model and provides strong consistency guarantees through distributed consensus. It's designed to process up to <strong>1 million transactions per second</strong> while maintaining strict safety and durability requirements.</p>
 
-          <h2>Understanding OLTP: The World is Becoming More Transactional</h2>
-          <p>OLTP (Online Transaction Processing) focuses on recording business transactions in real-time. This includes payments, money transfers, API usage billing, ride-sharing transactions, and more.</p>
-
-          <p>The scale of transactional workloads has exploded:</p>
-          <ul>
-            <li>India's UPI payment system processed 10 billion payments in 2019. By January 2025, it processed <strong>16.9 billion payments in a single month</strong></li>
-            <li>Serverless APIs charge per-request or per-second, requiring real-time transaction processing</li>
-            <li>Smart energy metering enables trading by the kilowatt-hour with billing every 15-30 minutes</li>
-          </ul>
-
-          <p>Traditional general-purpose databases struggle with these write-heavy, highly-contended workloads. TigerBeetle solves these challenges through specialized design.</p>
-
           <h2>The Debit-Credit Model: Centuries of Proven Accounting</h2>
-          <p>TigerBeetle uses <strong>double-entry bookkeeping</strong>, the lingua franca of business and accounting since the 13th century. This model captures the "who, what, when, where, why, and how much" of every transaction.</p>
+          <p>TigerBeetle uses <strong>double-entry bookkeeping</strong> model that captures the "who, what, when, where, why, and how much" of every transaction.</p>
 
           <h3>Core Principles</h3>
           <ul>
