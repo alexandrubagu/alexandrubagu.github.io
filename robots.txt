@@ -4,3 +4,5 @@ Disallow:
 User-agent: *
 Disallow: /search
 Allow: /
+
+Sitemap: https://alexandrubagu.github.io/sitemap.xml
