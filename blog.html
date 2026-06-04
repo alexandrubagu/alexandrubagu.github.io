@@ -86,6 +86,64 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+
+    /* Search */
+    #blog-search::-webkit-search-cancel-button {
+      cursor: pointer;
+    }
+
+    /* Tag filter buttons */
+    .tag-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.375rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1.5px solid rgb(226, 232, 240);
+      background: white;
+      color: rgb(100, 116, 139);
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+    .tag-btn:hover:not(.active) {
+      border-color: rgb(59, 130, 246);
+      color: rgb(59, 130, 246);
+      background: rgb(239, 246, 255);
+    }
+    .tag-btn.active {
+      background: rgb(59, 130, 246);
+      border-color: rgb(59, 130, 246);
+      color: white;
+      box-shadow: 0 1px 4px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Article inline tag pills */
+    .article-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: rgb(241, 245, 249);
+      color: rgb(71, 85, 105);
+      white-space: nowrap;
+    }
+
+    .blog-card[hidden] {
+      display: none;
+    }
+
+    #no-results {
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
   </style>
 
   <!-- Google tag (gtag.js) -->
@@ -142,18 +200,51 @@
     <section class="py-20 gradient-subtle">
       <div class="container mx-auto px-4">
         <div class="max-w-6xl mx-auto">
-          <div class="text-center mb-16">
+
+          <!-- Header -->
+          <div class="text-center mb-8">
             <h1 class="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Blog</h1>
             <p class="text-lg text-slate-600">Thoughts, tutorials, and insights from my development journey</p>
             <div class="w-20 h-1 bg-primary mx-auto mt-6"></div>
           </div>
 
-          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Search -->
+          <div class="relative max-w-2xl mx-auto mb-6">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <input
+              type="search"
+              id="blog-search"
+              placeholder="Search articles by title or description…"
+              class="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-200 bg-white shadow-sm text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all"
+              autocomplete="off"
+              aria-label="Search blog articles"
+            >
+          </div>
+
+          <!-- Tag filters -->
+          <div class="flex flex-wrap justify-center gap-2 mb-12" id="tag-filters" role="group" aria-label="Filter articles by tag">
+            <button class="tag-btn active" data-tag="all">All</button>
+            <button class="tag-btn" data-tag="ai">AI</button>
+            <button class="tag-btn" data-tag="database">Database</button>
+            <button class="tag-btn" data-tag="elixir">Elixir</button>
+            <button class="tag-btn" data-tag="postgres">Postgres</button>
+            <button class="tag-btn" data-tag="rabbitmq">RabbitMQ</button>
+            <button class="tag-btn" data-tag="redis">Redis</button>
+            <button class="tag-btn" data-tag="webgl">WebGL</button>
+            <button class="tag-btn" data-tag="backend">Backend</button>
+            <button class="tag-btn" data-tag="investing">Investing</button>
+          </div>
+
+          <!-- Blog grid -->
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
+
             <!-- Blog Card: avgr.app -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="investing">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Investing</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Investing</span>
                   <span class="text-xs text-slate-600">5 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">avgr.app: The Stock Average Calculator That Shows You the Real Math Before You Buy</h3>
@@ -175,11 +266,12 @@
               </div>
             </div>
 
-            <!-- Blog Card 1 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: Dead Letter Queue -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="elixir rabbitmq">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Elixir</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Elixir</span>
+                  <span class="article-tag">RabbitMQ</span>
                   <span class="text-xs text-slate-600">10 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">Dead Letter Queue Pattern with Broadway and RabbitMQ</h3>
@@ -201,11 +293,11 @@
               </div>
             </div>
 
-            <!-- Blog Card 2 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: expand_ex -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="elixir">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Elixir</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Elixir</span>
                   <span class="text-xs text-slate-600">7 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">expand_ex: Transform Your Elixir Code Organization with Automated Alias Expansion</h3>
@@ -227,11 +319,13 @@
               </div>
             </div>
 
-            <!-- Blog Card 3 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: Hall of Fame -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="backend redis postgres elixir">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Backend</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Backend</span>
+                  <span class="article-tag">Redis</span>
+                  <span class="article-tag">Postgres</span>
                   <span class="text-xs text-slate-600">8 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">Building a Hall of Fame Leaderboard: Three Approaches Compared</h3>
@@ -253,11 +347,11 @@
               </div>
             </div>
 
-            <!-- Blog Card 4 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: three.quarks Behaviors -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="webgl">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">WebGL</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">WebGL</span>
                   <span class="text-xs text-slate-600">10 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">three.quarks Particle Behaviors: Complete Animation Reference</h3>
@@ -279,11 +373,11 @@
               </div>
             </div>
 
-            <!-- Blog Card 5 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: three.quarks System -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="webgl">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">WebGL</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">WebGL</span>
                   <span class="text-xs text-slate-600">8 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">three.quarks Particle System Configuration Guide</h3>
@@ -305,11 +399,12 @@
               </div>
             </div>
 
-            <!-- Blog Card 6 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: pg_partman -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="database postgres">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Database</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Database</span>
+                  <span class="article-tag">Postgres</span>
                   <span class="text-xs text-slate-600">7 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">PostgreSQL Partitioning with pg_partman: Automate Partition Management</h3>
@@ -331,11 +426,12 @@
               </div>
             </div>
 
-            <!-- Blog Card 7 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: pg_repack -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="database postgres">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Database</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Database</span>
+                  <span class="article-tag">Postgres</span>
                   <span class="text-xs text-slate-600">6 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">Understanding pg_repack: Eliminate PostgreSQL Table Bloat Without Downtime</h3>
@@ -357,11 +453,11 @@
               </div>
             </div>
 
-            <!-- Blog Card 8 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: Parameter Validation -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="elixir">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Elixir</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Elixir</span>
                   <span class="text-xs text-slate-600">7 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">Mastering Parameter Validation in Elixir Phoenix Controllers</h3>
@@ -383,11 +479,11 @@
               </div>
             </div>
 
-            <!-- Blog Card 9 -->
-            <div class="flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden">
+            <!-- Blog Card: Mazex -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="elixir">
               <div class="p-6">
-                <div class="flex items-center gap-2 mb-3">
-                  <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full">Elixir</span>
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Elixir</span>
                   <span class="text-xs text-slate-600">9 min read</span>
                 </div>
                 <h3 class="text-xl font-bold mb-2 line-clamp-2">Building Mazex: Maze Generation with Elixir</h3>
@@ -408,7 +504,21 @@
                 </a>
               </div>
             </div>
+
           </div>
+
+          <!-- No results -->
+          <div id="no-results" class="hidden text-center py-20">
+            <svg class="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h3 class="text-xl font-semibold text-slate-700 mb-2">No articles found</h3>
+            <p class="text-slate-500 text-sm">Try a different search term or clear the tag filter.</p>
+            <button id="reset-filters" class="mt-6 px-5 py-2 rounded-full text-sm font-medium bg-primary text-white hover:bg-blue-600 transition-colors">
+              Clear filters
+            </button>
+          </div>
+
         </div>
       </div>
     </section>
@@ -464,9 +574,67 @@
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-
     mobileMenuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
+    });
+
+    // Blog filtering
+    const cards = Array.from(document.querySelectorAll('.blog-card'));
+    const tagButtons = Array.from(document.querySelectorAll('.tag-btn'));
+    const searchInput = document.getElementById('blog-search');
+    const noResults = document.getElementById('no-results');
+    const resetBtn = document.getElementById('reset-filters');
+
+    let activeTags = new Set();
+    let searchQuery = '';
+
+    function applyFilters() {
+      let visible = 0;
+      cards.forEach(card => {
+        const cardTags = card.dataset.tags ? card.dataset.tags.split(' ') : [];
+        const cardText = card.innerText.toLowerCase();
+        const matchesTag = activeTags.size === 0 || [...activeTags].some(t => cardTags.includes(t));
+        const matchesSearch = !searchQuery || cardText.includes(searchQuery);
+        card.hidden = !(matchesTag && matchesSearch);
+        if (!card.hidden) visible++;
+      });
+      noResults.classList.toggle('hidden', visible > 0);
+    }
+
+    tagButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag;
+        if (tag === 'all') {
+          activeTags.clear();
+          tagButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        } else {
+          if (activeTags.has(tag)) {
+            activeTags.delete(tag);
+            btn.classList.remove('active');
+          } else {
+            activeTags.add(tag);
+            btn.classList.add('active');
+          }
+          const allBtn = document.querySelector('.tag-btn[data-tag="all"]');
+          allBtn.classList.toggle('active', activeTags.size === 0);
+        }
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', () => {
+      searchQuery = searchInput.value.trim().toLowerCase();
+      applyFilters();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      activeTags.clear();
+      searchInput.value = '';
+      searchQuery = '';
+      tagButtons.forEach(b => b.classList.remove('active'));
+      document.querySelector('.tag-btn[data-tag="all"]').classList.add('active');
+      applyFilters();
     });
   </script>
 </body>
