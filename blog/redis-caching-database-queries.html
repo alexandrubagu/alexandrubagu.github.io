@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Redis Caching: How to Cache Database Queries and Web Page Responses - Bâgu Alexandru Bogdan</title>
-  <meta name="description" content="Learn how to use Redis to cache database query results and web page responses. Covers cache-aside pattern, TTL strategies, and cache invalidation techniques." />
+  <title>Caching Database Queries in Elixir with Nebulex and Redis - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Learn how to cache database queries in Elixir using Nebulex and the Redis adapter. Covers cacheable, cache_put, and cache_evict decorators with practical examples." />
   <link rel="canonical" href="https://alexandrubagu.github.io/blog/redis-caching-database-queries.html" />
   <meta name="theme-color" content="#1e293b">
 
@@ -12,15 +12,15 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Redis Caching: How to Cache Database Queries and Web Page Responses",
-    "description": "Learn how to use Redis to cache database query results and web page responses. Covers cache-aside pattern, TTL strategies, and cache invalidation techniques.",
+    "headline": "Caching Database Queries in Elixir with Nebulex and Redis",
+    "description": "Learn how to cache database queries in Elixir using Nebulex and the Redis adapter. Covers cacheable, cache_put, and cache_evict decorators with practical examples.",
     "image": "https://alexandrubagu.github.io/profile.jpg",
     "author": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "url": "https://alexandrubagu.github.io" },
     "publisher": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "logo": { "@type": "ImageObject", "url": "https://alexandrubagu.github.io/profile.jpg" } },
     "datePublished": "2026-06-09T12:00:00+00:00",
     "dateModified": "2026-06-09T12:00:00+00:00",
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://alexandrubagu.github.io/blog/redis-caching-database-queries.html" },
-    "keywords": "Redis caching, cache database queries, Redis cache-aside pattern, web page caching, Redis TTL, cache invalidation, Redis SET GET, Redis SETEX",
+    "keywords": "Elixir caching, Nebulex, NebulexRedisAdapter, Redis Elixir, cache database queries, cacheable decorator, cache_put, cache_evict, Elixir Redis",
     "articleSection": "Redis",
     "inLanguage": "en-US"
   }
@@ -99,7 +99,7 @@
     <div class="max-w-3xl mx-auto">
       <header class="mb-12">
         <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Redis</span>
-        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">Redis Caching: How to Cache Database Queries and Web Page Responses</h1>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">Caching Database Queries in Elixir with Nebulex and Redis</h1>
         <div class="flex items-center gap-6 text-slate-600">
           <div class="flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -107,146 +107,238 @@
           </div>
           <div class="flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="text-sm">7 min read</span>
+            <span class="text-sm">8 min read</span>
           </div>
         </div>
       </header>
 
       <div class="prose max-w-none text-slate-900">
         <p class="text-lg mb-4">
-          Database queries are often the slowest part of a web application. A single page load might trigger dozens of queries, each adding latency. Redis changes this equation entirely — serving cached results from memory in under a millisecond, while your database handles a fraction of the load.
+          Database queries are often the slowest part of a web application. In Elixir, <strong>Nebulex</strong> gives you a clean, decorator-based caching layer that sits on top of Redis with almost no boilerplate. Instead of manually calling <code>GET</code> and <code>SET</code> around every query, you annotate your functions and Nebulex handles the rest.
         </p>
 
-        <h2>Why Cache with Redis?</h2>
-        <p>Redis stores data in RAM, making reads roughly 100x faster than a typical database query. It supports automatic expiration (TTL), atomic operations, and scales horizontally. For read-heavy workloads — product pages, user profiles, dashboards — caching is the single highest-leverage optimization you can make.</p>
+        <h2>What Is Nebulex?</h2>
+        <p>Nebulex is a caching library for Elixir built around two main ideas: a unified <code>Cache</code> API that works across different backends, and a declarative decorator system that wraps functions transparently. The <strong>NebulexRedisAdapter</strong> connects that API to Redis via the Redix driver, supporting standalone nodes, Redis Cluster, and client-side sharding.</p>
 
-        <h2>The Cache-Aside Pattern</h2>
-        <p>Cache-aside (also called lazy loading) is the most common caching strategy. The application checks Redis first; on a miss it queries the database, stores the result in Redis, then returns it.</p>
+        <h2>Setup</h2>
+        <p>Add the dependencies to <code>mix.exs</code>:</p>
 
-        <pre><code># Python example with redis-py
-import redis
-import json
+        <pre><code>defp deps do
+  [
+    {:nebulex, "~> 3.0"},
+    {:nebulex_redis_adapter, "~> 2.0"},
+    {:redix, "~> 1.5"},
+    {:decorator, "~> 1.4"},
+    {:telemetry, "~> 1.0"}
+  ]
+end</code></pre>
 
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+        <p>Create your cache module:</p>
 
-def get_user(user_id):
-    cache_key = f"user:{user_id}"
+        <pre><code># lib/my_app/cache.ex
+defmodule MyApp.Cache do
+  use Nebulex.Cache,
+    otp_app: :my_app,
+    adapter: NebulexRedisAdapter
+end</code></pre>
 
-    # 1. Check cache
-    cached = r.get(cache_key)
-    if cached:
-        return json.loads(cached)
+        <p>Configure the Redis connection in <code>config/config.exs</code>:</p>
 
-    # 2. Cache miss — query DB
-    user = db.query("SELECT * FROM users WHERE id = %s", user_id)
+        <pre><code>config :my_app, MyApp.Cache,
+  conn_opts: [
+    host: "localhost",
+    port: 6379
+  ]</code></pre>
 
-    # 3. Store in cache with 5-minute TTL
-    r.setex(cache_key, 300, json.dumps(user))
+        <p>Finally, add the cache to your application supervisor so it starts with your app:</p>
 
-    return user</code></pre>
+        <pre><code># lib/my_app/application.ex
+def start(_type, _args) do
+  children = [
+    MyApp.Repo,
+    MyApp.Cache
+  ]
 
-        <p>The key operations are <code>GET</code> to check the cache and <code>SETEX</code> (SET with EXpiry) to store with a TTL.</p>
+  Supervisor.start_link(children, strategy: :one_for_one, name: MyApp.Supervisor)
+end</code></pre>
 
-        <h2>Setting TTLs Effectively</h2>
-        <p>TTL (Time To Live) controls how long data stays cached. Choose based on how often the underlying data changes:</p>
+        <h2>The <code>cacheable</code> Decorator — Cache-Aside Pattern</h2>
+        <p>The <code>@decorate cacheable(...)</code> decorator implements cache-aside: on the first call it executes the function and stores the result; on subsequent calls with the same key it returns the cached value directly, skipping the function body entirely.</p>
+
+        <pre><code>defmodule MyApp.Users do
+  use Nebulex.Caching, cache: MyApp.Cache
+
+  alias MyApp.{Repo, User}
+
+  @decorate cacheable(key: id, opts: [ttl: :timer.minutes(5)])
+  def get_user(id) do
+    Repo.get!(User, id)
+  end
+
+  @decorate cacheable(key: email, opts: [ttl: :timer.minutes(5)])
+  def get_user_by_email(email) do
+    Repo.get_by(User, email: email)
+  end
+end</code></pre>
+
+        <p>The <code>key:</code> option determines which function argument becomes the cache key. The <code>opts: [ttl: ...]</code> sets expiration using Erlang's <code>:timer</code> helpers — <code>:timer.minutes/1</code>, <code>:timer.hours/1</code>, and <code>:timer.seconds/1</code> all return milliseconds, which is what Nebulex expects.</p>
+
+        <h2>Choosing the Right TTL</h2>
+        <p>TTL controls how long data stays cached before Nebulex re-fetches it from the database. Match it to how often the underlying data actually changes:</p>
         <ul>
-          <li><strong>Static content</strong> (product descriptions, blog posts) — 1 hour to 24 hours</li>
-          <li><strong>Semi-dynamic</strong> (user profiles, search results) — 5 to 30 minutes</li>
-          <li><strong>Real-time data</strong> (stock prices, live scores) — 1 to 10 seconds</li>
-          <li><strong>Computed results</strong> (aggregations, reports) — match your data refresh frequency</li>
+          <li><strong>User profiles, product details</strong> — <code>:timer.minutes(5)</code> to <code>:timer.minutes(30)</code></li>
+          <li><strong>Reference data</strong> (categories, config) — <code>:timer.hours(1)</code> to <code>:timer.hours(24)</code></li>
+          <li><strong>Search results, aggregations</strong> — <code>:timer.minutes(1)</code> to <code>:timer.minutes(10)</code></li>
+          <li><strong>Real-time data</strong> (counters, live scores) — <code>:timer.seconds(5)</code> to <code>:timer.seconds(30)</code></li>
         </ul>
 
-        <pre><code># Redis CLI examples
-# Store with 60-second TTL
-SET product:42 '{"name":"Widget","price":9.99}' EX 60
+        <h2>Composite Cache Keys</h2>
+        <p>When a function takes multiple arguments but you want a key derived from a specific combination, pass a tuple or use an anonymous function:</p>
 
-# Check remaining TTL
-TTL product:42   # returns seconds remaining
+        <pre><code>defmodule MyApp.Products do
+  use Nebulex.Caching, cache: MyApp.Cache
 
-# Store without expiry (persistent)
-SET config:feature_flags '{"darkMode":true}'
+  alias MyApp.{Repo, Product}
+  import Ecto.Query
 
-# Update TTL on an existing key
-EXPIRE product:42 120</code></pre>
+  # Key combines both arguments
+  @decorate cacheable(key: {category, page}, opts: [ttl: :timer.minutes(10)])
+  def list_by_category(category, page) do
+    Product
+    |> where(category: ^category)
+    |> order_by(:inserted_at)
+    |> Repo.paginate(page: page)
+  end
 
-        <h2>Caching Web Page Responses</h2>
-        <p>For rendered HTML or API JSON responses, cache the entire output rather than re-running business logic on every request.</p>
+  # Key derived dynamically from decorator context
+  @decorate cacheable(
+    key: &{&1.function_name, hd(&1.args)},
+    opts: [ttl: :timer.hours(1)]
+  )
+  def get_featured(_opts \\ []) do
+    Repo.all(from p in Product, where: p.featured == true)
+  end
+end</code></pre>
 
-        <pre><code># Node.js / Express middleware
-const redis = require('redis');
-const client = redis.createClient();
+        <h2>Write-Through with <code>cache_put</code></h2>
+        <p>While <code>cacheable</code> only populates the cache on a miss, <code>cache_put</code> always executes the function <em>and</em> updates the cache with the result. This is the write-through pattern — the cache stays current after every mutation.</p>
 
-async function cacheMiddleware(req, res, next) {
-  const key = `page:${req.url}`;
-  const cached = await client.get(key);
+        <pre><code>defmodule MyApp.Users do
+  use Nebulex.Caching, cache: MyApp.Cache
 
-  if (cached) {
-    res.setHeader('X-Cache', 'HIT');
-    return res.send(cached);
-  }
+  alias MyApp.{Repo, User}
 
-  // Intercept the response to cache it
-  const originalSend = res.send.bind(res);
-  res.send = async (body) => {
-    await client.setEx(key, 300, body); // cache 5 minutes
-    res.setHeader('X-Cache', 'MISS');
-    originalSend(body);
-  };
+  @decorate cache_put(key: user.id, match: &match_ok/1, opts: [ttl: :timer.minutes(5)])
+  def update_user(user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
 
-  next();
-}
+  # Only cache on success; skip caching on changeset errors
+  defp match_ok({:ok, updated_user}), do: {true, updated_user}
+  defp match_ok({:error, _changeset}), do: false
+end</code></pre>
 
-app.get('/api/products', cacheMiddleware, getProducts);</code></pre>
+        <p>The <code>match:</code> function controls what gets stored. Returning <code>{true, value}</code> caches a transformed value (here, the unwrapped struct instead of the <code>{:ok, struct}</code> tuple). Returning <code>false</code> skips caching entirely, which is exactly what you want when the update fails.</p>
 
-        <h2>Write-Through vs Write-Behind</h2>
-        <p>Cache-aside only populates on reads. Two write strategies keep the cache fresh proactively:</p>
-        <ul>
-          <li><strong>Write-through</strong> — update both cache and database on every write. Cache is always fresh but writes are slightly slower.</li>
-          <li><strong>Write-behind (write-back)</strong> — write to cache immediately, flush to database asynchronously. Fastest writes, but risk of data loss if Redis crashes before the flush.</li>
-        </ul>
+        <h2>Cache Invalidation with <code>cache_evict</code></h2>
+        <p>When data is deleted or fundamentally changed, use <code>cache_evict</code> to remove the stale entry. Nebulex runs the eviction <em>after</em> the function by default, so the database operation succeeds before the cache is touched.</p>
 
-        <pre><code># Write-through example
-def update_user(user_id, data):
-    # Update DB first
-    db.execute("UPDATE users SET ... WHERE id = %s", user_id)
+        <pre><code>defmodule MyApp.Users do
+  use Nebulex.Caching, cache: MyApp.Cache
 
-    # Invalidate or update cache
-    cache_key = f"user:{user_id}"
-    r.setex(cache_key, 300, json.dumps(data))</code></pre>
+  alias MyApp.{Repo, User}
 
-        <h2>Cache Invalidation</h2>
-        <p>The hardest problem in caching. Three practical approaches:</p>
-        <ul>
-          <li><strong>TTL-based expiry</strong> — let the key expire naturally. Simple, but data can be stale up to the TTL duration.</li>
-          <li><strong>Delete on write</strong> — call <code>DEL cache_key</code> whenever the underlying data changes. Next read rebuilds the cache.</li>
-          <li><strong>Versioned keys</strong> — embed a version in the key (e.g. <code>user:42:v3</code>). Increment version on update; old keys expire naturally.</li>
-        </ul>
+  @decorate cache_evict(key: user_id)
+  def delete_user(user_id) do
+    Repo.get!(User, user_id) |> Repo.delete()
+  end
 
-        <pre><code># Delete on write
-def delete_product(product_id):
-    db.execute("DELETE FROM products WHERE id = %s", product_id)
-    r.delete(f"product:{product_id}")
-    r.delete("products:list")  # also invalidate list caches</code></pre>
+  # Evict multiple related keys at once
+  @decorate cache_evict(keys: [user.id, user.email])
+  def deactivate_user(user) do
+    user |> User.changeset(%{active: false}) |> Repo.update()
+  end
+end</code></pre>
 
-        <h2>Key Naming Conventions</h2>
-        <p>Consistent key naming prevents collisions and makes debugging easier. Use colons as namespace separators:</p>
-        <ul>
-          <li><code>user:{id}</code> — single user record</li>
-          <li><code>product:{id}:reviews</code> — reviews for a product</li>
-          <li><code>search:{query}:{page}</code> — paginated search results</li>
-          <li><code>page:/blog/my-post</code> — rendered page cache</li>
-        </ul>
+        <p>To flush an entire namespace — for example after a bulk import — pass <code>all_entries: true</code>:</p>
+
+        <pre><code>@decorate cache_evict(all_entries: true)
+def import_users(csv_path) do
+  csv_path |> File.stream!() |> bulk_insert()
+end</code></pre>
+
+        <h2>Referenced Keys — One Value, Many Lookups</h2>
+        <p>A common pattern is fetching a user by either their ID or their email. You want a single cached value stored under the primary key (ID), with secondary keys (email) pointing to it. Nebulex handles this with the <code>references:</code> option:</p>
+
+        <pre><code>defmodule MyApp.Users do
+  use Nebulex.Caching, cache: MyApp.Cache
+
+  alias MyApp.{Repo, User}
+
+  @decorate cacheable(key: id, opts: [ttl: :timer.minutes(5)])
+  def get_user(id) do
+    Repo.get!(User, id)
+  end
+
+  # Stores the user under their id; the email key is a reference pointing to it
+  @decorate cacheable(
+    key: email,
+    references: &(&1 && &1.id),
+    opts: [ttl: :timer.minutes(5)]
+  )
+  def get_user_by_email(email) do
+    Repo.get_by(User, email: email)
+  end
+
+  # Evicting by id automatically clears the email reference too
+  @decorate cache_evict(key: user_id)
+  def delete_user(user_id) do
+    Repo.get!(User, user_id) |> Repo.delete()
+  end
+end</code></pre>
+
+        <p>With this setup you never store the same struct twice, and a single eviction keeps both lookup paths consistent.</p>
+
+        <h2>Error Handling</h2>
+        <p>By default, Nebulex uses <code>on_error: :nothing</code> — if Redis is temporarily unavailable, the decorated function executes normally as if the cache didn't exist. This is the right default for most production apps: a Redis hiccup should degrade gracefully, not take down the application.</p>
+
+        <p>If you want cache failures to surface as exceptions (useful in tests or strict environments), set <code>on_error: :raise</code>:</p>
+
+        <pre><code>use Nebulex.Caching, cache: MyApp.Cache, on_error: :raise</code></pre>
+
+        <p>You can also override this per decorator:</p>
+
+        <pre><code>@decorate cacheable(key: id, on_error: :raise, opts: [ttl: :timer.minutes(5)])
+def get_critical_config(id) do
+  Repo.get!(Config, id)
+end</code></pre>
+
+        <h2>Redis Cluster Mode</h2>
+        <p>When you need horizontal scale, switch the adapter to Redis Cluster mode by setting master node entry points in config. The adapter handles key slot routing automatically:</p>
+
+        <pre><code>config :my_app, MyApp.Cache,
+  mode: :redis_cluster,
+  master_nodes: [
+    [host: "redis-node-1", port: 7000],
+    [host: "redis-node-2", port: 7001],
+    [host: "redis-node-3", port: 7002]
+  ]</code></pre>
+
+        <p>Your application code — decorators, keys, TTLs — stays identical. Only the config changes.</p>
 
         <h2>Key Takeaways</h2>
         <ul>
-          <li><strong>Cache-aside</strong> is the safest starting point — check Redis, fall back to DB on miss</li>
-          <li><strong>SETEX</strong> stores data with automatic expiration — always set a TTL</li>
-          <li><strong>Invalidate on write</strong> keeps cache consistent with the source of truth</li>
-          <li><strong>Cache at the right level</strong> — query results, API responses, and rendered HTML all benefit differently</li>
-          <li><strong>Monitor hit rate</strong> — a cache hit rate below 80% suggests poor key design or TTLs that are too short</li>
+          <li><strong><code>cacheable</code></strong> implements cache-aside: check Redis first, hit the DB on a miss, store the result — all transparently via a decorator</li>
+          <li><strong><code>cache_put</code></strong> always writes to cache after executing the function — use it on updates to keep the cache in sync</li>
+          <li><strong><code>cache_evict</code></strong> removes stale entries after deletes or invalidating changes — target specific keys or flush all entries</li>
+          <li><strong>Referenced keys</strong> let you look up the same cached value by multiple identifiers without duplicating the stored data</li>
+          <li><strong><code>on_error: :nothing</code></strong> (the default) makes Redis failures transparent — the function runs as if there's no cache, keeping your app resilient</li>
+          <li><strong>TTLs in milliseconds</strong> — use <code>:timer.minutes/1</code> and <code>:timer.hours/1</code> for readable, correct values</li>
         </ul>
 
-        <p>Redis caching is one of the fastest wins in backend performance. Even a simple cache-aside layer on your most expensive queries can cut response times dramatically and take significant load off your database.</p>
+        <p>Nebulex keeps caching concerns out of your business logic. Once the setup is in place, adding a cache to a slow query is a single line annotation — and switching from an in-memory adapter in dev to Redis in production is purely a config change.</p>
       </div>
 
       <footer class="mt-16 pt-8 border-t border-slate-200">
