@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building a Social Network Timeline with Redis List Data Type - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Build a social network timeline with Redis Lists. Learn the fan-out on write pattern using LPUSH, LRANGE, and LTRIM to create fast, scalable Twitter-like feeds." />
+  <link rel="canonical" href="https://alexandrubagu.github.io/blog/redis-list-social-timeline.html" />
+  <meta name="theme-color" content="#1e293b">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Building a Social Network Timeline with Redis List Data Type",
+    "description": "Build a social network timeline with Redis Lists. Learn the fan-out on write pattern using LPUSH, LRANGE, and LTRIM to create fast, scalable Twitter-like feeds.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "url": "https://alexandrubagu.github.io" },
+    "publisher": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "logo": { "@type": "ImageObject", "url": "https://alexandrubagu.github.io/profile.jpg" } },
+    "datePublished": "2026-06-09T12:00:00+00:00",
+    "dateModified": "2026-06-09T12:00:00+00:00",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://alexandrubagu.github.io/blog/redis-list-social-timeline.html" },
+    "keywords": "Redis social timeline, Redis LPUSH LRANGE, fan-out on write Redis, Redis newsfeed, Redis Lists timeline, Twitter-like feed Redis, Redis LTRIM",
+    "articleSection": "Redis",
+    "inLanguage": "en-US"
+  }
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }, colors: { primary: 'rgb(59, 130, 246)', slate: { 50:'rgb(248,250,252)',100:'rgb(241,245,249)',200:'rgb(226,232,240)',300:'rgb(203,213,225)',400:'rgb(148,163,184)',500:'rgb(100,116,139)',600:'rgb(71,85,105)',700:'rgb(51,65,85)',800:'rgb(30,41,59)',900:'rgb(15,23,42)' } } } }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    article code { background-color: #f1f5f9; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; }
+    article pre { background-color: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+    article pre code { background-color: transparent; padding: 0; color: #e2e8f0; font-family: 'Courier New', monospace; }
+    article h2 { font-size: 1.875rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
+    article h3 { font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #334155; }
+    article p { margin-bottom: 1rem; line-height: 1.75; color: #475569; }
+    article ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+    article li { margin-bottom: 0.5rem; color: #475569; line-height: 1.75; }
+    article strong { color: #1e293b; font-weight: 600; }
+  </style>
+  <script defer data-domain="alexandrubagu.github.io" src="https://plausible-analytics-ce-production-37e7.up.railway.app/js/script.hash.outbound-links.tagged-events.js"></script>
+  <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+</head>
+<body class="bg-white text-slate-900">
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" class="text-xl font-bold text-slate-900 hover:text-primary transition-colors">Alexandru Bogdan</a>
+        <div class="hidden md:flex items-center space-x-1">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Contact</a>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <article class="container mx-auto px-4 pt-24 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Redis</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">Building a Social Network Timeline with Redis List Data Type</h1>
+        <div class="flex items-center gap-6 text-slate-600">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span class="text-sm">June 9, 2026</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="text-sm">7 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="prose max-w-none text-slate-900">
+        <p class="text-lg mb-4">
+          A social timeline is one of the most read-heavy features in any application. When a user loads their feed, you need the latest posts from everyone they follow — instantly. Redis Lists with fan-out on write make this possible: each read is a single O(N) list slice, no joins, no sorting.
+        </p>
+
+        <h2>The Fan-Out on Write Pattern</h2>
+        <p>When a user posts, the system immediately pushes the post ID to the timeline list of every follower. Each user's timeline is a pre-computed, sorted list of post IDs. Loading the feed becomes a single <code>LRANGE</code> call.</p>
+
+        <pre><code># User alice (id:1) posts something (post id: 99)
+# She has 3 followers: bob (id:2), carol (id:3), dave (id:4)
+
+# Push post to each follower's timeline
+LPUSH timeline:user:2 99
+LPUSH timeline:user:3 99
+LPUSH timeline:user:4 99
+
+# Cap timelines at 1000 items (trim old posts)
+LTRIM timeline:user:2 0 999
+LTRIM timeline:user:3 0 999
+LTRIM timeline:user:4 0 999</code></pre>
+
+        <h2>Reading the Timeline</h2>
+        <pre><code># Load first page of bob's timeline (newest 20 posts)
+LRANGE timeline:user:2 0 19
+
+# Load second page
+LRANGE timeline:user:2 20 39
+
+# Count total items in timeline
+LLEN timeline:user:2</code></pre>
+
+        <h2>Python Implementation</h2>
+        <pre><code">import redis
+import json
+
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+MAX_TIMELINE_SIZE = 1000
+
+def get_followers(user_id):
+    # Return follower IDs from your database
+    return db.query("SELECT follower_id FROM follows WHERE followed_id = %s", user_id)
+
+def publish_post(author_id, post_id):
+    followers = get_followers(author_id)
+
+    pipe = r.pipeline()
+    for follower_id in followers:
+        timeline_key = f"timeline:{follower_id}"
+        pipe.lpush(timeline_key, post_id)
+        pipe.ltrim(timeline_key, 0, MAX_TIMELINE_SIZE - 1)
+
+    # Also add to author's own timeline
+    pipe.lpush(f"timeline:{author_id}", post_id)
+    pipe.ltrim(f"timeline:{author_id}", 0, MAX_TIMELINE_SIZE - 1)
+
+    pipe.execute()
+
+def get_timeline(user_id, page=1, page_size=20):
+    start = (page - 1) * page_size
+    end = start + page_size - 1
+    post_ids = r.lrange(f"timeline:{user_id}", start, end)
+
+    # Batch-fetch post details from cache or DB
+    posts = []
+    for post_id in post_ids:
+        post = r.hgetall(f"post:{post_id}")
+        if post:
+            posts.append(post)
+    return posts</code></pre>
+
+        <h2>Storing Post Metadata</h2>
+        <pre><code">def create_post(author_id, content):
+    post_id = generate_id()
+    post_key = f"post:{post_id}"
+
+    r.hset(post_key, mapping={
+        "id": post_id,
+        "author_id": author_id,
+        "content": content,
+        "created_at": datetime.utcnow().isoformat(),
+        "likes": 0
+    })
+
+    publish_post(author_id, post_id)
+    return post_id</code></pre>
+
+        <h2>Fan-Out on Write vs Fan-Out on Read</h2>
+        <ul>
+          <li><strong>Fan-out on write</strong> (this approach) — writes are more expensive (push to N followers), reads are instant. Best for users with moderate follower counts.</li>
+          <li><strong>Fan-out on read</strong> — write once, merge feeds at read time. Cheaper writes, expensive reads (merge N author timelines per request). Best for "celebrity" accounts with millions of followers.</li>
+        </ul>
+        <p>Most production systems use a <strong>hybrid approach</strong>: fan-out on write for regular users, fan-out on read for high-follower accounts (e.g., accounts with 10k+ followers don't get pushed into every follower's list directly).</p>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li><strong>LPUSH</strong> prepends the newest post ID to each follower's timeline list</li>
+          <li><strong>LTRIM</strong> caps the list size after every push — keeps memory bounded</li>
+          <li><strong>LRANGE</strong> reads a page of the timeline — one command, no sorting needed</li>
+          <li>Store post IDs in the timeline, fetch full content from a separate hash or database</li>
+          <li>For celebrity accounts, use fan-out on read to avoid massive write amplification</li>
+        </ul>
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-slate-200">
+        <a href="/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          Back to All Posts
+        </a>
+      </footer>
+    </div>
+  </article>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

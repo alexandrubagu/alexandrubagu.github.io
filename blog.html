@@ -233,6 +233,244 @@
           <!-- Blog grid -->
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
 
+            <!-- Blog Card: RedisJSON -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">6 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Storing Nested JSON Without Re-Serialization Costs Using RedisJSON</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Store and update deeply nested JSON documents atomically in Redis without fetching and re-serializing the whole object. Learn JSON.SET, JSON.GET, JSON.NUMINCRBY, and JSONPath.</p>
+                <a href="blog/redis-json-storage.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: RedisSearch -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">7 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Full-Text Search with RedisSearch</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Add sub-millisecond full-text search to Redis without a separate search engine. Learn FT.CREATE, FT.SEARCH with fuzzy matching, tag filters, and FT.AGGREGATE using RedisSearch.</p>
+                <a href="blog/redis-full-text-search.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Social Timeline -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">7 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Building a Social Network Timeline with Redis List Data Type</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Build a Twitter-like feed using Redis Lists and the fan-out on write pattern. Learn LPUSH, LRANGE, and LTRIM to deliver pre-computed timelines with a single O(N) read.</p>
+                <a href="blog/redis-list-social-timeline.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Time Series -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">7 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Data Analytics with Redis Time Series Data Type</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Use RedisTimeSeries for metrics, IoT, and real-time analytics. Learn TS.CREATE, TS.ADD, TS.RANGE with aggregation, and automatic downsampling rules to keep storage lean.</p>
+                <a href="blog/redis-time-series-analytics.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Geospatial -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">6 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Finding Nearby Points with Redis Geospatial Index</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Build store locators, ride-sharing, and proximity features with Redis. Learn GEOADD, GEODIST, and GEOSEARCH to find nearby locations in milliseconds across millions of points.</p>
+                <a href="blog/redis-geospatial-index.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Pub/Sub -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">6 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Real-Time Messaging with Redis Pub-Sub</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Broadcast real-time events with Redis PUBLISH and SUBSCRIBE. Learn channel and pattern subscriptions, cache invalidation broadcasts, and when to use Redis Streams instead.</p>
+                <a href="blog/redis-pub-sub-messaging.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis HyperLogLog -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">6 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Approximate Cardinality of Large Sets Using Redis HyperLogLog</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Count unique visitors, active users, and distinct events using only 12KB of memory. Learn PFADD, PFCOUNT, and PFMERGE to estimate cardinality with &lt;1% error at any scale.</p>
+                <a href="blog/redis-hyperloglog-cardinality.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Sorted Sets Leaderboard -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">6 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Real-Time Leaderboard with Redis Sorted Sets</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Build a globally-ranked leaderboard that updates in real time using Redis Sorted Sets. Learn ZADD, ZINCRBY, ZREVRANK, and ZREVRANGE to rank players in O(log N) time.</p>
+                <a href="blog/redis-sorted-sets-leaderboard.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Web Server Rate Limiting -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">6 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Rate Limiting Web Server Requests with Redis</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Protect your API from abuse with Redis-backed rate limiting middleware. Implement per-IP and per-user limits with proper HTTP 429 responses and X-RateLimit headers in Express and Flask.</p>
+                <a href="blog/redis-web-server-rate-limit.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Session Store -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">6 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Redis Session Store for Fast Retrieval and Update of User Data</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Replace sticky sessions with a shared Redis session store. Learn HSET, HGETALL, and sliding EXPIRE for fast, horizontally-scalable user session management.</p>
+                <a href="blog/redis-session-store.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Rate Limiting & Throttling -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">7 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Redis Rate Limiting and Request Throttling for Load Smoothening</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Smooth traffic spikes with Redis-backed rate limiting. Compare fixed window, sliding window, and token bucket algorithms — with Python implementations for each approach.</p>
+                <a href="blog/redis-rate-limiting-throttling.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Distributed Locking -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">7 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Distributed Locking with Redis to Orchestrate Access for a Shared Resource</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Coordinate access to shared resources across distributed services with Redis. Learn the SET NX EX pattern, atomic Lua release scripts, and the Redlock algorithm for multi-node safety.</p>
+                <a href="blog/redis-distributed-locking.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Message Queue -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">7 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Redis as a Message Queue for Asynchronous Processing</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Use Redis Lists and Streams as a lightweight message queue. Learn LPUSH, BRPOP, LMOVE for reliable queues, and XADD/XREADGROUP for durable, consumer-group-backed job processing.</p>
+                <a href="blog/redis-message-queue-async.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
+            <!-- Blog Card: Redis Caching -->
+            <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="redis">
+              <div class="p-6">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                  <span class="article-tag">Redis</span>
+                  <span class="text-xs text-slate-600">7 min read</span>
+                </div>
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">Redis Caching: How to Cache Database Queries and Web Page Responses</h3>
+                <div class="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  June 9, 2026
+                </div>
+                <p class="text-slate-600 mb-4 flex-1 line-clamp-3">Speed up your application with Redis caching. Learn the cache-aside pattern, SETEX with TTL strategies, write-through caching, and cache invalidation techniques to eliminate slow queries.</p>
+                <a href="blog/redis-caching-database-queries.html" class="text-primary hover:underline font-medium flex items-center gap-2">Read More <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>
+              </div>
+            </div>
+
             <!-- Blog Card: avgr.app -->
             <div class="blog-card flex flex-col shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white rounded-lg overflow-hidden" data-tags="investing">
               <div class="p-6">

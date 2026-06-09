@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rate Limiting Web Server Requests with Redis - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Implement web server request rate limiting with Redis. Build per-IP and per-user limits, return proper 429 responses with Retry-After headers, and protect your API from abuse." />
+  <link rel="canonical" href="https://alexandrubagu.github.io/blog/redis-web-server-rate-limit.html" />
+  <meta name="theme-color" content="#1e293b">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Rate Limiting Web Server Requests with Redis",
+    "description": "Implement web server request rate limiting with Redis. Build per-IP and per-user limits, return proper 429 responses with Retry-After headers, and protect your API from abuse.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "url": "https://alexandrubagu.github.io" },
+    "publisher": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "logo": { "@type": "ImageObject", "url": "https://alexandrubagu.github.io/profile.jpg" } },
+    "datePublished": "2026-06-09T12:00:00+00:00",
+    "dateModified": "2026-06-09T12:00:00+00:00",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://alexandrubagu.github.io/blog/redis-web-server-rate-limit.html" },
+    "keywords": "Redis rate limiting, web server rate limit, HTTP 429 Redis, per-IP rate limit, API rate limiting middleware, Redis INCR rate limit, Express rate limit Redis",
+    "articleSection": "Redis",
+    "inLanguage": "en-US"
+  }
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }, colors: { primary: 'rgb(59, 130, 246)', slate: { 50:'rgb(248,250,252)',100:'rgb(241,245,249)',200:'rgb(226,232,240)',300:'rgb(203,213,225)',400:'rgb(148,163,184)',500:'rgb(100,116,139)',600:'rgb(71,85,105)',700:'rgb(51,65,85)',800:'rgb(30,41,59)',900:'rgb(15,23,42)' } } } }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    article code { background-color: #f1f5f9; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; }
+    article pre { background-color: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+    article pre code { background-color: transparent; padding: 0; color: #e2e8f0; font-family: 'Courier New', monospace; }
+    article h2 { font-size: 1.875rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
+    article h3 { font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #334155; }
+    article p { margin-bottom: 1rem; line-height: 1.75; color: #475569; }
+    article ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+    article li { margin-bottom: 0.5rem; color: #475569; line-height: 1.75; }
+    article strong { color: #1e293b; font-weight: 600; }
+  </style>
+  <script defer data-domain="alexandrubagu.github.io" src="https://plausible-analytics-ce-production-37e7.up.railway.app/js/script.hash.outbound-links.tagged-events.js"></script>
+  <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+</head>
+<body class="bg-white text-slate-900">
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" class="text-xl font-bold text-slate-900 hover:text-primary transition-colors">Alexandru Bogdan</a>
+        <div class="hidden md:flex items-center space-x-1">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Contact</a>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <article class="container mx-auto px-4 pt-24 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Redis</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">Rate Limiting Web Server Requests with Redis</h1>
+        <div class="flex items-center gap-6 text-slate-600">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span class="text-sm">June 9, 2026</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="text-sm">6 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="prose max-w-none text-slate-900">
+        <p class="text-lg mb-4">
+          Without rate limiting, a single misbehaving client — or a sudden traffic spike — can take your web server down. Redis-backed rate limiting at the HTTP layer stops abuse before it reaches your application, and it's fast enough to add to every request without measurable overhead.
+        </p>
+
+        <h2>Why Rate Limit at the Web Server Layer</h2>
+        <p>Rate limiting on individual API handlers is too late — your application code already ran. A middleware that runs before route handlers rejects excess requests immediately, protecting all downstream resources: databases, third-party APIs, expensive computations.</p>
+
+        <h2>Express.js Rate Limit Middleware</h2>
+        <pre><code>const express = require('express');
+const redis = require('redis');
+
+const app = express();
+const client = redis.createClient();
+
+async function rateLimitMiddleware(req, res, next) {
+  const ip = req.ip;
+  const userId = req.user?.id || 'anonymous';
+  const window = 60; // seconds
+  const limit = req.user ? 1000 : 100; // authenticated vs anonymous
+
+  // Use authenticated user ID when available, else IP
+  const key = `ratelimit:${req.user ? `user:${userId}` : `ip:${ip}`}`;
+
+  const current = await client.incr(key);
+  if (current === 1) {
+    await client.expire(key, window);
+  }
+
+  const ttl = await client.ttl(key);
+
+  // Set informational headers
+  res.setHeader('X-RateLimit-Limit', limit);
+  res.setHeader('X-RateLimit-Remaining', Math.max(0, limit - current));
+  res.setHeader('X-RateLimit-Reset', Date.now() + ttl * 1000);
+
+  if (current > limit) {
+    res.setHeader('Retry-After', ttl);
+    return res.status(429).json({
+      error: 'Too Many Requests',
+      retryAfter: ttl
+    });
+  }
+
+  next();
+}
+
+app.use(rateLimitMiddleware);</code></pre>
+
+        <h2>Per-Endpoint Rate Limits</h2>
+        <p>Different endpoints have different cost profiles. A search endpoint is more expensive than a profile view — give each its own limit.</p>
+
+        <pre><code>function createRateLimit(name, limit, windowSeconds) {
+  return async (req, res, next) => {
+    const identifier = req.user?.id || req.ip;
+    const key = `ratelimit:${name}:${identifier}`;
+
+    const current = await client.incr(key);
+    if (current === 1) await client.expire(key, windowSeconds);
+
+    if (current > limit) {
+      return res.status(429).json({ error: 'Rate limit exceeded' });
+    }
+    next();
+  };
+}
+
+// Strict limit for expensive search endpoint
+app.get('/api/search', createRateLimit('search', 10, 60), handleSearch);
+
+// Generous limit for profile reads
+app.get('/api/profile', createRateLimit('profile', 300, 60), handleProfile);
+
+// Very strict limit for auth endpoints (brute force protection)
+app.post('/api/login', createRateLimit('login', 5, 300), handleLogin);</code></pre>
+
+        <h2>Python / Flask Implementation</h2>
+        <pre><code>from flask import Flask, request, jsonify, g
+import redis
+import time
+
+app = Flask(__name__)
+r = redis.Redis(host='localhost', decode_responses=True)
+
+def rate_limit(limit=100, window=60):
+    def decorator(f):
+        def wrapped(*args, **kwargs):
+            identifier = request.headers.get('X-User-Id') or request.remote_addr
+            key = f"ratelimit:{request.endpoint}:{identifier}"
+
+            pipe = r.pipeline()
+            pipe.incr(key)
+            pipe.expire(key, window)
+            count, _ = pipe.execute()
+
+            if count > limit:
+                ttl = r.ttl(key)
+                response = jsonify({'error': 'Too Many Requests'})
+                response.headers['Retry-After'] = ttl
+                response.status_code = 429
+                return response
+
+            return f(*args, **kwargs)
+        wrapped.__name__ = f.__name__
+        return wrapped
+    return decorator
+
+@app.route('/api/data')
+@rate_limit(limit=100, window=60)
+def get_data():
+    return jsonify({'data': 'ok'})</code></pre>
+
+        <h2>Proper HTTP 429 Responses</h2>
+        <p>RFC 6585 defines the proper response for rate limiting. Clients that respect these headers back off automatically:</p>
+        <ul>
+          <li><strong>Status 429</strong> — Too Many Requests</li>
+          <li><strong>Retry-After</strong> — seconds until the client should retry (or an HTTP date)</li>
+          <li><strong>X-RateLimit-Limit</strong> — the configured limit for this endpoint</li>
+          <li><strong>X-RateLimit-Remaining</strong> — requests left in the current window</li>
+          <li><strong>X-RateLimit-Reset</strong> — Unix timestamp when the window resets</li>
+        </ul>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li><strong>Middleware placement</strong> — rate limit before route handlers to block abuse at the edge</li>
+          <li><strong>Differentiate limits</strong> — authenticated users deserve higher limits than anonymous IPs</li>
+          <li><strong>Per-endpoint limits</strong> — expensive endpoints need stricter controls</li>
+          <li><strong>Return Retry-After</strong> — well-behaved clients use it to back off gracefully</li>
+          <li>Redis pipelines keep the middleware to 1 round-trip per request</li>
+        </ul>
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-slate-200">
+        <a href="/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          Back to All Posts
+        </a>
+      </footer>
+    </div>
+  </article>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

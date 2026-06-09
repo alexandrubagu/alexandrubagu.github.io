@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Storing Nested JSON Without Re-Serialization Costs Using RedisJSON - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Store and manipulate nested JSON documents natively in Redis with RedisJSON. Learn JSON.SET, JSON.GET with JSONPath, JSON.ARRAPPEND, and atomic partial updates without re-serializing the whole document." />
+  <link rel="canonical" href="https://alexandrubagu.github.io/blog/redis-json-storage.html" />
+  <meta name="theme-color" content="#1e293b">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Storing Nested JSON Without Re-Serialization Costs Using RedisJSON",
+    "description": "Store and manipulate nested JSON documents natively in Redis with RedisJSON. Learn JSON.SET, JSON.GET with JSONPath, JSON.ARRAPPEND, and atomic partial updates without re-serializing the whole document.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "url": "https://alexandrubagu.github.io" },
+    "publisher": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "logo": { "@type": "ImageObject", "url": "https://alexandrubagu.github.io/profile.jpg" } },
+    "datePublished": "2026-06-09T12:00:00+00:00",
+    "dateModified": "2026-06-09T12:00:00+00:00",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://alexandrubagu.github.io/blog/redis-json-storage.html" },
+    "keywords": "RedisJSON, JSON.SET JSON.GET, Redis nested JSON, Redis Stack JSON, JSONPath Redis, Redis partial update JSON, Redis JSON document store",
+    "articleSection": "Redis",
+    "inLanguage": "en-US"
+  }
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }, colors: { primary: 'rgb(59, 130, 246)', slate: { 50:'rgb(248,250,252)',100:'rgb(241,245,249)',200:'rgb(226,232,240)',300:'rgb(203,213,225)',400:'rgb(148,163,184)',500:'rgb(100,116,139)',600:'rgb(71,85,105)',700:'rgb(51,65,85)',800:'rgb(30,41,59)',900:'rgb(15,23,42)' } } } }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    article code { background-color: #f1f5f9; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; }
+    article pre { background-color: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+    article pre code { background-color: transparent; padding: 0; color: #e2e8f0; font-family: 'Courier New', monospace; }
+    article h2 { font-size: 1.875rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
+    article h3 { font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #334155; }
+    article p { margin-bottom: 1rem; line-height: 1.75; color: #475569; }
+    article ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+    article li { margin-bottom: 0.5rem; color: #475569; line-height: 1.75; }
+    article strong { color: #1e293b; font-weight: 600; }
+  </style>
+  <script defer data-domain="alexandrubagu.github.io" src="https://plausible-analytics-ce-production-37e7.up.railway.app/js/script.hash.outbound-links.tagged-events.js"></script>
+  <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+</head>
+<body class="bg-white text-slate-900">
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" class="text-xl font-bold text-slate-900 hover:text-primary transition-colors">Alexandru Bogdan</a>
+        <div class="hidden md:flex items-center space-x-1">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Contact</a>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <article class="container mx-auto px-4 pt-24 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Redis</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">Storing Nested JSON Without Re-Serialization Costs Using RedisJSON</h1>
+        <div class="flex items-center gap-6 text-slate-600">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span class="text-sm">June 9, 2026</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="text-sm">6 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="prose max-w-none text-slate-900">
+        <p class="text-lg mb-4">
+          The classic Redis pattern for storing objects is to serialize them to JSON strings with <code>SET</code> and deserialize on <code>GET</code>. This works — until you need to update a single nested field. With a plain string you must fetch the entire document, deserialize, mutate, re-serialize, and write it back. RedisJSON eliminates that round-trip entirely.
+        </p>
+
+        <h2>The Problem with Serialized Strings</h2>
+        <p>Consider a user profile stored as a JSON string:</p>
+        <pre><code># Old approach: full document round-trip to update one field
+GET user:42
+# -> '{"name":"Alice","email":"alice@example.com","settings":{"theme":"dark","notifications":true},"score":1500}'
+
+# To update score: fetch -> parse -> mutate -> serialize -> write
+SET user:42 '{"name":"Alice","email":"alice@example.com","settings":{"theme":"dark","notifications":true},"score":1501}'</code></pre>
+
+        <p>With RedisJSON you update just the field you need — atomically, server-side, with no round-trip deserialization.</p>
+
+        <h2>Storing a JSON Document</h2>
+        <pre><code># JSON.SET key path value
+# $ is the root path (JSONPath syntax)
+JSON.SET user:42 $ '{"name":"Alice","email":"alice@example.com","settings":{"theme":"dark","notifications":true},"score":1500}'
+
+# Retrieve the whole document
+JSON.GET user:42
+
+# Retrieve a nested field only
+JSON.GET user:42 $.name
+# -> ["Alice"]
+
+JSON.GET user:42 $.settings.theme
+# -> ["dark"]</code></pre>
+
+        <h2>Atomic Partial Updates</h2>
+        <p>The key advantage: update deeply nested fields without touching the rest of the document.</p>
+
+        <pre><code># Update a single field (no fetch-deserialize-reserialize)
+JSON.SET user:42 $.settings.theme '"light"'
+
+# Increment a numeric field atomically
+JSON.NUMINCRBY user:42 $.score 10
+# -> [1510]
+
+# Set a new nested field
+JSON.SET user:42 $.settings.language '"en"'
+
+# Retrieve multiple paths in one call
+JSON.GET user:42 $.name $.score $.settings
+# -> {"$.name":["Alice"],"$.score":[1510],"$.settings":[{"theme":"light","notifications":true,"language":"en"}]}</code></pre>
+
+        <h2>Working with Arrays</h2>
+        <pre><code># Store a document with an array
+JSON.SET product:10 $ '{"name":"Laptop","tags":["electronics","computers"],"reviews":[]}'
+
+# Append to an array (no re-serialization)
+JSON.ARRAPPEND product:10 $.tags '"sale"'
+# -> [3]  (new array length)
+
+JSON.ARRAPPEND product:10 $.reviews '{"user":"bob","rating":5,"text":"Great laptop!"}'
+
+# Get array length
+JSON.ARRLEN product:10 $.tags
+# -> [3]
+
+# Get a specific array element
+JSON.GET product:10 $.tags[0]
+# -> ["electronics"]</code></pre>
+
+        <h2>Multi-Key Operations</h2>
+        <pre><code># Get the same path from multiple keys at once
+JSON.MGET user:42 user:43 user:44 $.name
+# -> [["Alice"], ["Bob"], ["Carol"]]</code></pre>
+
+        <h2>Python Integration</h2>
+        <pre><code>import redis
+import json
+
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+
+def save_user(user_id, user_data):
+    r.execute_command('JSON.SET', f'user:{user_id}', '$', json.dumps(user_data))
+
+def get_user(user_id):
+    result = r.execute_command('JSON.GET', f'user:{user_id}')
+    return json.loads(result) if result else None
+
+def update_user_field(user_id, path, value):
+    # path example: "$.settings.theme"
+    r.execute_command('JSON.SET', f'user:{user_id}', path, json.dumps(value))
+
+def increment_score(user_id, delta=1):
+    result = r.execute_command('JSON.NUMINCRBY', f'user:{user_id}', '$.score', delta)
+    return json.loads(result)[0]
+
+def add_tag(product_id, tag):
+    r.execute_command('JSON.ARRAPPEND', f'product:{product_id}', '$.tags', json.dumps(tag))
+
+# Usage
+save_user(42, {"name": "Alice", "score": 1500, "settings": {"theme": "dark"}})
+update_user_field(42, "$.settings.theme", "light")
+new_score = increment_score(42, delta=10)
+print(f"New score: {new_score}")  # 1510</code></pre>
+
+        <h2>Integration with RedisSearch</h2>
+        <p>RedisJSON integrates natively with RedisSearch — you can index JSON document fields directly for full-text and numeric queries:</p>
+
+        <pre><code># Create a search index on JSON documents
+FT.CREATE idx:users
+  ON JSON
+  PREFIX 1 user:
+  SCHEMA
+    $.name AS name TEXT
+    $.email AS email TAG
+    $.score AS score NUMERIC SORTABLE
+    $.settings.theme AS theme TAG
+
+# HSET is replaced by JSON.SET for document updates
+# Search works identically to HASH-backed indexes
+FT.SEARCH idx:users "@score:[1500 +inf]" SORTBY score DESC</code></pre>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li><strong>JSON.SET</strong> stores a full document or updates any nested path using JSONPath syntax</li>
+          <li><strong>JSON.GET</strong> retrieves the whole document or specific paths — multiple paths in one call</li>
+          <li><strong>JSON.NUMINCRBY</strong> and <strong>JSON.ARRAPPEND</strong> mutate fields atomically server-side — no round-trip needed</li>
+          <li><strong>JSON.MGET</strong> fetches the same path from multiple keys in a single command</li>
+          <li>RedisJSON documents are first-class citizens in RedisSearch — index JSON fields directly for full-text and numeric queries</li>
+          <li>All operations are atomic — concurrent updates to different paths of the same document are safe</li>
+        </ul>
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-slate-200">
+        <a href="/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          Back to All Posts
+        </a>
+      </footer>
+    </div>
+  </article>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

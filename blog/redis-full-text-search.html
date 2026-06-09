@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Full-Text Search with RedisSearch - Bâgu Alexandru Bogdan</title>
+  <meta name="description" content="Implement full-text search with RedisSearch. Learn FT.CREATE, FT.SEARCH, fuzzy matching, aggregations, and how to build fast product and document search without a dedicated search engine." />
+  <link rel="canonical" href="https://alexandrubagu.github.io/blog/redis-full-text-search.html" />
+  <meta name="theme-color" content="#1e293b">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Full-Text Search with RedisSearch",
+    "description": "Implement full-text search with RedisSearch. Learn FT.CREATE, FT.SEARCH, fuzzy matching, aggregations, and how to build fast product and document search without a dedicated search engine.",
+    "image": "https://alexandrubagu.github.io/profile.jpg",
+    "author": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "url": "https://alexandrubagu.github.io" },
+    "publisher": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "logo": { "@type": "ImageObject", "url": "https://alexandrubagu.github.io/profile.jpg" } },
+    "datePublished": "2026-06-09T12:00:00+00:00",
+    "dateModified": "2026-06-09T12:00:00+00:00",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://alexandrubagu.github.io/blog/redis-full-text-search.html" },
+    "keywords": "RedisSearch, FT.CREATE FT.SEARCH, Redis full-text search, Redis Stack search, Redis inverted index, Redis fuzzy search, FT.AGGREGATE Redis",
+    "articleSection": "Redis",
+    "inLanguage": "en-US"
+  }
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }, colors: { primary: 'rgb(59, 130, 246)', slate: { 50:'rgb(248,250,252)',100:'rgb(241,245,249)',200:'rgb(226,232,240)',300:'rgb(203,213,225)',400:'rgb(148,163,184)',500:'rgb(100,116,139)',600:'rgb(71,85,105)',700:'rgb(51,65,85)',800:'rgb(30,41,59)',900:'rgb(15,23,42)' } } } }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    article code { background-color: #f1f5f9; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; }
+    article pre { background-color: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1rem; }
+    article pre code { background-color: transparent; padding: 0; color: #e2e8f0; font-family: 'Courier New', monospace; }
+    article h2 { font-size: 1.875rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
+    article h3 { font-size: 1.5rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #334155; }
+    article p { margin-bottom: 1rem; line-height: 1.75; color: #475569; }
+    article ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+    article li { margin-bottom: 0.5rem; color: #475569; line-height: 1.75; }
+    article strong { color: #1e293b; font-weight: 600; }
+  </style>
+  <script defer data-domain="alexandrubagu.github.io" src="https://plausible-analytics-ce-production-37e7.up.railway.app/js/script.hash.outbound-links.tagged-events.js"></script>
+  <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+</head>
+<body class="bg-white text-slate-900">
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <a href="/index.html" class="text-xl font-bold text-slate-900 hover:text-primary transition-colors">Alexandru Bogdan</a>
+        <div class="hidden md:flex items-center space-x-1">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary transition-colors">Contact</a>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-900">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-slate-200">
+        <div class="flex flex-col space-y-2">
+          <a href="/index.html#home" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Home</a>
+          <a href="/index.html#experience" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Experience</a>
+          <a href="/index.html#projects" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Projects</a>
+          <a href="/blog.html" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Blog</a>
+          <a href="/index.html#contact" class="px-3 py-2 text-sm font-medium text-slate-900 hover:text-primary hover:bg-slate-100 rounded-md">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <article class="container mx-auto px-4 pt-24 pb-16">
+    <div class="max-w-3xl mx-auto">
+      <header class="mb-12">
+        <span class="px-3 py-1 bg-slate-200 text-slate-700 text-xs rounded-full mb-4 inline-block">Redis</span>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900">Full-Text Search with RedisSearch</h1>
+        <div class="flex items-center gap-6 text-slate-600">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <span class="text-sm">June 9, 2026</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="text-sm">7 min read</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="prose max-w-none text-slate-900">
+        <p class="text-lg mb-4">
+          SQL <code>LIKE '%query%'</code> scans every row. Elasticsearch is a separate cluster to maintain. RedisSearch (part of Redis Stack) adds a true inverted index directly inside Redis, enabling sub-millisecond full-text search over your existing Redis data with no extra infrastructure.
+        </p>
+
+        <h2>How RedisSearch Works</h2>
+        <p>RedisSearch builds an inverted index on top of Redis Hashes or JSON documents. You define which fields to index — the module maintains the index automatically as documents are added or updated. Queries hit the index directly, not the underlying data.</p>
+
+        <h2>Creating an Index</h2>
+        <pre><code># Create an index on the "products" prefix
+FT.CREATE idx:products
+  ON HASH
+  PREFIX 1 product:
+  SCHEMA
+    name TEXT WEIGHT 2.0
+    description TEXT
+    category TAG
+    price NUMERIC SORTABLE
+    rating NUMERIC SORTABLE
+
+# Fields:
+# TEXT    — full-text indexed, supports stemming and fuzzy
+# TAG     — exact-match categorical field (filterable)
+# NUMERIC — range queries and sorting</code></pre>
+
+        <h2>Indexing Documents</h2>
+        <pre><code># Add documents via HSET (RedisSearch auto-indexes anything matching the prefix)
+HSET product:1 name "Wireless Headphones" description "Noise cancelling bluetooth headphones" category "electronics" price 79.99 rating 4.5
+HSET product:2 name "Coffee Maker" description "12-cup programmable drip coffee maker" category "kitchen" price 49.99 rating 4.2
+HSET product:3 name "Running Shoes" description "Lightweight mesh running shoes for trail" category "sports" price 120.00 rating 4.8</code></pre>
+
+        <h2>Searching</h2>
+        <pre><code># Simple full-text search
+FT.SEARCH idx:products "headphones"
+
+# Phrase search
+FT.SEARCH idx:products '"noise cancelling"'
+
+# Fuzzy search (tolerates typos, 1 edit distance)
+FT.SEARCH idx:products "%headphonez%"
+
+# Filter by tag + text
+FT.SEARCH idx:products "@category:{electronics} wireless"
+
+# Numeric range filter
+FT.SEARCH idx:products "@price:[0 100]"  # under $100
+
+# Combined: electronics, wireless, under $100, sorted by rating
+FT.SEARCH idx:products "@category:{electronics} wireless @price:[0 100]"
+  SORTBY rating DESC
+  LIMIT 0 10</code></pre>
+
+        <h2>Python Integration</h2>
+        <pre><code">import redis
+
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+
+def search_products(query, category=None, max_price=None, page=1, per_page=20):
+    filters = [query]
+
+    if category:
+        filters.append(f"@category:{{{category}}}")
+    if max_price:
+        filters.append(f"@price:[0 {max_price}]")
+
+    full_query = " ".join(filters)
+    offset = (page - 1) * per_page
+
+    result = r.execute_command(
+        'FT.SEARCH', 'idx:products', full_query,
+        'SORTBY', 'rating', 'DESC',
+        'LIMIT', offset, per_page
+    )
+
+    total = result[0]
+    docs = []
+    for i in range(1, len(result), 2):
+        doc_id = result[i]
+        fields = result[i + 1]
+        doc = dict(zip(fields[::2], fields[1::2]))
+        doc['id'] = doc_id
+        docs.append(doc)
+
+    return {"total": total, "results": docs}
+
+results = search_products("wireless", category="electronics", max_price=100)
+for product in results["results"]:
+    print(f"{product['name']} — ${product['price']} ★{product['rating']}")</code></pre>
+
+        <h2>Aggregations</h2>
+        <pre><code"># Count products per category
+FT.AGGREGATE idx:products "*"
+  GROUPBY 1 @category
+  REDUCE COUNT 0 AS product_count
+  SORTBY 2 @product_count DESC
+
+# Average price per category
+FT.AGGREGATE idx:products "*"
+  GROUPBY 1 @category
+  REDUCE AVG 1 @price AS avg_price</code></pre>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li><strong>FT.CREATE</strong> defines an index schema — TEXT, TAG, NUMERIC field types with different query capabilities</li>
+          <li><strong>FT.SEARCH</strong> queries the inverted index instantly — no table scans</li>
+          <li>Fuzzy search with <code>%term%</code> tolerates typos and spelling variations</li>
+          <li>TAG fields enable exact-match filters (category, status, tags)</li>
+          <li>NUMERIC fields support range queries and sorting</li>
+          <li>Documents are indexed automatically when added via HSET with the matching prefix — no separate indexing step</li>
+        </ul>
+      </div>
+
+      <footer class="mt-16 pt-8 border-t border-slate-200">
+        <a href="/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          Back to All Posts
+        </a>
+      </footer>
+    </div>
+  </article>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
