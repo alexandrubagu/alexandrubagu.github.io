@@ -100,113 +100,128 @@
           </div>
           <div class="flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="text-sm">7 min read</span>
+            <span class="text-sm">10 min read</span>
           </div>
         </div>
       </header>
 
       <div class="prose max-w-none text-slate-900">
         <p class="text-lg mb-4">
-          When multiple servers compete to update the same record, send the same notification, or run the same scheduled job — race conditions happen. Distributed locks with Redis let you enforce mutual exclusion across any number of processes or machines without a dedicated coordination service.
+          When multiple servers compete to update the same record, send the same notification, or run the same scheduled job — race conditions happen. Redis distributed locks enforce mutual exclusion across any number of processes or machines. Let's look at exactly how that works at the Redis command level.
         </p>
 
-        <h2>The Problem: Race Conditions in Distributed Systems</h2>
-        <p>In a single-process app, a mutex handles concurrency. In a distributed system with multiple servers, threads, or workers, you need a lock that all participants can see — stored in a shared location like Redis.</p>
+        <h2>Acquiring the Lock: SET NX PX</h2>
+        <p>The entire acquisition is a single Redis command:</p>
 
-        <p>Common scenarios requiring distributed locks:</p>
+        <pre><code>SET lock:inventory:item42 "550e8400-e29b-41d4-a716-446655440000" NX PX 30000</code></pre>
+
+        <p>Three flags do all the work:</p>
         <ul>
-          <li>Preventing duplicate email sends when multiple workers pick up the same job</li>
-          <li>Ensuring only one server runs a scheduled cron job at a time</li>
-          <li>Serializing access to a third-party API with strict rate limits</li>
-          <li>Coordinating inventory deductions to prevent overselling</li>
+          <li><strong>NX</strong> — only set if the key does <em>not</em> exist. This is the mutex. Redis is single-threaded, so only one caller wins; everyone else gets <code>nil</code>.</li>
+          <li><strong>PX 30000</strong> — expire in 30,000 milliseconds. If the lock holder crashes, the key disappears automatically. No deadlock.</li>
+          <li><strong>The UUID value</strong> — identity. The holder stores a unique token, not a static string like <code>"locked"</code>. This becomes critical at release time.</li>
         </ul>
 
-        <h2>The SET NX EX Pattern</h2>
-        <p>The foundation of Redis locking is a single atomic command: <code>SET key value NX EX seconds</code>. <strong>NX</strong> means "only set if Not eXists", and <strong>EX</strong> sets an expiry — preventing deadlocks if the lock holder crashes.</p>
+        <p>Note: <code>PX</code> (milliseconds) is preferred over <code>EX</code> (seconds) because it gives finer-grained control over validity windows — especially important when multiple Redis nodes are involved.</p>
 
-        <pre><code># Acquire lock (returns OK on success, nil on failure)
-SET lock:inventory:item42 "worker-uuid-abc123" NX EX 30
+        <h2>Releasing the Lock: Atomic Lua Check-and-Delete</h2>
+        <p>A naive <code>DEL lock:inventory:item42</code> is dangerous. Consider: Worker A's TTL expires while it's still running. Redis auto-deletes the key. Worker B acquires the lock. Worker A finishes and calls <code>DEL</code> — it just deleted Worker B's lock.</p>
 
-# Check if lock is held
-GET lock:inventory:item42   # "worker-uuid-abc123"
+        <p>The fix is an atomic check-and-delete via a Lua script. Redis executes Lua atomically — no other command can run between the <code>GET</code> and the <code>DEL</code>:</p>
 
-# Release lock (must verify owner before deleting)
-# Use a Lua script for atomic check-and-delete:
-EVAL "
-  if redis.call('get', KEYS[1]) == ARGV[1] then
-    return redis.call('del', KEYS[1])
-  else
-    return 0
-  end
-" 1 lock:inventory:item42 "worker-uuid-abc123"</code></pre>
-
-        <p>The unique value (UUID) is critical — it ensures only the lock owner can release it, preventing a slow worker from accidentally releasing a lock that was re-acquired after its TTL expired.</p>
-
-        <h2>Python Implementation</h2>
-        <pre><code>import redis
-import uuid
-import time
-
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-
-RELEASE_SCRIPT = """
-if redis.call('get', KEYS[1]) == ARGV[1] then
-    return redis.call('del', KEYS[1])
+        <pre><code>-- Unlock script (executed atomically by Redis)
+if redis.call("get", KEYS[1]) == ARGV[1] then
+  return redis.call("del", KEYS[1])
 else
-    return 0
-end
-"""
+  return 0
+end</code></pre>
 
-def acquire_lock(resource, ttl_seconds=30, retry=3, retry_delay=0.1):
-    lock_key = f"lock:{resource}"
-    lock_value = str(uuid.uuid4())
+        <p>Only the process holding the matching UUID can delete the key. A late worker whose token no longer matches gets <code>0</code> — its lock was already expired and re-acquired by someone else.</p>
 
-    for attempt in range(retry):
-        acquired = r.set(lock_key, lock_value, nx=True, ex=ttl_seconds)
-        if acquired:
-            return lock_key, lock_value
-        time.sleep(retry_delay * (attempt + 1))  # backoff
+        <h2>Why Lua?</h2>
+        <p>Redis does have a native transaction mechanism — <code>MULTI</code>/<code>EXEC</code>. But it can't do what we need here. Inside a <code>MULTI</code> block, commands are queued and sent as a batch; you cannot branch on the result of one command to decide whether to run the next. There is no "if the GET returned this value, then DEL" inside a transaction.</p>
 
-    return None, None
+        <p>The naive alternative is two separate round trips:</p>
 
-def release_lock(lock_key, lock_value):
-    r.eval(RELEASE_SCRIPT, 1, lock_key, lock_value)
+        <pre><code># NOT safe — another client can act between these two commands
+GET lock:inventory:item42      # → "our-uuid"
+DEL lock:inventory:item42      # ← a different worker may have taken the lock here</code></pre>
 
-# Usage
-lock_key, lock_value = acquire_lock("inventory:item42", ttl_seconds=10)
-if lock_key:
-    try:
-        # Critical section — only one worker runs this at a time
-        update_inventory(42)
-    finally:
-        release_lock(lock_key, lock_value)
-else:
-    print("Could not acquire lock — another worker is processing")</code></pre>
+        <p>Between the <code>GET</code> and the <code>DEL</code> there is a window — however small — where another process can acquire the lock. On a loaded system or a slow network, that window is real.</p>
 
-        <h2>The Redlock Algorithm</h2>
-        <p>For stronger guarantees against Redis node failures, Redis creator Salvatore Sanfilippo proposed <strong>Redlock</strong>: acquire the lock on a majority of N independent Redis instances (typically 5). The lock is valid only if acquired on at least ⌊N/2⌋+1 instances within a time window.</p>
+        <p>Lua closes it. Redis is single-threaded: while a Lua script is executing, no other client command runs. The <code>GET</code> and the <code>DEL</code> are fused into one indivisible operation from the perspective of every other client. There is no window. That is the only reason Lua is used here — not for its language features, but for the atomicity guarantee Redis gives to any script it runs.</p>
+
+        <h2>Script Caching: SCRIPT LOAD and EVALSHA</h2>
+        <p>Sending the full Lua source on every unlock call wastes bandwidth. Redis has a smarter path: preload the script once, then call it by its SHA1 hash.</p>
+
+        <pre><code># Preload once at startup — Redis stores the script server-side
+SCRIPT LOAD "if redis.call(\"get\",KEYS[1]) == ARGV[1] then ..."
+# → "3c78c2a4f5f3c2f39c28b7a91e2d5c3d6e7f8a9b"  (SHA1 hash)
+
+# Every subsequent call uses the hash, not the full script
+EVALSHA 3c78c2a4f5f3c2f39c28b7a91e2d5c3d6e7f8a9b 1 lock:inventory:item42 "uuid"</code></pre>
+
+        <p>The hash is deterministic — the same script always produces the same SHA1. A robust implementation verifies this at startup: compute the expected hash locally, compare it to what Redis returned for <code>SCRIPT LOAD</code>, and reject a mismatch. This catches silent script corruption.</p>
+
+        <h2>Extending a Lock: PEXPIRE with the GT Flag</h2>
+        <p>Sometimes a critical section runs longer than anticipated. You need to extend the TTL without releasing and re-acquiring. The extend Lua script uses <code>PEXPIRE</code> with the <code>GT</code> flag:</p>
+
+        <pre><code>-- Extend script
+if redis.call("get", KEYS[1]) == ARGV[1] then
+  return redis.call("pexpire", KEYS[1], ARGV[2], "GT")
+else
+  return redis.error_reply("NOT LOCKED")
+end</code></pre>
+
+        <p><code>GT</code> means "only update the expiry if the new TTL is <em>greater than</em> the current one." This prevents a race where two threads both try to extend — the second call cannot accidentally shorten the TTL that the first call just set.</p>
+
+        <p>If the <code>GET</code> returns a different UUID, Redis returns an error. Your process doesn't own the lock anymore — it expired and someone else took it. The right response is to abort your work, not blindly extend a lock you no longer hold.</p>
+
+        <h2>The Redlock Algorithm: Quorum and Validity</h2>
+        <p>A single Redis node is a single point of failure. If it goes down after granting your lock but before you use it, you have no lock. Redlock solves this by running the same <code>SET NX PX</code> against N independent Redis masters (typically 3 or 5) and requiring a majority:</p>
+
+        <pre><code>quorum = floor(N / 2) + 1   # e.g. 3 nodes → quorum = 2</code></pre>
+
+        <p>But winning the majority vote is not enough on its own. The algorithm also measures how long the acquisition round took and subtracts a drift budget:</p>
+
+        <pre><code>drift    = ttl * drift_factor + 0.002   # e.g. 1% of TTL + 2ms fixed
+validity = ttl - elapsed_time - drift</code></pre>
+
+        <p><strong>drift_factor</strong> accounts for clock skew between nodes and network jitter. The fixed <code>0.002</code> (2ms) covers the minimum overhead of a round-trip even on a local network.</p>
+
+        <p>The lock is accepted only when <strong>both</strong> conditions hold:</p>
         <ul>
-          <li>Tolerates up to ⌊N/2⌋ Redis node failures</li>
-          <li>Uses the <code>redlock-py</code> or <code>redlock</code> (Node.js) libraries</li>
-          <li>Overkill for most applications — single-node locking is sufficient when Redis has persistence and replication</li>
+          <li><code>successes &gt;= quorum</code> — a majority of nodes confirmed the lock</li>
+          <li><code>validity &gt; 0</code> — there is still meaningful time left before expiry</li>
         </ul>
 
-        <h2>Lock TTL Best Practices</h2>
-        <ul>
-          <li><strong>TTL must exceed max expected work time</strong> — if your critical section can take up to 5 seconds, set TTL to 15+ seconds</li>
-          <li><strong>Keep critical sections short</strong> — long-held locks create contention; do minimal work inside the lock</li>
-          <li><strong>Never extend locks without re-acquiring</strong> — a lock that expires while held is safer than a runaway lock</li>
-          <li><strong>Log failed acquisitions</strong> — contention spikes indicate a bottleneck in your design</li>
-        </ul>
+        <p>If validity is negative it means by the time you finished talking to all the nodes, the TTL you set on the first node may have already expired. The lock is rejected and retried — even though you technically "won" the vote.</p>
 
-        <h2>Key Takeaways</h2>
-        <ul>
-          <li><strong>SET NX EX</strong> atomically acquires a lock with automatic expiry — no deadlocks</li>
-          <li><strong>Store a unique value</strong> as the lock owner to safely release only your own lock</li>
-          <li><strong>Use Lua scripts</strong> for atomic check-and-release operations</li>
-          <li><strong>Retry with backoff</strong> when acquisition fails — don't spin-wait</li>
-          <li><strong>Redlock</strong> provides stronger guarantees in multi-node setups but adds complexity</li>
-        </ul>
+        <h2>Retry with Exponential Backoff</h2>
+        <p>When acquisition fails, spinning immediately creates a thundering herd — all contending processes hammering Redis at the same instant. The safe pattern is exponential backoff with a cap:</p>
+
+        <pre><code>wait_ms = min(retry_interval_max, retry_interval_base * attempts²)
+
+# Example with base=300ms, max=3000ms:
+# attempt 1 → min(3000, 300 * 1) = 300ms
+# attempt 2 → min(3000, 300 * 4) = 1200ms
+# attempt 3 → min(3000, 300 * 9) = 2700ms</code></pre>
+
+        <p>The squared growth means processes spread out quickly. The cap prevents unbounded waits. After <code>max_retry</code> attempts the caller gets <code>:error</code> — it's up to the application to decide whether to surface that as a retry later or a user-visible failure.</p>
+
+        <h2>Putting It Together with a Library</h2>
+        <p>All of the above — <code>SET NX PX</code>, EVALSHA unlock, quorum voting, validity window, exponential backoff — is what a solid Redlock implementation wires together. In Elixir, <a href="https://github.com/lyokato/redlock" class="text-blue-600 hover:underline">lyokato/redlock</a> handles all of it. The surface API collapses to three lines:</p>
+
+        <pre><code>case Redlock.transaction("lock:order:#{order_id}", 10, fn ->
+  deduct_inventory(order_id)
+  charge_payment(order_id)
+  {:ok, :done}
+end) do
+  {:ok, :done}            -> :ok
+  {:error, :lock_failure} -> {:error, :try_again}
+end</code></pre>
+
+        <p><code>transaction/3</code> acquires across all configured nodes, verifies quorum and validity, runs your callback, and releases via EVALSHA — even if the callback raises. The machinery above is invisible, but understanding it tells you exactly what guarantees you're getting and where the edge cases live.</p>
       </div>
 
       <footer class="mt-16 pt-8 border-t border-slate-200">
