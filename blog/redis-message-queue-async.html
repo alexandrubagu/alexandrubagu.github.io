@@ -18,9 +18,9 @@
     "author": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "url": "https://alexandrubagu.github.io" },
     "publisher": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "logo": { "@type": "ImageObject", "url": "https://alexandrubagu.github.io/profile.jpg" } },
     "datePublished": "2026-06-09T12:00:00+00:00",
-    "dateModified": "2026-06-09T12:00:00+00:00",
+    "dateModified": "2026-06-23T12:00:00+00:00",
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://alexandrubagu.github.io/blog/redis-message-queue-async.html" },
-    "keywords": "Redis message queue, Redis async processing, Redis LPUSH BRPOP, Redis Streams, consumer groups, job queue Redis, Redis Lists queue",
+    "keywords": "Redis message queue, Redis async processing, Redis LPUSH BRPOP, Redis Streams, consumer groups, job queue Redis, Redis Lists queue, off_broadway_redis_stream, Broadway Elixir, Redis Streams Elixir, XACK XCLAIM Elixir",
     "articleSection": "Redis",
     "inLanguage": "en-US"
   }
@@ -100,7 +100,7 @@
           </div>
           <div class="flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="text-sm">7 min read</span>
+            <span class="text-sm">11 min read</span>
           </div>
         </div>
       </header>
@@ -184,11 +184,93 @@ XACK jobs:stream workers 1686300000000-0</code></pre>
           <li><strong>Redis Streams</strong> — higher reliability requirements, multiple consumer workers, need for message history or replay.</li>
         </ul>
 
+        <h2>Production Elixir: <code>off_broadway_redis_stream</code></h2>
+        <p>
+          If you are running Elixir, there is a community-driven Broadway producer specifically built for this use case:
+          <code>off_broadway_redis_stream</code>. It wraps Redis Streams into a native Broadway pipeline, automatically
+          managing consumer groups, distributed processing, backpressure, and fault tolerance — so you write business
+          logic instead of plumbing.
+        </p>
+
+        <h3>Adding the Dependency</h3>
+        <pre><code>defp deps do
+  [
+    {:off_broadway_redis_stream, "~> 0.10.0"}
+  ]
+end</code></pre>
+
+        <h3>Implementation Template</h3>
+        <p>Configure a Broadway pipeline to pull tasks concurrently out of a Redis Stream:</p>
+        <pre><code>defmodule MyApp.OrderBroadway do
+  use Broadway
+
+  alias Broadway.Message
+
+  def start_link(_opts) do
+    Broadway.start_link(__MODULE__,
+      name: __MODULE__,
+      producer: [
+        module: {OffBroadwayRedisStream.Producer, [
+          redis_client_opts: [host: "localhost", port: 6379],
+          stream: "orders:stream",
+          group: "order_processing_group",
+          consumer_name: "broadway_node_#{:rand.uniform(1000)}"
+        ]}
+      ],
+      processors: [
+        default: [
+          concurrency: 3,
+          min_demand: 1,
+          max_demand: 10
+        ]
+      ]
+    )
+  end
+
+  @impl true
+  def handle_message(_processor, %Message{data: [_id, fields]} = message, _context) do
+    payload = Map.new(Enum.chunk_every(fields, 2), fn [k, v] -> {k, v} end)
+
+    IO.inspect(payload, label: "Broadway Processing Order")
+
+    # Broadway automatically XACKs this message if no error is raised
+    message
+  end
+end</code></pre>
+
+        <p>
+          The <code>concurrency</code> option maps directly to concurrent Elixir processes. Broadway's demand-driven
+          model means each processor only pulls as many messages as it can handle, giving you built-in backpressure
+          without any extra configuration.
+        </p>
+
+        <h3>How it Handles Failures</h3>
+        <p>The real value of running Redis Streams inside Broadway comes from how <code>off_broadway_redis_stream</code> maps to the Redis primitives you have already seen:</p>
+        <ul>
+          <li>
+            <strong>Automatic <code>XACK</code></strong> — if <code>handle_message/3</code> finishes without raising,
+            the adapter calls <code>XACK</code> automatically. You never write acknowledgment logic by hand.
+          </li>
+          <li>
+            <strong>Built-in <code>XCLAIM</code> failover</strong> — the library uses a heartbeat strategy to detect
+            dead nodes. If a cluster node dies mid-processing, the remaining Broadway nodes detect the failure and
+            call <code>XCLAIM</code> to take ownership of the pending messages, preventing them from being stuck
+            in the PEL indefinitely.
+          </li>
+          <li>
+            <strong>Poison pill handling</strong> — if a message raises inside <code>handle_message/3</code>, Broadway's
+            native <code>handle_failed/2</code> callback intercepts it. Push the message to a dead-letter stream there
+            and return it with <code>Message.ack_immediately/1</code> to prevent the same message from crashing
+            your pipeline in an infinite loop.
+          </li>
+        </ul>
+
         <h2>Key Takeaways</h2>
         <ul>
           <li><strong>LPUSH + BRPOP</strong> is the simplest queue — producer pushes, worker blocks and pops</li>
           <li><strong>LMOVE</strong> provides at-least-once delivery by keeping jobs in a processing list until acknowledged</li>
           <li><strong>Redis Streams</strong> with XREADGROUP scales to multiple parallel workers with reliable delivery</li>
+          <li><strong><code>off_broadway_redis_stream</code></strong> wraps Redis Streams in a Broadway pipeline for Elixir, handling <code>XACK</code>, <code>XCLAIM</code> failover, and backpressure automatically</li>
           <li>Redis queues add no new infrastructure if you already use Redis for caching</li>
           <li>For very high throughput or complex routing, dedicated brokers (RabbitMQ, Kafka) are better choices</li>
         </ul>
