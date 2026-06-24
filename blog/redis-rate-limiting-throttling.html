@@ -18,7 +18,7 @@
     "author": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "url": "https://alexandrubagu.github.io" },
     "publisher": { "@type": "Person", "name": "Bâgu Alexandru Bogdan", "logo": { "@type": "ImageObject", "url": "https://alexandrubagu.github.io/profile.jpg" } },
     "datePublished": "2026-06-09T12:00:00+00:00",
-    "dateModified": "2026-06-09T12:00:00+00:00",
+    "dateModified": "2026-06-24T12:00:00+00:00",
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://alexandrubagu.github.io/blog/redis-rate-limiting-throttling.html" },
     "keywords": "Redis rate limiting, Redis throttling, token bucket Redis, sliding window rate limit, Redis INCR EXPIRE, load smoothening, request throttle Redis",
     "articleSection": "Redis",
@@ -100,7 +100,7 @@
           </div>
           <div class="flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="text-sm">7 min read</span>
+            <span class="text-sm">10 min read</span>
           </div>
         </div>
       </header>
@@ -114,93 +114,209 @@
         <p><strong>Rate limiting</strong> enforces a maximum number of requests in a time window — hard stop when exceeded. <strong>Throttling</strong> smoothens the intake rate, queuing or slowing excess requests rather than rejecting them. Redis supports both approaches.</p>
 
         <h2>Fixed Window Counter (INCR + EXPIRE)</h2>
-        <p>The simplest approach: count requests per time window with <code>INCR</code> and expire the counter at window's end.</p>
+        <p>The simplest approach: count requests per time window using <code>INCR</code> and expire the counter at the end of the window. The key encodes both the user identifier and the current time window (e.g. the current minute as a unix epoch divided by 60), so each window gets its own counter that automatically disappears when it expires.</p>
 
-        <pre><code># Allow 100 requests per minute per user
-import redis
-import time
+        <pre><code># key format: rate:{user_id}:{window}
+# window = floor(current_unix_timestamp / 60)  → changes every 60 s
 
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+# First request in the window
+INCR rate:user:42:28234567
+# (integer) 1
 
-def is_allowed(user_id, limit=100, window_seconds=60):
-    window = int(time.time() // window_seconds)
-    key = f"rate:{user_id}:{window}"
+# Set expiry so the key self-cleans after the window ends
+EXPIRE rate:user:42:28234567 60
+# (integer) 1
 
-    pipe = r.pipeline()
-    pipe.incr(key)
-    pipe.expire(key, window_seconds)
-    count, _ = pipe.execute()
+# Subsequent requests just increment — no EXPIRE needed again
+INCR rate:user:42:28234567
+# (integer) 2
 
-    return count <= limit
+# Decision: if returned count <= 100 → allow. Otherwise → HTTP 429.</code></pre>
 
-# Usage
-if not is_allowed("user:42"):
-    return {"error": "Too many requests"}, 429</code></pre>
+        <p>The <code>INCR</code> command is atomic: Redis guarantees no two clients ever receive the same counter value for the same key. However, calling <code>EXPIRE</code> unconditionally on <em>every</em> request would reset the TTL back to 60 seconds each time, turning the fixed window into an ever-sliding one — exactly the behaviour we want to avoid here.</p>
+        <p>The correct approach is to set the expiry <strong>only on the first increment</strong> (when the count equals 1). Two ways to do this atomically:</p>
 
-        <p><strong>Drawback</strong>: a user can send 100 requests at 0:59 and 100 more at 1:01, effectively 200 requests in 2 seconds. The sliding window solves this.</p>
+        <p><strong>Option 1 — <code>EXPIRE NX</code> (Redis 7.0+)</strong>: The <code>NX</code> flag tells Redis to apply the expiry only when no TTL is set yet, so subsequent requests leave the deadline untouched:</p>
+
+        <pre><code>MULTI
+INCR rate:user:42:28234567
+EXPIRE rate:user:42:28234567 60 NX
+EXEC
+# 1) (integer) 3
+# 2) (integer) 0   → 0 means expiry was already set; TTL was not reset</code></pre>
+
+        <p><strong>Option 2 — Lua script (Redis &lt; 7.0)</strong>: A small Lua script runs atomically server-side in a single round-trip and checks the count before setting the expiry:</p>
+
+        <pre><code>EVAL "
+  local count = redis.call('INCR', KEYS[1])
+  if count == 1 then
+    redis.call('EXPIRE', KEYS[1], ARGV[1])
+  end
+  return count
+" 1 rate:user:42:28234567 60
+# (integer) 4</code></pre>
+
+        <p>Because <code>count == 1</code> is true only for the very first request in a window, the expiry is set exactly once and never extended. The key disappears after 60 seconds, and the next request starts a fresh window.</p>
+        <p><strong>Drawback</strong>: a user can send 100 requests at 0:59 and 100 more at 1:01, effectively 200 requests in 2 seconds at the window boundary. The sliding window solves this.</p>
 
         <h2>Sliding Window with Sorted Sets</h2>
-        <p>Store each request as a member in a sorted set with its timestamp as the score. Count only requests within the last N seconds.</p>
+        <p>Store each request as a member in a sorted set (<code>ZADD</code>) with the unix timestamp as the score. Before counting, trim entries older than the window with <code>ZREMRANGEBYSCORE</code>, then use <code>ZCARD</code> to count what remains. This gives an exact count of requests in the last N seconds regardless of where in the minute the clock sits.</p>
 
-        <pre><code">import time
+        <p>The four commands must run atomically. Use a Lua script so the ZADD only fires when the request is actually allowed — otherwise denied requests pile up in the sorted set and artificially inflate the count for subsequent checks:</p>
 
-def is_allowed_sliding(user_id, limit=100, window_seconds=60):
-    now = time.time()
-    window_start = now - window_seconds
-    key = f"rate:sliding:{user_id}"
+        <pre><code>EVAL "
+  local key   = KEYS[1]
+  local now   = tonumber(ARGV[1])
+  local win   = tonumber(ARGV[2])
+  local limit = tonumber(ARGV[3])
+  local window_start = now - win
 
-    pipe = r.pipeline()
-    # Remove requests outside the window
-    pipe.zremrangebyscore(key, 0, window_start)
-    # Count requests in the window
-    pipe.zcard(key)
-    # Add current request
-    pipe.zadd(key, {str(now): now})
-    # Set expiry to clean up
-    pipe.expire(key, window_seconds + 1)
-    _, count, _, _ = pipe.execute()
+  redis.call('ZREMRANGEBYSCORE', key, 0, window_start)
+  local count = redis.call('ZCARD', key)
 
-    return count < limit</code></pre>
+  if count < limit then
+    redis.call('ZADD', key, now, now)
+    redis.call('EXPIRE', key, win + 1)
+    return 1  -- allowed
+  end
+  return 0    -- denied, sorted set is NOT modified
+" 1 rate:sliding:user:42 1700000060.500 60 100
+# (integer) 1   → allowed
+# (integer) 0   → denied (HTTP 429)</code></pre>
+
+        <p><code>ZREMRANGEBYSCORE</code> removes every member whose score (timestamp) falls before <code>window_start</code>, leaving only the last 60 seconds of traffic. <code>ZCARD</code> counts what remains in O(1). The <code>ZADD</code> is guarded inside the <code>if count &lt; limit</code> block — denied requests are never written to the set, so a flood of rejected calls cannot inflate the counter for legitimate ones. The EXPIRE is reset on every allowed request, which is intentional: the key should stay alive as long as active requests keep arriving.</p>
+        <p>Unlike the fixed-window counter, the EXPIRE reset here is correct — for a sliding window the key must live at least <code>window_seconds</code> from the most recent entry so that old entries have time to age out of the score range.</p>
 
         <h2>Token Bucket Algorithm</h2>
-        <p>The token bucket smoothens bursts: tokens accumulate over time up to a maximum capacity, each request consumes one token. It allows short bursts while maintaining a long-term rate.</p>
+        <p>The token bucket smoothens bursts: tokens refill at a constant rate up to a maximum capacity, and each request consumes one token. It allows short bursts while enforcing a sustained long-term rate. The state — current token count and the last refill timestamp — is stored in a Redis hash with <code>HSET</code> and read back with <code>HMGET</code>.</p>
 
-        <pre><code">def consume_token(user_id, capacity=10, refill_rate=1):
-    """
-    capacity: max burst size
-    refill_rate: tokens added per second
-    """
-    now = time.time()
-    key = f"token_bucket:{user_id}"
+        <pre><code># key: token_bucket:user:42
+# capacity = 10 (max burst), refill_rate = 1 token/second
 
-    data = r.hmget(key, 'tokens', 'last_refill')
-    tokens = float(data[0] or capacity)
-    last_refill = float(data[1] or now)
+# Read current state
+HMGET token_bucket:user:42 tokens last_refill
+# 1) "8.500000"
+# 2) "1700000050.123"
 
-    # Add tokens based on elapsed time
-    elapsed = now - last_refill
-    tokens = min(capacity, tokens + elapsed * refill_rate)
+# --- client-side arithmetic ---
+# elapsed     = now - last_refill  = 1700000060.500 - 1700000050.123 = 10.377 s
+# refilled    = min(10, 8.5 + 10.377 * 1) = min(10, 18.877) = 10 tokens
+# after use   = 10 - 1 = 9 tokens
+# → request is ALLOWED
+# ------------------------------
 
-    if tokens >= 1:
-        tokens -= 1
-        r.hset(key, mapping={'tokens': tokens, 'last_refill': now})
-        r.expire(key, int(capacity / refill_rate) + 10)
-        return True  # allowed
-    return False  # throttled</code></pre>
+# Write back the new state
+HSET token_bucket:user:42 tokens 9 last_refill 1700000060.500
+# (integer) 0   → 0 new fields created (both fields already existed)
+
+# TTL = capacity / refill_rate + safety buffer = 10 / 1 + 10 = 20 s
+EXPIRE token_bucket:user:42 20
+# (integer) 1
+
+# If tokens were < 1 before decrement: skip HSET, return HTTP 429.</code></pre>
+
+        <p>The arithmetic runs on the application side after reading the hash — Redis itself never needs to know the formula. Because <code>HMGET</code> and <code>HSET</code> are not run inside a <code>MULTI</code>/<code>EXEC</code>, high-concurrency systems should use a Lua script (<code>EVAL</code>) to make the read-compute-write cycle atomic in a single Redis call, eliminating the race condition where two simultaneous requests both read the same token count.</p>
 
         <h2>Choosing the Right Algorithm</h2>
         <ul>
-          <li><strong>Fixed window</strong> — simplest, minimal memory. Good for rough limits where edge cases don't matter.</li>
-          <li><strong>Sliding window</strong> — precise, prevents boundary exploitation. Higher memory usage (one entry per request).</li>
+          <li><strong>Fixed window</strong> — simplest, minimal memory. Good for rough limits where boundary edge cases don't matter.</li>
+          <li><strong>Sliding window</strong> — precise, prevents boundary exploitation. Higher memory usage (one sorted-set entry per request).</li>
           <li><strong>Token bucket</strong> — allows controlled bursts, smoothens load. Best for API quota management and load smoothening.</li>
         </ul>
 
+        <h2>Rate Limiting in Elixir with Hammer</h2>
+        <p><a href="https://github.com/ExHammer/hammer" class="text-blue-600 hover:underline">Hammer</a> is the de-facto rate-limiting library for Elixir. Its pluggable backend system lets you swap storage without touching application code. Two Redis backends cover the most common production setups.</p>
+
+        <h3>Single Redis Instance — hammer_backend_redis</h3>
+        <p>The <code>hammer_backend_redis</code> package wraps <a href="https://github.com/whatyouhide/redix" class="text-blue-600 hover:underline">Redix</a> and implements the fixed-window counter algorithm using Redis pipelines under the hood — the same <code>INCR</code> + <code>EXPIRE</code> pattern shown above, but entirely managed for you.</p>
+
+        <pre><code># mix.exs
+defp deps do
+  [
+    {:hammer, "~> 6.1"},
+    {:hammer_backend_redis, "~> 6.1"}
+  ]
+end</code></pre>
+
+        <p>Define a module that acts as your rate limiter and add it to the supervision tree:</p>
+
+        <pre><code>defmodule MyApp.RateLimit do
+  use Hammer, backend: Hammer.Redis
+end
+
+# application.ex — supervision tree
+children = [
+  {MyApp.RateLimit, url: "redis://localhost:6379"}
+]</code></pre>
+
+        <p>Then call <code>hit/3</code> anywhere in your application. The first argument is a string key (typically user ID or IP), the second is the window size in milliseconds, and the third is the request limit:</p>
+
+        <pre><code>defmodule MyAppWeb.ApiController do
+  # Allow 100 requests per minute per user
+  def check_rate(user_id) do
+    case MyApp.RateLimit.hit("api:#{user_id}", 60_000, 100) do
+      {:allow, _count} ->
+        :ok
+      {:deny, _limit} ->
+        {:error, :rate_limited}
+    end
+  end
+end</code></pre>
+
+        <p>For production deployments with TLS you can pass <code>ssl</code> and <code>socket_opts</code> directly when starting the process:</p>
+
+        <pre><code>{MyApp.RateLimit,
+ host: "redis.internal",
+ port: 6379,
+ ssl: true,
+ socket_opts: [
+   customize_hostname_check: [
+     match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
+   ]
+ ]}</code></pre>
+
+        <h3>Redis Cluster — hammer_backend_eredis_cluster</h3>
+        <p>When your Redis deployment is a cluster (multiple shards for horizontal scaling), use <code>hammer_backend_eredis_cluster</code>. It uses <code>eredis_cluster</code> under the hood to route commands to the correct shard based on the key hash slot, so counters for different users land on different nodes automatically.</p>
+
+        <pre><code># mix.exs
+defp deps do
+  [
+    {:hammer, "~> 6.1"},
+    {:hammer_backend_eredis_cluster, "~> 1.0"}
+  ]
+end</code></pre>
+
+        <p>Configuration goes in <code>config/config.exs</code>. Provide at least a few seed nodes — <code>eredis_cluster</code> discovers the full topology from them at startup:</p>
+
+        <pre><code># config/config.exs
+config :hammer,
+  backend: {Hammer.Backend.Eredis, [
+    expiry_ms: 60_000 * 60 * 2,  # counters live for 2 hours
+    eredis_cluster_init_servers: [
+      {"redis-node-1.internal", 6379},
+      {"redis-node-2.internal", 6380},
+      {"redis-node-3.internal", 6381}
+    ]
+  ]}</code></pre>
+
+        <p>The public API is identical to the single-node backend — your application code does not need to change at all:</p>
+
+        <pre><code>case Hammer.check_rate("api:#{user_id}", 60_000, 100) do
+  {:allow, _count} ->
+    conn |> send_resp(200, "OK")
+  {:deny, _limit} ->
+    conn |> put_status(429) |> json(%{error: "Too many requests"})
+end</code></pre>
+
+        <p>The cluster backend is the right choice when you need Redis to scale horizontally — for example, if a single Redis node cannot handle the write throughput of your rate-limiting traffic, or if you need data locality across regions.</p>
+
         <h2>Key Takeaways</h2>
         <ul>
-          <li><strong>INCR + EXPIRE</strong> is the simplest fixed-window rate limiter — two commands, minimal overhead</li>
-          <li><strong>Sorted sets</strong> enable precise sliding windows at the cost of more memory per user</li>
-          <li><strong>Token bucket</strong> smoothens bursts while enforcing a sustained rate — ideal for load smoothening</li>
-          <li>Use Redis pipelines to execute multiple commands atomically and reduce round-trips</li>
+          <li><strong>INCR + EXPIRE</strong> is the simplest fixed-window rate limiter — two commands, minimal overhead, O(1) memory per user</li>
+          <li><strong>Sorted sets</strong> with <code>ZREMRANGEBYSCORE</code> + <code>ZCARD</code> enable precise sliding windows at the cost of one entry per request in memory</li>
+          <li><strong>Token bucket</strong> via a Redis hash smoothens bursts while enforcing a sustained rate — use a Lua script to make the read-compute-write cycle atomic</li>
+          <li>Use Redis pipelines or <code>MULTI</code>/<code>EXEC</code> to send multiple commands in a single round-trip and avoid race conditions</li>
+          <li>In Elixir, <strong>Hammer</strong> with <code>hammer_backend_redis</code> gives you a clean, tested fixed-window implementation on top of Redix — swap to <code>hammer_backend_eredis_cluster</code> for clustered Redis without touching application code</li>
           <li>Always return <code>Retry-After</code> headers so clients know when to retry</li>
         </ul>
       </div>
